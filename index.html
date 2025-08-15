@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Reconciliation Platform - AI-Powered Document Comparison</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .api-key-section {
+            background: #f8f9ff;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .api-key-section h2 {
+            color: #444;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .api-key-input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .api-key-input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .api-key-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .save-key-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .save-key-btn:hover {
+            background: #5a67d8;
+        }
+
+        .api-status {
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .api-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .api-status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+
+        .info-box a {
+            color: #1976D2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
+        }
+
+        .upload-section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #444;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .upload-box {
+            border: 2px dashed #ddd;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .upload-box.has-file {
+            border-color: #4CAF50;
+            background: #f0fff0;
+        }
+
+        .upload-label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+
+        .upload-box h3 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .upload-box p {
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .file-name {
+            display: block;
+            margin-top: 15px;
+            color: #4CAF50;
+            font-weight: 500;
+            font-size: 0.9rem;
+            word-break: break-all;
+        }
+
+        .process-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .process-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .process-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .processing-section {
+            text-align: center;
+            padding: 60px 0;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .results-section {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .summary-card, .discrepancies-card, .warnings-card, .matches-card, .details-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .status-badge.passed {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .status-badge.failed {
+            background: #f44336;
+            color: white;
+        }
+
+        .discrepancy-item, .warning-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 4px solid #f44336;
+        }
+
+        .warning-item {
+            border-left-color: #ff9800;
+        }
+
+        .match-badge {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 5px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .detail-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .new-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: block;
+            margin: 30px auto 0;
+        }
+
+        .new-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .upload-grid, .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+        }
+    </style>
+    <!-- Load Tesseract.js for OCR in the browser -->
+    <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
+    <!-- Load PDF.js for PDF processing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Invoice Reconciliation Platform</h1>
+            <p class="subtitle">AI-powered contract and invoice comparison - Works 100% in your browser!</p>
+        </header>
+
+        <!-- API Key Section -->
+        <div class="api-key-section" id="apiKeySection">
+            <h2>🔐 Step 1: Enter Your OpenAI API Key</h2>
+            <div class="info-box">
+                <strong>Need an API key?</strong> 
+                <a href="https://platform.openai.com/api-keys" target="_blank">Get one here from OpenAI</a>
+                (You'll need to create an account and add some credits - usually $5-10 is plenty)
+            </div>
+            <div class="info-box">
+                <strong>🔒 Privacy:</strong> Your API key is stored only in your browser and never sent anywhere except directly to OpenAI
+            </div>
+            <div class="api-key-input-group">
+                <input type="password" 
+                       id="apiKeyInput" 
+                       class="api-key-input" 
+                       placeholder="sk-..." 
+                       value="">
+                <button id="saveApiKeyBtn" class="save-key-btn">Save & Test Key</button>
+            </div>
+            <div id="apiStatus" class="api-status hidden"></div>
+        </div>
+
+        <!-- Upload Section -->
+        <div class="upload-section" id="uploadSection">
+            <h2>📄 Step 2: Upload Your Documents</h2>
+            <div class="upload-grid">
+                <div class="upload-box">
+                    <label for="contractFile" class="upload-label">
+                        <div class="upload-icon">📄</div>
+                        <h3>Contract</h3>
+                        <p>Click to select contract PDF or image</p>
+                        <input type="file" id="contractFile" accept=".pdf,.png,.jpg,.jpeg" />
+                        <span class="file-name" id="contractFileName"></span>
+                    </label>
+                </div>
+                <div class="upload-box">
+                    <label for="invoiceFile" class="upload-label">
+                        <div class="upload-icon">🧾</div>
+                        <h3>Invoice</h3>
+                        <p>Click to select invoice PDF or image</p>
+                        <input type="file" id="invoiceFile" accept=".pdf,.png,.jpg,.jpeg" />
+                        <span class="file-name" id="invoiceFileName"></span>
+                    </label>
+                </div>
+            </div>
+            <button id="processBtn" class="process-btn" disabled>Start Reconciliation</button>
+        </div>
+
+        <!-- Processing Section -->
+        <div class="processing-section hidden" id="processingSection">
+            <div class="spinner"></div>
+            <h2>Processing Documents...</h2>
+            <p id="processingStatus">Extracting text from documents...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-section hidden" id="resultsSection">
+            <h2>Reconciliation Results</h2>
+            
+            <div class="summary-card">
+                <h3>Summary</h3>
+                <div id="summaryContent"></div>
+            </div>
+
+            <div class="discrepancies-card">
+                <h3>Discrepancies Found</h3>
+                <div id="discrepanciesList"></div>
+            </div>
+
+            <div class="warnings-card">
+                <h3>Warnings</h3>
+                <div id="warningsList"></div>
+            </div>
+
+            <div class="matches-card">
+                <h3>Matching Fields</h3>
+                <div id="matchesList"></div>
+            </div>
+
+            <div class="details-grid">
+                <div class="details-card">
+                    <h3>Contract Details</h3>
+                    <div id="contractDetails"></div>
+                </div>
+                <div class="details-card">
+                    <h3>Invoice Details</h3>
+                    <div id="invoiceDetails"></div>
+                </div>
+            </div>
+
+            <button id="newReconciliationBtn" class="new-btn">New Reconciliation</button>
+        </div>
+    </div>
+
+    <script>
+        // Store API key in browser's local storage
+        let apiKey = localStorage.getItem('openai_api_key') || '';
+        
+        // Initialize UI
+        document.addEventListener('DOMContentLoaded', function() {
+            if (apiKey) {
+                document.getElementById('apiKeyInput').value = apiKey;
+                checkApiKey();
+            }
+        });
+
+        // Save API Key
+        document.getElementById('saveApiKeyBtn').addEventListener('click', async function() {
+            const keyInput = document.getElementById('apiKeyInput');
+            const newKey = keyInput.value.trim();
+            
+            if (!newKey) {
+                showApiStatus('Please enter your OpenAI API key', 'error');
+                return;
+            }
+            
+            if (!newKey.startsWith('sk-')) {
+                showApiStatus('API key should start with "sk-"', 'error');
+                return;
+            }
+            
+            apiKey = newKey;
+            localStorage.setItem('openai_api_key', apiKey);
+            
+            // Test the API key
+            showApiStatus('Testing API key...', 'success');
+            
+            try {
+                const response = await fetch('https://api.openai.com/v1/models', {
+                    headers: {
+                        'Authorization': `Bearer ${apiKey}`
+                    }
+                });
+                
+                if (response.ok) {
+                    showApiStatus('✅ API key saved and verified!', 'success');
+                    checkFilesReady();
+                } else {
+                    showApiStatus('❌ Invalid API key. Please check and try again.', 'error');
+                }
+            } catch (error) {
+                showApiStatus('❌ Could not verify API key. Please check your internet connection.', 'error');
+            }
+        });
+
+        function showApiStatus(message, type) {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `api-status ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
+
+        async function checkApiKey() {
+            if (apiKey && apiKey.startsWith('sk-')) {
+                try {
+                    const response = await fetch('https://api.openai.com/v1/models', {
+                        headers: {
+                            'Authorization': `Bearer ${apiKey}`
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        showApiStatus('✅ API key verified and ready!', 'success');
+                        return true;
+                    }
+                } catch (error) {
+                    console.error('API check failed:', error);
+                }
+            }
+            return false;
+        }
+
+        // File handling
+        document.getElementById('contractFile').addEventListener('change', handleFileSelect);
+        document.getElementById('invoiceFile').addEventListener('change', handleFileSelect);
+        document.getElementById('processBtn').addEventListener('click', startReconciliation);
+        document.getElementById('newReconciliationBtn').addEventListener('click', resetForm);
+
+        function handleFileSelect(event) {
+            const fileInput = event.target;
+            const fileName = fileInput.files[0]?.name || '';
+            const fileNameSpan = fileInput.id === 'contractFile' 
+                ? document.getElementById('contractFileName')
+                : document.getElementById('invoiceFileName');
+            
+            fileNameSpan.textContent = fileName;
+            
+            if (fileName) {
+                fileInput.closest('.upload-box').classList.add('has-file');
+            } else {
+                fileInput.closest('.upload-box').classList.remove('has-file');
+            }
+            
+            checkFilesReady();
+        }
+
+        function checkFilesReady() {
+            const contractFile = document.getElementById('contractFile').files[0];
+            const invoiceFile = document.getElementById('invoiceFile').files[0];
+            const processBtn = document.getElementById('processBtn');
+            
+            processBtn.disabled = !(contractFile && invoiceFile && apiKey);
+        }
+
+        async function startReconciliation() {
+            const contractFile = document.getElementById('contractFile').files[0];
+            const invoiceFile = document.getElementById('invoiceFile').files[0];
+            
+            if (!contractFile || !invoiceFile) {
+                alert('Please select both contract and invoice files');
+                return;
+            }
+            
+            if (!apiKey) {
+                alert('Please enter your OpenAI API key first');
+                return;
+            }
+            
+            showProcessingSection();
+            
+            try {
+                updateProcessingStatus('Extracting text from contract...');
+                const contractText = await extractTextFromFile(contractFile);
+                
+                updateProcessingStatus('Extracting text from invoice...');
+                const invoiceText = await extractTextFromFile(invoiceFile);
+                
+                updateProcessingStatus('Analyzing documents with AI...');
+                const contractDetails = await analyzeDocument(contractText, 'contract');
+                const invoiceDetails = await analyzeDocument(invoiceText, 'invoice');
+                
+                updateProcessingStatus('Comparing documents...');
+                const comparison = compareDocuments(contractDetails, invoiceDetails);
+                
+                displayResults({
+                    contract_details: contractDetails,
+                    invoice_details: invoiceDetails,
+                    comparison: comparison
+                });
+            } catch (error) {
+                console.error('Processing error:', error);
+                alert('Error processing documents: ' + error.message);
+                resetForm();
+            }
+        }
+
+        async function extractTextFromFile(file) {
+            const fileType = file.type;
+            
+            if (fileType === 'application/pdf') {
+                return await extractTextFromPDF(file);
+            } else if (fileType.startsWith('image/')) {
+                return await extractTextFromImage(file);
+            } else {
+                throw new Error('Unsupported file type');
+            }
+        }
+
+        async function extractTextFromPDF(file) {
+            const arrayBuffer = await file.arrayBuffer();
+            const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
+            let fullText = '';
+            
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i);
+                const textContent = await page.getTextContent();
+                const pageText = textContent.items.map(item => item.str).join(' ');
+                fullText += `\n--- Page ${i} ---\n${pageText}`;
+            }
+            
+            // If PDF text extraction didn't work well, try OCR
+            if (fullText.trim().length < 100) {
+                updateProcessingStatus('PDF text extraction failed, trying OCR...');
+                return await extractTextWithOCR(file);
+            }
+            
+            return fullText;
+        }
+
+        async function extractTextFromImage(file) {
+            return await extractTextWithOCR(file);
+        }
+
+        async function extractTextWithOCR(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const result = await Tesseract.recognize(
+                            e.target.result,
+                            'eng',
+                            {
+                                logger: m => {
+                                    if (m.status === 'recognizing text') {
+                                        updateProcessingStatus(`OCR Progress: ${Math.round(m.progress * 100)}%`);
+                                    }
+                                }
+                            }
+                        );
+                        resolve(result.data.text);
+                    } catch (error) {
+                        reject(error);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        async function analyzeDocument(text, docType) {
+            const prompt = docType === 'contract' 
+                ? `Analyze this contract and extract: vendor_name, contract_number, start_date, end_date, payment_terms, total_value, billing_frequency, items (list), special_conditions. Return as JSON.`
+                : `Analyze this invoice and extract: vendor_name, invoice_number, invoice_date, due_date, total_amount, subtotal, tax_amount, items (list), payment_terms, reference_contract_number. Return as JSON.`;
+            
+            const messages = [
+                {
+                    role: "system",
+                    content: "You are a document analysis expert. Extract information accurately and return only valid JSON without markdown formatting."
+                },
+                {
+                    role: "user",
+                    content: `${prompt}\n\nDocument text:\n${text.substring(0, 3000)}`
+                }
+            ];
+            
+            try {
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${apiKey}`
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: messages,
+                        temperature: 0.3,
+                        max_tokens: 1500
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('OpenAI API request failed');
+                }
+                
+                const data = await response.json();
+                const content = data.choices[0].message.content;
+                
+                // Try to parse JSON from the response
+                try {
+                    return JSON.parse(content);
+                } catch (e) {
+                    // If parsing fails, try to extract JSON from the response
+                    const jsonMatch = content.match(/\{[\s\S]*\}/);
+                    if (jsonMatch) {
+                        return JSON.parse(jsonMatch[0]);
+                    }
+                    throw new Error('Could not parse AI response');
+                }
+            } catch (error) {
+                console.error('AI analysis error:', error);
+                // Return fallback extraction
+                return {
+                    vendor_name: "Unable to extract",
+                    [docType === 'contract' ? 'contract_number' : 'invoice_number']: "N/A",
+                    [docType === 'contract' ? 'total_value' : 'total_amount']: "0",
+                    items: [],
+                    error: "AI analysis failed"
+                };
+            }
+        }
+
+        function compareDocuments(contractDetails, invoiceDetails) {
+            const discrepancies = [];
+            const warnings = [];
+            const matches = [];
+            
+            // Compare vendor names
+            if (contractDetails.vendor_name && invoiceDetails.vendor_name) {
+                if (contractDetails.vendor_name.toLowerCase() !== invoiceDetails.vendor_name.toLowerCase()) {
+                    discrepancies.push({
+                        field: "Vendor Name",
+                        contract_value: contractDetails.vendor_name,
+                        invoice_value: invoiceDetails.vendor_name,
+                        severity: "HIGH"
+                    });
+                } else {
+                    matches.push("Vendor Name");
+                }
+            }
+            
+            // Compare amounts
+            const contractTotal = parseAmount(contractDetails.total_value);
+            const invoiceTotal = parseAmount(invoiceDetails.total_amount);
+            
+            if (contractTotal && invoiceTotal) {
+                if (Math.abs(contractTotal - invoiceTotal) > 0.01) {
+                    discrepancies.push({
+                        field: "Total Amount",
+                        contract_value: `$${contractTotal.toFixed(2)}`,
+                        invoice_value: `$${invoiceTotal.toFixed(2)}`,
+                        difference: `$${Math.abs(contractTotal - invoiceTotal).toFixed(2)}`,
+                        severity: "HIGH"
+                    });
+                } else {
+                    matches.push("Total Amount");
+                }
+            }
+            
+            // Check contract reference
+            if (invoiceDetails.reference_contract_number && contractDetails.contract_number) {
+                if (invoiceDetails.reference_contract_number !== contractDetails.contract_number) {
+                    warnings.push({
+                        field: "Contract Reference",
+                        message: `Invoice references contract ${invoiceDetails.reference_contract_number}, but provided contract is ${contractDetails.contract_number}`,
+                        severity: "MEDIUM"
+                    });
+                } else {
+                    matches.push("Contract Reference");
+                }
+            }
+            
+            return {
+                discrepancies: discrepancies,
+                warnings: warnings,
+                matches: matches,
+                summary: {
+                    total_discrepancies: discrepancies.length,
+                    total_warnings: warnings.length,
+                    total_matches: matches.length,
+                    reconciliation_status: discrepancies.length === 0 ? "PASSED" : "FAILED"
+                }
+            };
+        }
+
+        function parseAmount(amountStr) {
+            if (!amountStr) return 0;
+            const cleaned = String(amountStr).replace(/[$,]/g, '');
+            return parseFloat(cleaned) || 0;
+        }
+
+        function showProcessingSection() {
+            document.getElementById('uploadSection').classList.add('hidden');
+            document.getElementById('apiKeySection').classList.add('hidden');
+            document.getElementById('processingSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+
+        function updateProcessingStatus(status) {
+            document.getElementById('processingStatus').textContent = status;
+        }
+
+        function displayResults(results) {
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Display summary
+            const summary = results.comparison.summary;
+            document.getElementById('summaryContent').innerHTML = `
+                <div class="status-badge ${summary.reconciliation_status.toLowerCase()}">${summary.reconciliation_status}</div>
+                <p>Discrepancies: ${summary.total_discrepancies}</p>
+                <p>Warnings: ${summary.total_warnings}</p>
+                <p>Matches: ${summary.total_matches}</p>
+            `;
+            
+            // Display discrepancies
+            const discrepanciesList = document.getElementById('discrepanciesList');
+            if (results.comparison.discrepancies.length === 0) {
+                discrepanciesList.innerHTML = '<p style="color: #4CAF50;">✅ No discrepancies found!</p>';
+            } else {
+                discrepanciesList.innerHTML = results.comparison.discrepancies.map(disc => `
+                    <div class="discrepancy-item">
+                        <h4>${disc.field}</h4>
+                        <p>Contract: ${disc.contract_value}</p>
+                        <p>Invoice: ${disc.invoice_value}</p>
+                        ${disc.difference ? `<p>Difference: ${disc.difference}</p>` : ''}
+                    </div>
+                `).join('');
+            }
+            
+            // Display warnings
+            const warningsList = document.getElementById('warningsList');
+            if (results.comparison.warnings.length === 0) {
+                warningsList.innerHTML = '<p>No warnings</p>';
+            } else {
+                warningsList.innerHTML = results.comparison.warnings.map(warning => `
+                    <div class="warning-item">
+                        <h4>${warning.field}</h4>
+                        <p>${warning.message}</p>
+                    </div>
+                `).join('');
+            }
+            
+            // Display matches
+            const matchesList = document.getElementById('matchesList');
+            if (results.comparison.matches.length === 0) {
+                matchesList.innerHTML = '<p>No matching fields found</p>';
+            } else {
+                matchesList.innerHTML = results.comparison.matches.map(match => 
+                    `<span class="match-badge">✓ ${match}</span>`
+                ).join('');
+            }
+            
+            // Display document details
+            displayDocumentDetails(results.contract_details, 'contractDetails');
+            displayDocumentDetails(results.invoice_details, 'invoiceDetails');
+        }
+
+        function displayDocumentDetails(details, elementId) {
+            const element = document.getElementById(elementId);
+            const items = Object.entries(details || {})
+                .filter(([key]) => key !== 'items' && key !== 'error')
+                .map(([key, value]) => `
+                    <div class="detail-item">
+                        <div class="detail-label">${key.replace(/_/g, ' ').toUpperCase()}</div>
+                        <div class="detail-value">${value || 'N/A'}</div>
+                    </div>
+                `).join('');
+            
+            element.innerHTML = items || '<p>No details available</p>';
+        }
+
+        function resetForm() {
+            document.getElementById('uploadSection').classList.remove('hidden');
+            document.getElementById('apiKeySection').classList.remove('hidden');
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            document.getElementById('contractFile').value = '';
+            document.getElementById('invoiceFile').value = '';
+            document.getElementById('contractFileName').textContent = '';
+            document.getElementById('invoiceFileName').textContent = '';
+            
+            document.querySelectorAll('.upload-box').forEach(box => {
+                box.classList.remove('has-file');
+            });
+            
+            checkFilesReady();
+        }
+    </script>
+</body>
+</html>
