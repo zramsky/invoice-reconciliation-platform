@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Reconciliation Platform - AI-Powered Document Comparison</title>
+    <title>Invoice Reconciliation Platform Pro - AI-Powered Batch Document Analysis</title>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -30,6 +30,28 @@
         header {
             text-align: center;
             margin-bottom: 40px;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .header-controls button:hover {
+            background: #5a67d8;
         }
 
         h1 {
@@ -44,18 +66,87 @@
             margin-bottom: 20px;
         }
 
-        .api-key-section {
-            background: #f8f9ff;
-            border: 2px solid #667eea;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
+        .feature-badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
-        .api-key-section h2 {
+        .badge {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #e1e8ff;
+        }
+
+        .section.collapsed {
+            background: #f5f5f5;
+            border-color: #ddd;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .section-header h2 {
             color: #444;
-            margin-bottom: 15px;
             font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-content {
+            transition: all 0.3s ease;
+        }
+
+        .section.collapsed .section-content {
+            display: none;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e1e8ff;
+        }
+
+        .setting-item label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        .setting-item input, .setting-item select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 0.9rem;
         }
 
         .api-key-input-group {
@@ -70,11 +161,6 @@
             border: 2px solid #ddd;
             border-radius: 8px;
             font-size: 1rem;
-        }
-
-        .api-key-input:focus {
-            outline: none;
-            border-color: #667eea;
         }
 
         .save-key-btn {
@@ -112,37 +198,9 @@
             border: 1px solid #f5c6cb;
         }
 
-        .info-box {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-        }
-
-        .info-box a {
-            color: #1976D2;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .info-box a:hover {
-            text-decoration: underline;
-        }
-
-        .upload-section {
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            color: #444;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        .upload-grid {
+        .upload-area {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 2fr;
             gap: 30px;
             margin-bottom: 30px;
         }
@@ -154,21 +212,26 @@
             text-align: center;
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .upload-box:hover {
+        .upload-box.drag-over {
             border-color: #667eea;
             background: #f8f9ff;
+            transform: scale(1.02);
         }
 
-        .upload-box.has-file {
+        .upload-box.has-files {
             border-color: #4CAF50;
             background: #f0fff0;
         }
 
-        .upload-label {
-            cursor: pointer;
-            display: block;
+        .multi-upload-box {
+            min-height: 300px;
         }
 
         .upload-icon {
@@ -176,27 +239,40 @@
             margin-bottom: 15px;
         }
 
-        .upload-box h3 {
-            color: #555;
-            margin-bottom: 10px;
+        .file-list {
+            margin-top: 20px;
+            text-align: left;
         }
 
-        .upload-box p {
-            color: #999;
+        .file-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 1px solid #e1e8ff;
+        }
+
+        .file-item .file-name {
+            flex: 1;
+            color: #333;
             font-size: 0.9rem;
+        }
+
+        .file-item .remove-btn {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.8rem;
         }
 
         input[type="file"] {
             display: none;
-        }
-
-        .file-name {
-            display: block;
-            margin-top: 15px;
-            color: #4CAF50;
-            font-weight: 500;
-            font-size: 0.9rem;
-            word-break: break-all;
         }
 
         .process-btn {
@@ -207,9 +283,10 @@
             font-size: 1.1rem;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
             display: block;
             margin: 0 auto;
+            position: relative;
         }
 
         .process-btn:hover:not(:disabled) {
@@ -225,6 +302,41 @@
         .processing-section {
             text-align: center;
             padding: 60px 0;
+        }
+
+        .processing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .processing-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #e1e8ff;
+        }
+
+        .processing-item h4 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.3s ease;
+            border-radius: 4px;
         }
 
         .spinner {
@@ -255,25 +367,98 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .summary-card, .discrepancies-card, .warnings-card, .matches-card, .details-card {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
         }
 
-        .summary-card {
+        .export-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .export-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .export-btn:hover {
+            background: #45a049;
+        }
+
+        .batch-summary {
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-value.passed { color: #4CAF50; }
+        .stat-value.failed { color: #f44336; }
+        .stat-value.warning { color: #ff9800; }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .invoice-results {
+            display: grid;
+            gap: 25px;
+        }
+
+        .invoice-result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e1e8ff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .invoice-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
         }
 
         .status-badge {
-            display: inline-block;
-            padding: 10px 20px;
-            border-radius: 50px;
+            padding: 8px 16px;
+            border-radius: 20px;
             font-weight: bold;
             text-transform: uppercase;
-            font-size: 0.9rem;
-            margin-bottom: 15px;
+            font-size: 0.8rem;
         }
 
         .status-badge.passed {
@@ -287,14 +472,15 @@
         }
 
         .discrepancy-item, .warning-item {
-            background: white;
+            background: #fff5f5;
             padding: 15px;
             border-radius: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             border-left: 4px solid #f44336;
         }
 
         .warning-item {
+            background: #fffbf0;
             border-left-color: #ff9800;
         }
 
@@ -302,55 +488,152 @@
             display: inline-block;
             background: #4CAF50;
             color: white;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin: 5px;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin: 3px;
         }
 
-        .details-grid {
+        .contract-details {
+            background: #f8f9ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #e1e8ff;
+        }
+
+        .detail-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-top: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
         }
 
         .detail-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #e0e0e0;
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #e1e8ff;
         }
 
         .detail-label {
             font-weight: 600;
             color: #555;
+            font-size: 0.85rem;
             margin-bottom: 5px;
+            text-transform: uppercase;
         }
 
         .detail-value {
             color: #333;
+            word-break: break-word;
         }
 
-        .new-btn {
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-success {
             background: #4CAF50;
             color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: block;
-            margin: 30px auto 0;
         }
 
-        .new-btn:hover {
+        .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.4);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .history-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: right 0.3s ease;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .history-panel.open {
+            right: 0;
+        }
+
+        .history-header {
+            padding: 20px;
+            background: #667eea;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-content {
+            padding: 20px;
+        }
+
+        .history-item {
+            padding: 15px;
+            border: 1px solid #e1e8ff;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: #f8f9ff;
+            transform: translateX(5px);
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .info-box a {
+            color: #1976D2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .info-box a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
-            .upload-grid, .details-grid {
+            .upload-area {
                 grid-template-columns: 1fr;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .results-header {
+                flex-direction: column;
+                gap: 15px;
             }
             
             h1 {
@@ -360,12 +643,38 @@
             .container {
                 padding: 20px;
             }
+
+            .history-panel {
+                width: 100%;
+                right: -100%;
+            }
+        }
+
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            z-index: 1000;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
         }
     </style>
-    <!-- Load Tesseract.js for OCR in the browser -->
+    <!-- External Libraries -->
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
-    <!-- Load PDF.js for PDF processing -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
@@ -373,118 +682,298 @@
 <body>
     <div class="container">
         <header>
-            <h1>Invoice Reconciliation Platform</h1>
-            <p class="subtitle">AI-powered contract and invoice comparison - Works 100% in your browser!</p>
+            <div class="header-controls">
+                <button onclick="toggleHistory()">📚 History</button>
+                <button onclick="resetAll()">🔄 Reset</button>
+            </div>
+            <h1>Invoice Reconciliation Platform Pro</h1>
+            <p class="subtitle">AI-powered batch contract and invoice reconciliation with advanced analytics</p>
+            <div class="feature-badges">
+                <span class="badge">✨ Multiple Invoices</span>
+                <span class="badge">🧠 Advanced AI Analysis</span>
+                <span class="badge">📊 Export Results</span>
+                <span class="badge">📱 Mobile Friendly</span>
+                <span class="badge">🔒 100% Private</span>
+            </div>
         </header>
 
-        <!-- API Key Section -->
-        <div class="api-key-section" id="apiKeySection">
-            <h2>🔐 Step 1: Enter Your OpenAI API Key</h2>
-            <div class="info-box">
-                <strong>Need an API key?</strong> 
-                <a href="https://platform.openai.com/api-keys" target="_blank">Get one here from OpenAI</a>
-                (You'll need to create an account and add some credits - usually $5-10 is plenty)
+        <!-- Settings Section -->
+        <div class="section" id="settingsSection">
+            <div class="section-header" onclick="toggleSection('settingsSection')">
+                <h2>⚙️ Settings & Configuration</h2>
+                <span>▼</span>
             </div>
-            <div class="info-box">
-                <strong>🔒 Privacy:</strong> Your API key is stored only in your browser and never sent anywhere except directly to OpenAI
+            <div class="section-content">
+                <div class="info-box">
+                    <strong>Need an API key?</strong> 
+                    <a href="https://platform.openai.com/api-keys" target="_blank">Get one here from OpenAI</a>
+                    (Create account + add $10-20 credits for best performance)
+                </div>
+                
+                <div class="api-key-input-group">
+                    <input type="password" 
+                           id="apiKeyInput" 
+                           class="api-key-input" 
+                           placeholder="Enter your OpenAI API key (sk-...)" 
+                           value="">
+                    <button id="saveApiKeyBtn" class="save-key-btn">Save & Test Key</button>
+                </div>
+                <div id="apiStatus" class="api-status hidden"></div>
+
+                <div class="settings-grid">
+                    <div class="setting-item">
+                        <label for="aiModel" class="tooltip" data-tooltip="GPT-4 is more accurate but costs more">AI Model</label>
+                        <select id="aiModel">
+                            <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Fast & Cheap)</option>
+                            <option value="gpt-4">GPT-4 (Most Accurate)</option>
+                            <option value="gpt-4-turbo-preview">GPT-4 Turbo (Best Performance)</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="tolerance" class="tooltip" data-tooltip="Allow small differences in amounts">Amount Tolerance ($)</label>
+                        <input type="number" id="tolerance" value="0.01" step="0.01" min="0">
+                    </div>
+                    <div class="setting-item">
+                        <label for="contractType" class="tooltip" data-tooltip="Helps AI understand contract format">Contract Type</label>
+                        <select id="contractType">
+                            <option value="general">General Business Contract</option>
+                            <option value="service">Service Agreement</option>
+                            <option value="supply">Supply/Purchase Contract</option>
+                            <option value="consulting">Consulting Agreement</option>
+                            <option value="maintenance">Maintenance Contract</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <label for="strictMode">Validation Mode</label>
+                        <select id="strictMode">
+                            <option value="normal">Normal (Recommended)</option>
+                            <option value="strict">Strict (Zero Tolerance)</option>
+                            <option value="lenient">Lenient (Business Friendly)</option>
+                        </select>
+                    </div>
+                </div>
             </div>
-            <div class="api-key-input-group">
-                <input type="password" 
-                       id="apiKeyInput" 
-                       class="api-key-input" 
-                       placeholder="sk-..." 
-                       value="">
-                <button id="saveApiKeyBtn" class="save-key-btn">Save & Test Key</button>
-            </div>
-            <div id="apiStatus" class="api-status hidden"></div>
         </div>
 
         <!-- Upload Section -->
-        <div class="upload-section" id="uploadSection">
-            <h2>📄 Step 2: Upload Your Documents</h2>
-            <div class="upload-grid">
-                <div class="upload-box">
-                    <label for="contractFile" class="upload-label">
-                        <div class="upload-icon">📄</div>
-                        <h3>Contract</h3>
-                        <p>Click to select contract PDF or image</p>
-                        <input type="file" id="contractFile" accept=".pdf,.png,.jpg,.jpeg" />
-                        <span class="file-name" id="contractFileName"></span>
-                    </label>
-                </div>
-                <div class="upload-box">
-                    <label for="invoiceFile" class="upload-label">
-                        <div class="upload-icon">🧾</div>
-                        <h3>Invoice</h3>
-                        <p>Click to select invoice PDF or image</p>
-                        <input type="file" id="invoiceFile" accept=".pdf,.png,.jpg,.jpeg" />
-                        <span class="file-name" id="invoiceFileName"></span>
-                    </label>
-                </div>
+        <div class="section" id="uploadSection">
+            <div class="section-header" onclick="toggleSection('uploadSection')">
+                <h2>📁 Document Upload</h2>
+                <span>▼</span>
             </div>
-            <button id="processBtn" class="process-btn" disabled>Start Reconciliation</button>
+            <div class="section-content">
+                <div class="upload-area">
+                    <!-- Contract Upload -->
+                    <div class="upload-box" id="contractUpload">
+                        <div class="upload-icon">📄</div>
+                        <h3>Contract Document</h3>
+                        <p>Drag & drop or click to select contract PDF/image</p>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Supports: PDF, PNG, JPG, JPEG</p>
+                        <input type="file" id="contractFile" accept=".pdf,.png,.jpg,.jpeg" />
+                        <div id="contractFileInfo" class="file-list"></div>
+                    </div>
+
+                    <!-- Multiple Invoices Upload -->
+                    <div class="upload-box multi-upload-box" id="invoicesUpload">
+                        <div class="upload-icon">🧾</div>
+                        <h3>Invoice Documents</h3>
+                        <p>Drag & drop or click to select multiple invoices</p>
+                        <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">You can select multiple files at once!</p>
+                        <p style="font-size: 0.8rem; color: #888;">Supports: PDF, PNG, JPG, JPEG</p>
+                        <input type="file" id="invoiceFiles" accept=".pdf,.png,.jpg,.jpeg" multiple />
+                        <div id="invoiceFilesList" class="file-list"></div>
+                    </div>
+                </div>
+
+                <button id="processBtn" class="process-btn" disabled>
+                    <span id="processBtnText">🚀 Start Batch Reconciliation</span>
+                </button>
+            </div>
         </div>
 
         <!-- Processing Section -->
         <div class="processing-section hidden" id="processingSection">
             <div class="spinner"></div>
             <h2>Processing Documents...</h2>
-            <p id="processingStatus">Extracting text from documents...</p>
+            <p id="processingStatus">Initializing batch processing...</p>
+            
+            <div class="processing-grid" id="processingGrid">
+                <!-- Dynamic processing items will be added here -->
+            </div>
         </div>
 
         <!-- Results Section -->
         <div class="results-section hidden" id="resultsSection">
-            <h2>Reconciliation Results</h2>
+            <div class="results-header">
+                <h2>📊 Reconciliation Results</h2>
+                <div class="export-controls">
+                    <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
+                    <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+                    <button class="export-btn" onclick="saveToHistory()">💾 Save Results</button>
+                </div>
+            </div>
             
-            <div class="summary-card">
-                <h3>Summary</h3>
-                <div id="summaryContent"></div>
-            </div>
-
-            <div class="discrepancies-card">
-                <h3>Discrepancies Found</h3>
-                <div id="discrepanciesList"></div>
-            </div>
-
-            <div class="warnings-card">
-                <h3>Warnings</h3>
-                <div id="warningsList"></div>
-            </div>
-
-            <div class="matches-card">
-                <h3>Matching Fields</h3>
-                <div id="matchesList"></div>
-            </div>
-
-            <div class="details-grid">
-                <div class="details-card">
-                    <h3>Contract Details</h3>
-                    <div id="contractDetails"></div>
-                </div>
-                <div class="details-card">
-                    <h3>Invoice Details</h3>
-                    <div id="invoiceDetails"></div>
+            <!-- Batch Summary -->
+            <div class="batch-summary">
+                <h3>📈 Batch Summary</h3>
+                <div class="summary-stats" id="batchSummaryStats">
+                    <!-- Dynamic summary stats -->
                 </div>
             </div>
 
-            <button id="newReconciliationBtn" class="new-btn">New Reconciliation</button>
+            <!-- Contract Analysis -->
+            <div class="contract-details" id="contractAnalysis">
+                <h3>📋 Contract Analysis</h3>
+                <div id="contractDetailsContent"></div>
+            </div>
+
+            <!-- Individual Invoice Results -->
+            <div class="invoice-results" id="invoiceResults">
+                <!-- Dynamic invoice results -->
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-success" onclick="resetAll()">🆕 New Reconciliation</button>
+                <button class="btn btn-primary" onclick="addMoreInvoices()">➕ Add More Invoices</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Panel -->
+    <div class="history-panel" id="historyPanel">
+        <div class="history-header">
+            <h3>📚 Reconciliation History</h3>
+            <button onclick="toggleHistory()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">✕</button>
+        </div>
+        <div class="history-content" id="historyContent">
+            <!-- Dynamic history items -->
         </div>
     </div>
 
     <script>
-        // Store API key in browser's local storage
+        // Global variables
         let apiKey = localStorage.getItem('openai_api_key') || '';
-        
-        // Initialize UI
+        let contractFile = null;
+        let invoiceFiles = [];
+        let currentResults = null;
+        let processingQueue = [];
+        let contractAnalysis = null;
+
+        // Settings
+        let settings = {
+            aiModel: 'gpt-4',
+            tolerance: 0.01,
+            contractType: 'general',
+            strictMode: 'normal'
+        };
+
+        // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            setupEventListeners();
+            setupDragAndDrop();
+            loadHistory();
+            
             if (apiKey) {
                 document.getElementById('apiKeyInput').value = apiKey;
                 checkApiKey();
             }
         });
 
-        // Save API Key
-        document.getElementById('saveApiKeyBtn').addEventListener('click', async function() {
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('reconciliation_settings');
+            if (savedSettings) {
+                settings = { ...settings, ...JSON.parse(savedSettings) };
+                
+                document.getElementById('aiModel').value = settings.aiModel;
+                document.getElementById('tolerance').value = settings.tolerance;
+                document.getElementById('contractType').value = settings.contractType;
+                document.getElementById('strictMode').value = settings.strictMode;
+            }
+        }
+
+        function saveSettings() {
+            settings = {
+                aiModel: document.getElementById('aiModel').value,
+                tolerance: parseFloat(document.getElementById('tolerance').value),
+                contractType: document.getElementById('contractType').value,
+                strictMode: document.getElementById('strictMode').value
+            };
+            localStorage.setItem('reconciliation_settings', JSON.stringify(settings));
+        }
+
+        function setupEventListeners() {
+            // API Key
+            document.getElementById('saveApiKeyBtn').addEventListener('click', saveAndTestApiKey);
+            
+            // File uploads
+            document.getElementById('contractFile').addEventListener('change', handleContractSelect);
+            document.getElementById('invoiceFiles').addEventListener('change', handleInvoiceSelect);
+            
+            // Settings
+            document.getElementById('aiModel').addEventListener('change', saveSettings);
+            document.getElementById('tolerance').addEventListener('change', saveSettings);
+            document.getElementById('contractType').addEventListener('change', saveSettings);
+            document.getElementById('strictMode').addEventListener('change', saveSettings);
+            
+            // Process button
+            document.getElementById('processBtn').addEventListener('click', startBatchReconciliation);
+        }
+
+        function setupDragAndDrop() {
+            const contractUpload = document.getElementById('contractUpload');
+            const invoicesUpload = document.getElementById('invoicesUpload');
+
+            // Contract drag and drop
+            contractUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                contractUpload.classList.add('drag-over');
+            });
+
+            contractUpload.addEventListener('dragleave', () => {
+                contractUpload.classList.remove('drag-over');
+            });
+
+            contractUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                contractUpload.classList.remove('drag-over');
+                const files = Array.from(e.dataTransfer.files);
+                if (files.length > 0 && files[0].type.match(/(application\/pdf|image\/.*)/)) {
+                    contractFile = files[0];
+                    displayContractFile();
+                }
+            });
+
+            contractUpload.addEventListener('click', () => {
+                document.getElementById('contractFile').click();
+            });
+
+            // Invoices drag and drop
+            invoicesUpload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                invoicesUpload.classList.add('drag-over');
+            });
+
+            invoicesUpload.addEventListener('dragleave', () => {
+                invoicesUpload.classList.remove('drag-over');
+            });
+
+            invoicesUpload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                invoicesUpload.classList.remove('drag-over');
+                const files = Array.from(e.dataTransfer.files).filter(file => 
+                    file.type.match(/(application\/pdf|image\/.*)/)
+                );
+                invoiceFiles = [...invoiceFiles, ...files];
+                displayInvoiceFiles();
+            });
+
+            invoicesUpload.addEventListener('click', () => {
+                document.getElementById('invoiceFiles').click();
+            });
+        }
+
+        async function saveAndTestApiKey() {
             const keyInput = document.getElementById('apiKeyInput');
             const newKey = keyInput.value.trim();
             
@@ -501,7 +990,6 @@
             apiKey = newKey;
             localStorage.setItem('openai_api_key', apiKey);
             
-            // Test the API key
             showApiStatus('Testing API key...', 'success');
             
             try {
@@ -520,13 +1008,6 @@
             } catch (error) {
                 showApiStatus('❌ Could not verify API key. Please check your internet connection.', 'error');
             }
-        });
-
-        function showApiStatus(message, type) {
-            const statusDiv = document.getElementById('apiStatus');
-            statusDiv.textContent = message;
-            statusDiv.className = `api-status ${type}`;
-            statusDiv.classList.remove('hidden');
         }
 
         async function checkApiKey() {
@@ -549,77 +1030,199 @@
             return false;
         }
 
-        // File handling
-        document.getElementById('contractFile').addEventListener('change', handleFileSelect);
-        document.getElementById('invoiceFile').addEventListener('change', handleFileSelect);
-        document.getElementById('processBtn').addEventListener('click', startReconciliation);
-        document.getElementById('newReconciliationBtn').addEventListener('click', resetForm);
+        function showApiStatus(message, type) {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `api-status ${type}`;
+            statusDiv.classList.remove('hidden');
+        }
 
-        function handleFileSelect(event) {
-            const fileInput = event.target;
-            const fileName = fileInput.files[0]?.name || '';
-            const fileNameSpan = fileInput.id === 'contractFile' 
-                ? document.getElementById('contractFileName')
-                : document.getElementById('invoiceFileName');
+        function handleContractSelect(event) {
+            contractFile = event.target.files[0];
+            displayContractFile();
+        }
+
+        function handleInvoiceSelect(event) {
+            const newFiles = Array.from(event.target.files);
+            invoiceFiles = [...invoiceFiles, ...newFiles];
+            displayInvoiceFiles();
+        }
+
+        function displayContractFile() {
+            const container = document.getElementById('contractFileInfo');
+            const uploadBox = document.getElementById('contractUpload');
             
-            fileNameSpan.textContent = fileName;
-            
-            if (fileName) {
-                fileInput.closest('.upload-box').classList.add('has-file');
+            if (contractFile) {
+                container.innerHTML = `
+                    <div class="file-item">
+                        <span class="file-name">📄 ${contractFile.name}</span>
+                        <button class="remove-btn" onclick="removeContractFile()">✕</button>
+                    </div>
+                `;
+                uploadBox.classList.add('has-files');
             } else {
-                fileInput.closest('.upload-box').classList.remove('has-file');
+                container.innerHTML = '';
+                uploadBox.classList.remove('has-files');
             }
-            
             checkFilesReady();
         }
 
-        function checkFilesReady() {
-            const contractFile = document.getElementById('contractFile').files[0];
-            const invoiceFile = document.getElementById('invoiceFile').files[0];
-            const processBtn = document.getElementById('processBtn');
+        function displayInvoiceFiles() {
+            const container = document.getElementById('invoiceFilesList');
+            const uploadBox = document.getElementById('invoicesUpload');
             
-            processBtn.disabled = !(contractFile && invoiceFile && apiKey);
+            if (invoiceFiles.length > 0) {
+                container.innerHTML = invoiceFiles.map((file, index) => `
+                    <div class="file-item">
+                        <span class="file-name">🧾 ${file.name}</span>
+                        <button class="remove-btn" onclick="removeInvoiceFile(${index})">✕</button>
+                    </div>
+                `).join('');
+                uploadBox.classList.add('has-files');
+            } else {
+                container.innerHTML = '';
+                uploadBox.classList.remove('has-files');
+            }
+            checkFilesReady();
         }
 
-        async function startReconciliation() {
-            const contractFile = document.getElementById('contractFile').files[0];
-            const invoiceFile = document.getElementById('invoiceFile').files[0];
+        function removeContractFile() {
+            contractFile = null;
+            document.getElementById('contractFile').value = '';
+            displayContractFile();
+        }
+
+        function removeInvoiceFile(index) {
+            invoiceFiles.splice(index, 1);
+            displayInvoiceFiles();
+        }
+
+        function checkFilesReady() {
+            const processBtn = document.getElementById('processBtn');
+            const btnText = document.getElementById('processBtnText');
             
-            if (!contractFile || !invoiceFile) {
-                alert('Please select both contract and invoice files');
+            const ready = contractFile && invoiceFiles.length > 0 && apiKey;
+            processBtn.disabled = !ready;
+            
+            if (ready) {
+                btnText.textContent = `🚀 Process Contract + ${invoiceFiles.length} Invoice${invoiceFiles.length > 1 ? 's' : ''}`;
+            } else {
+                btnText.textContent = '🚀 Start Batch Reconciliation';
+            }
+        }
+
+        async function startBatchReconciliation() {
+            if (!contractFile || invoiceFiles.length === 0 || !apiKey) {
+                alert('Please upload contract, at least one invoice, and enter your API key');
                 return;
             }
-            
-            if (!apiKey) {
-                alert('Please enter your OpenAI API key first');
-                return;
-            }
-            
+
             showProcessingSection();
             
             try {
-                updateProcessingStatus('Extracting text from contract...');
+                // Step 1: Analyze contract with advanced prompting
+                updateProcessingStatus('🔍 Analyzing contract with advanced AI...');
                 const contractText = await extractTextFromFile(contractFile);
+                contractAnalysis = await analyzeContractAdvanced(contractText);
                 
-                updateProcessingStatus('Extracting text from invoice...');
-                const invoiceText = await extractTextFromFile(invoiceFile);
+                // Step 2: Process each invoice
+                const invoiceResults = [];
                 
-                updateProcessingStatus('Analyzing documents with AI...');
-                const contractDetails = await analyzeDocument(contractText, 'contract');
-                const invoiceDetails = await analyzeDocument(invoiceText, 'invoice');
+                for (let i = 0; i < invoiceFiles.length; i++) {
+                    const file = invoiceFiles[i];
+                    updateProcessingStatus(`📄 Processing invoice ${i + 1}/${invoiceFiles.length}: ${file.name}`);
+                    updateProgressBar(`invoice-${i}`, 0);
+                    
+                    try {
+                        // Extract text
+                        updateProgressBar(`invoice-${i}`, 25);
+                        const invoiceText = await extractTextFromFile(file);
+                        
+                        // Analyze with AI
+                        updateProgressBar(`invoice-${i}`, 50);
+                        const invoiceDetails = await analyzeDocument(invoiceText, 'invoice');
+                        
+                        // Compare with contract
+                        updateProgressBar(`invoice-${i}`, 75);
+                        const comparison = compareDocuments(contractAnalysis, invoiceDetails);
+                        
+                        updateProgressBar(`invoice-${i}`, 100);
+                        
+                        invoiceResults.push({
+                            filename: file.name,
+                            file: file,
+                            invoiceDetails: invoiceDetails,
+                            comparison: comparison,
+                            status: comparison.summary.reconciliation_status
+                        });
+                        
+                    } catch (error) {
+                        console.error(`Error processing ${file.name}:`, error);
+                        invoiceResults.push({
+                            filename: file.name,
+                            file: file,
+                            error: error.message,
+                            status: 'ERROR'
+                        });
+                    }
+                }
                 
-                updateProcessingStatus('Comparing documents...');
-                const comparison = compareDocuments(contractDetails, invoiceDetails);
+                // Store results
+                currentResults = {
+                    timestamp: new Date(),
+                    contractFile: contractFile.name,
+                    contractAnalysis: contractAnalysis,
+                    invoiceResults: invoiceResults,
+                    batchSummary: calculateBatchSummary(invoiceResults)
+                };
                 
-                displayResults({
-                    contract_details: contractDetails,
-                    invoice_details: invoiceDetails,
-                    comparison: comparison
-                });
+                displayResults();
+                
             } catch (error) {
-                console.error('Processing error:', error);
+                console.error('Batch processing error:', error);
                 alert('Error processing documents: ' + error.message);
-                resetForm();
+                resetToUpload();
+            }
+        }
+
+        function showProcessingSection() {
+            document.getElementById('uploadSection').querySelector('.section-content').style.display = 'none';
+            document.getElementById('settingsSection').classList.add('collapsed');
+            document.getElementById('processingSection').classList.remove('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            
+            // Create processing items for each invoice
+            const grid = document.getElementById('processingGrid');
+            grid.innerHTML = invoiceFiles.map((file, index) => `
+                <div class="processing-item">
+                    <h4>📄 ${file.name}</h4>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-invoice-${index}" style="width: 0%"></div>
+                    </div>
+                    <div id="status-invoice-${index}">Waiting...</div>
+                </div>
+            `).join('');
+        }
+
+        function updateProcessingStatus(status) {
+            document.getElementById('processingStatus').textContent = status;
+        }
+
+        function updateProgressBar(invoiceId, percentage) {
+            const progressBar = document.getElementById(`progress-${invoiceId}`);
+            const statusDiv = document.getElementById(`status-${invoiceId}`);
+            
+            if (progressBar) {
+                progressBar.style.width = `${percentage}%`;
+            }
+            
+            if (statusDiv) {
+                const statusText = percentage === 0 ? 'Starting...' :
+                                percentage === 25 ? 'Extracting text...' :
+                                percentage === 50 ? 'AI analysis...' :
+                                percentage === 75 ? 'Comparing...' :
+                                percentage === 100 ? '✅ Complete' : 'Processing...';
+                statusDiv.textContent = statusText;
             }
         }
 
@@ -649,7 +1252,6 @@
             
             // If PDF text extraction didn't work well, try OCR
             if (fullText.trim().length < 100) {
-                updateProcessingStatus('PDF text extraction failed, trying OCR...');
                 return await extractTextWithOCR(file);
             }
             
@@ -685,22 +1287,74 @@
             });
         }
 
+        async function analyzeContractAdvanced(contractText) {
+            const contractTypePrompts = {
+                general: "This is a general business contract. Focus on identifying vendor information, payment terms, deliverables, and key obligations.",
+                service: "This is a service agreement. Pay special attention to service descriptions, performance metrics, payment schedules, and service level agreements.",
+                supply: "This is a supply or purchase contract. Focus on product specifications, quantities, unit prices, delivery terms, and total values.",
+                consulting: "This is a consulting agreement. Emphasize project scope, hourly rates, milestones, deliverables, and payment terms.",
+                maintenance: "This is a maintenance contract. Focus on equipment covered, service schedules, response times, and maintenance fees."
+            };
+
+            const contractPrompt = contractTypePrompts[settings.contractType] || contractTypePrompts.general;
+
+            const prompt = `You are an expert contract analyst with years of experience in business law and contract interpretation. 
+
+${contractPrompt}
+
+Please analyze this contract systematically:
+
+STEP 1: First, identify the document structure and key sections
+STEP 2: Extract basic information (parties, dates, amounts)  
+STEP 3: Identify all financial terms and payment obligations
+STEP 4: Note any special conditions or clauses that could affect invoicing
+STEP 5: Determine what should appear on valid invoices for this contract
+
+Contract text:
+${contractText.substring(0, 4000)}
+
+Return a comprehensive JSON analysis with these fields:
+{
+  "vendor_name": "exact legal name of the vendor/supplier",
+  "client_name": "name of the client/buyer", 
+  "contract_number": "contract reference number",
+  "contract_date": "contract signing date",
+  "start_date": "contract effective start date",
+  "end_date": "contract expiration date",
+  "total_value": "total contract value",
+  "currency": "contract currency",
+  "payment_terms": "payment terms and conditions",
+  "billing_frequency": "how often billing should occur",
+  "line_items": [
+    {
+      "description": "item/service description",
+      "quantity": "quantity if applicable",
+      "unit_price": "price per unit",
+      "total_price": "total for this line item"
+    }
+  ],
+  "special_conditions": "any special billing or payment conditions",
+  "invoice_requirements": "specific requirements for invoices",
+  "late_payment_terms": "penalties for late payment",
+  "contract_type": "type of contract identified",
+  "key_obligations": "main obligations of each party",
+  "analysis_confidence": "high/medium/low - how confident you are in this analysis"
+}
+
+Be extremely thorough and accurate. If any field cannot be determined, mark it as "not specified" rather than guessing.`;
+
+            return await callOpenAI(prompt, 'You are an expert legal contract analyst. Analyze contracts with extreme precision and attention to detail.');
+        }
+
         async function analyzeDocument(text, docType) {
             const prompt = docType === 'contract' 
                 ? `Analyze this contract and extract: vendor_name, contract_number, start_date, end_date, payment_terms, total_value, billing_frequency, items (list), special_conditions. Return as JSON.`
-                : `Analyze this invoice and extract: vendor_name, invoice_number, invoice_date, due_date, total_amount, subtotal, tax_amount, items (list), payment_terms, reference_contract_number. Return as JSON.`;
+                : `Analyze this invoice and extract: vendor_name, invoice_number, invoice_date, due_date, total_amount, subtotal, tax_amount, items (list with description, quantity, unit_price, total), payment_terms, reference_contract_number. Return as JSON.`;
             
-            const messages = [
-                {
-                    role: "system",
-                    content: "You are a document analysis expert. Extract information accurately and return only valid JSON without markdown formatting."
-                },
-                {
-                    role: "user",
-                    content: `${prompt}\n\nDocument text:\n${text.substring(0, 3000)}`
-                }
-            ];
-            
+            return await callOpenAI(`${prompt}\n\nDocument text:\n${text.substring(0, 3000)}`, 'You are a document analysis expert. Extract information accurately and return only valid JSON.');
+        }
+
+        async function callOpenAI(userPrompt, systemPrompt) {
             try {
                 const response = await fetch('https://api.openai.com/v1/chat/completions', {
                     method: 'POST',
@@ -709,10 +1363,19 @@
                         'Authorization': `Bearer ${apiKey}`
                     },
                     body: JSON.stringify({
-                        model: 'gpt-3.5-turbo',
-                        messages: messages,
-                        temperature: 0.3,
-                        max_tokens: 1500
+                        model: settings.aiModel,
+                        messages: [
+                            {
+                                role: "system",
+                                content: systemPrompt
+                            },
+                            {
+                                role: "user", 
+                                content: userPrompt
+                            }
+                        ],
+                        temperature: 0.1,
+                        max_tokens: 2000
                     })
                 });
                 
@@ -736,14 +1399,7 @@
                 }
             } catch (error) {
                 console.error('AI analysis error:', error);
-                // Return fallback extraction
-                return {
-                    vendor_name: "Unable to extract",
-                    [docType === 'contract' ? 'contract_number' : 'invoice_number']: "N/A",
-                    [docType === 'contract' ? 'total_value' : 'total_amount']: "0",
-                    items: [],
-                    error: "AI analysis failed"
-                };
+                throw error;
             }
         }
 
@@ -754,7 +1410,7 @@
             
             // Compare vendor names
             if (contractDetails.vendor_name && invoiceDetails.vendor_name) {
-                if (contractDetails.vendor_name.toLowerCase() !== invoiceDetails.vendor_name.toLowerCase()) {
+                if (contractDetails.vendor_name.toLowerCase().trim() !== invoiceDetails.vendor_name.toLowerCase().trim()) {
                     discrepancies.push({
                         field: "Vendor Name",
                         contract_value: contractDetails.vendor_name,
@@ -766,18 +1422,19 @@
                 }
             }
             
-            // Compare amounts
+            // Compare amounts with tolerance
             const contractTotal = parseAmount(contractDetails.total_value);
             const invoiceTotal = parseAmount(invoiceDetails.total_amount);
             
             if (contractTotal && invoiceTotal) {
-                if (Math.abs(contractTotal - invoiceTotal) > 0.01) {
+                const difference = Math.abs(contractTotal - invoiceTotal);
+                if (difference > settings.tolerance) {
                     discrepancies.push({
                         field: "Total Amount",
                         contract_value: `$${contractTotal.toFixed(2)}`,
                         invoice_value: `$${invoiceTotal.toFixed(2)}`,
-                        difference: `$${Math.abs(contractTotal - invoiceTotal).toFixed(2)}`,
-                        severity: "HIGH"
+                        difference: `$${difference.toFixed(2)}`,
+                        severity: difference > contractTotal * 0.1 ? "HIGH" : "MEDIUM"
                     });
                 } else {
                     matches.push("Total Amount");
@@ -794,6 +1451,23 @@
                     });
                 } else {
                     matches.push("Contract Reference");
+                }
+            }
+
+            // Date validation
+            if (contractDetails.start_date && contractDetails.end_date && invoiceDetails.invoice_date) {
+                const contractStart = new Date(contractDetails.start_date);
+                const contractEnd = new Date(contractDetails.end_date);
+                const invoiceDate = new Date(invoiceDetails.invoice_date);
+                
+                if (invoiceDate < contractStart || invoiceDate > contractEnd) {
+                    warnings.push({
+                        field: "Invoice Date",
+                        message: `Invoice date ${invoiceDetails.invoice_date} is outside contract period (${contractDetails.start_date} to ${contractDetails.end_date})`,
+                        severity: "MEDIUM"
+                    });
+                } else {
+                    matches.push("Invoice Date");
                 }
             }
             
@@ -816,103 +1490,345 @@
             return parseFloat(cleaned) || 0;
         }
 
-        function showProcessingSection() {
-            document.getElementById('uploadSection').classList.add('hidden');
-            document.getElementById('apiKeySection').classList.add('hidden');
-            document.getElementById('processingSection').classList.remove('hidden');
-            document.getElementById('resultsSection').classList.add('hidden');
+        function calculateBatchSummary(invoiceResults) {
+            const total = invoiceResults.length;
+            const passed = invoiceResults.filter(r => r.status === 'PASSED').length;
+            const failed = invoiceResults.filter(r => r.status === 'FAILED').length;
+            const errors = invoiceResults.filter(r => r.status === 'ERROR').length;
+            
+            const totalDiscrepancies = invoiceResults.reduce((sum, r) => 
+                sum + (r.comparison?.summary?.total_discrepancies || 0), 0);
+            const totalWarnings = invoiceResults.reduce((sum, r) => 
+                sum + (r.comparison?.summary?.total_warnings || 0), 0);
+            
+            return {
+                total,
+                passed,
+                failed,
+                errors,
+                totalDiscrepancies,
+                totalWarnings,
+                passRate: ((passed / total) * 100).toFixed(1)
+            };
         }
 
-        function updateProcessingStatus(status) {
-            document.getElementById('processingStatus').textContent = status;
-        }
-
-        function displayResults(results) {
+        function displayResults() {
             document.getElementById('processingSection').classList.add('hidden');
             document.getElementById('resultsSection').classList.remove('hidden');
             
-            // Display summary
-            const summary = results.comparison.summary;
-            document.getElementById('summaryContent').innerHTML = `
-                <div class="status-badge ${summary.reconciliation_status.toLowerCase()}">${summary.reconciliation_status}</div>
-                <p>Discrepancies: ${summary.total_discrepancies}</p>
-                <p>Warnings: ${summary.total_warnings}</p>
-                <p>Matches: ${summary.total_matches}</p>
-            `;
+            // Display batch summary
+            displayBatchSummary(currentResults.batchSummary);
             
-            // Display discrepancies
-            const discrepanciesList = document.getElementById('discrepanciesList');
-            if (results.comparison.discrepancies.length === 0) {
-                discrepanciesList.innerHTML = '<p style="color: #4CAF50;">✅ No discrepancies found!</p>';
-            } else {
-                discrepanciesList.innerHTML = results.comparison.discrepancies.map(disc => `
-                    <div class="discrepancy-item">
-                        <h4>${disc.field}</h4>
-                        <p>Contract: ${disc.contract_value}</p>
-                        <p>Invoice: ${disc.invoice_value}</p>
-                        ${disc.difference ? `<p>Difference: ${disc.difference}</p>` : ''}
-                    </div>
-                `).join('');
-            }
+            // Display contract analysis
+            displayContractAnalysis(currentResults.contractAnalysis);
             
-            // Display warnings
-            const warningsList = document.getElementById('warningsList');
-            if (results.comparison.warnings.length === 0) {
-                warningsList.innerHTML = '<p>No warnings</p>';
-            } else {
-                warningsList.innerHTML = results.comparison.warnings.map(warning => `
-                    <div class="warning-item">
-                        <h4>${warning.field}</h4>
-                        <p>${warning.message}</p>
-                    </div>
-                `).join('');
-            }
-            
-            // Display matches
-            const matchesList = document.getElementById('matchesList');
-            if (results.comparison.matches.length === 0) {
-                matchesList.innerHTML = '<p>No matching fields found</p>';
-            } else {
-                matchesList.innerHTML = results.comparison.matches.map(match => 
-                    `<span class="match-badge">✓ ${match}</span>`
-                ).join('');
-            }
-            
-            // Display document details
-            displayDocumentDetails(results.contract_details, 'contractDetails');
-            displayDocumentDetails(results.invoice_details, 'invoiceDetails');
+            // Display individual invoice results
+            displayInvoiceResults(currentResults.invoiceResults);
         }
 
-        function displayDocumentDetails(details, elementId) {
-            const element = document.getElementById(elementId);
-            const items = Object.entries(details || {})
-                .filter(([key]) => key !== 'items' && key !== 'error')
+        function displayBatchSummary(summary) {
+            const container = document.getElementById('batchSummaryStats');
+            container.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${summary.total}</div>
+                    <div class="stat-label">Total Invoices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value passed">${summary.passed}</div>
+                    <div class="stat-label">Passed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value failed">${summary.failed}</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value warning">${summary.totalDiscrepancies}</div>
+                    <div class="stat-label">Total Discrepancies</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${summary.passRate}%</div>
+                    <div class="stat-label">Pass Rate</div>
+                </div>
+            `;
+        }
+
+        function displayContractAnalysis(contract) {
+            const container = document.getElementById('contractDetailsContent');
+            const details = Object.entries(contract || {})
+                .filter(([key]) => !['line_items', 'key_obligations'].includes(key))
                 .map(([key, value]) => `
                     <div class="detail-item">
-                        <div class="detail-label">${key.replace(/_/g, ' ').toUpperCase()}</div>
+                        <div class="detail-label">${key.replace(/_/g, ' ')}</div>
                         <div class="detail-value">${value || 'N/A'}</div>
                     </div>
                 `).join('');
             
-            element.innerHTML = items || '<p>No details available</p>';
+            container.innerHTML = `<div class="detail-grid">${details}</div>`;
         }
 
-        function resetForm() {
-            document.getElementById('uploadSection').classList.remove('hidden');
-            document.getElementById('apiKeySection').classList.remove('hidden');
-            document.getElementById('processingSection').classList.add('hidden');
-            document.getElementById('resultsSection').classList.add('hidden');
+        function displayInvoiceResults(invoiceResults) {
+            const container = document.getElementById('invoiceResults');
+            container.innerHTML = invoiceResults.map((result, index) => {
+                if (result.error) {
+                    return `
+                        <div class="invoice-result-card">
+                            <div class="invoice-result-header">
+                                <h3>❌ ${result.filename}</h3>
+                                <span class="status-badge failed">ERROR</span>
+                            </div>
+                            <p style="color: #f44336;">Error: ${result.error}</p>
+                        </div>
+                    `;
+                }
+
+                const comparison = result.comparison;
+                const invoice = result.invoiceDetails;
+                
+                return `
+                    <div class="invoice-result-card">
+                        <div class="invoice-result-header">
+                            <h3>${getStatusIcon(result.status)} ${result.filename}</h3>
+                            <span class="status-badge ${result.status.toLowerCase()}">${result.status}</span>
+                        </div>
+                        
+                        ${comparison.discrepancies.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: #f44336; margin-bottom: 10px;">🚨 Discrepancies Found</h4>
+                                ${comparison.discrepancies.map(disc => `
+                                    <div class="discrepancy-item">
+                                        <strong>${disc.field}</strong><br>
+                                        Contract: ${disc.contract_value}<br>
+                                        Invoice: ${disc.invoice_value}
+                                        ${disc.difference ? `<br>Difference: ${disc.difference}` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${comparison.warnings.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: #ff9800; margin-bottom: 10px;">⚠️ Warnings</h4>
+                                ${comparison.warnings.map(warning => `
+                                    <div class="warning-item">
+                                        <strong>${warning.field}</strong><br>
+                                        ${warning.message}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${comparison.matches.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: #4CAF50; margin-bottom: 10px;">✅ Matches</h4>
+                                ${comparison.matches.map(match => `<span class="match-badge">${match}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <details style="margin-top: 20px;">
+                            <summary style="cursor: pointer; font-weight: bold;">📄 Invoice Details</summary>
+                            <div class="detail-grid" style="margin-top: 15px;">
+                                ${Object.entries(invoice || {})
+                                    .filter(([key]) => key !== 'items')
+                                    .map(([key, value]) => `
+                                        <div class="detail-item">
+                                            <div class="detail-label">${key.replace(/_/g, ' ')}</div>
+                                            <div class="detail-value">${value || 'N/A'}</div>
+                                        </div>
+                                    `).join('')}
+                            </div>
+                        </details>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'PASSED': return '✅';
+                case 'FAILED': return '❌';
+                case 'ERROR': return '💥';
+                default: return '❓';
+            }
+        }
+
+        // Utility functions
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.classList.toggle('collapsed');
+        }
+
+        function resetAll() {
+            contractFile = null;
+            invoiceFiles = [];
+            currentResults = null;
             
             document.getElementById('contractFile').value = '';
-            document.getElementById('invoiceFile').value = '';
-            document.getElementById('contractFileName').textContent = '';
-            document.getElementById('invoiceFileName').textContent = '';
+            document.getElementById('invoiceFiles').value = '';
             
-            document.querySelectorAll('.upload-box').forEach(box => {
-                box.classList.remove('has-file');
+            displayContractFile();
+            displayInvoiceFiles();
+            
+            document.getElementById('uploadSection').querySelector('.section-content').style.display = 'block';
+            document.getElementById('settingsSection').classList.remove('collapsed');
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+
+        function resetToUpload() {
+            document.getElementById('uploadSection').querySelector('.section-content').style.display = 'block';
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+
+        function addMoreInvoices() {
+            document.getElementById('invoiceFiles').click();
+        }
+
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            panel.classList.toggle('open');
+            if (panel.classList.contains('open')) {
+                loadHistory();
+            }
+        }
+
+        function saveToHistory() {
+            if (!currentResults) return;
+            
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            const newEntry = {
+                id: Date.now(),
+                timestamp: currentResults.timestamp,
+                contractFile: currentResults.contractFile,
+                invoiceCount: currentResults.invoiceResults.length,
+                passRate: currentResults.batchSummary.passRate,
+                results: currentResults
+            };
+            
+            history.unshift(newEntry);
+            // Keep only last 50 entries
+            history.splice(50);
+            
+            localStorage.setItem('reconciliation_history', JSON.stringify(history));
+            loadHistory();
+            alert('Results saved to history!');
+        }
+
+        function loadHistory() {
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            const container = document.getElementById('historyContent');
+            
+            if (history.length === 0) {
+                container.innerHTML = '<p style="color: #666; text-align: center;">No reconciliation history yet.</p>';
+                return;
+            }
+            
+            container.innerHTML = history.map(entry => `
+                <div class="history-item" onclick="loadHistoryItem(${entry.id})">
+                    <div style="font-weight: bold;">${entry.contractFile}</div>
+                    <div style="font-size: 0.9rem; color: #666;">
+                        ${entry.invoiceCount} invoices • ${entry.passRate}% pass rate
+                    </div>
+                    <div style="font-size: 0.8rem; color: #888;">
+                        ${new Date(entry.timestamp).toLocaleString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadHistoryItem(id) {
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            const entry = history.find(h => h.id === id);
+            
+            if (entry) {
+                currentResults = entry.results;
+                displayResults();
+                toggleHistory();
+            }
+        }
+
+        // Export functions
+        function exportToPDF() {
+            if (!currentResults) return;
+            
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.text('Invoice Reconciliation Report', 20, 20);
+            
+            // Batch summary
+            doc.setFontSize(14);
+            doc.text('Batch Summary', 20, 40);
+            doc.setFontSize(10);
+            doc.text(`Total Invoices: ${currentResults.batchSummary.total}`, 20, 50);
+            doc.text(`Passed: ${currentResults.batchSummary.passed}`, 20, 60);
+            doc.text(`Failed: ${currentResults.batchSummary.failed}`, 20, 70);
+            doc.text(`Pass Rate: ${currentResults.batchSummary.passRate}%`, 20, 80);
+            
+            // Individual results
+            let yPos = 100;
+            currentResults.invoiceResults.forEach((result, index) => {
+                if (yPos > 250) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                
+                doc.setFontSize(12);
+                doc.text(`${index + 1}. ${result.filename}`, 20, yPos);
+                doc.setFontSize(10);
+                doc.text(`Status: ${result.status}`, 20, yPos + 10);
+                
+                if (result.comparison) {
+                    doc.text(`Discrepancies: ${result.comparison.summary.total_discrepancies}`, 20, yPos + 20);
+                    doc.text(`Warnings: ${result.comparison.summary.total_warnings}`, 20, yPos + 30);
+                }
+                
+                yPos += 45;
             });
             
-            checkFilesReady();
+            doc.save(`reconciliation-report-${new Date().toISOString().split('T')[0]}.pdf`);
+        }
+
+        function exportToExcel() {
+            if (!currentResults) return;
+            
+            const wb = XLSX.utils.book_new();
+            
+            // Summary sheet
+            const summaryData = [
+                ['Metric', 'Value'],
+                ['Total Invoices', currentResults.batchSummary.total],
+                ['Passed', currentResults.batchSummary.passed],
+                ['Failed', currentResults.batchSummary.failed],
+                ['Pass Rate', currentResults.batchSummary.passRate + '%'],
+                ['Total Discrepancies', currentResults.batchSummary.totalDiscrepancies],
+                ['Total Warnings', currentResults.batchSummary.totalWarnings]
+            ];
+            
+            const summaryWs = XLSX.utils.aoa_to_sheet(summaryData);
+            XLSX.utils.book_append_sheet(wb, summaryWs, 'Summary');
+            
+            // Results sheet
+            const resultsData = [
+                ['Filename', 'Status', 'Discrepancies', 'Warnings', 'Matches']
+            ];
+            
+            currentResults.invoiceResults.forEach(result => {
+                resultsData.push([
+                    result.filename,
+                    result.status,
+                    result.comparison?.summary?.total_discrepancies || 0,
+                    result.comparison?.summary?.total_warnings || 0,
+                    result.comparison?.summary?.total_matches || 0
+                ]);
+            });
+            
+            const resultsWs = XLSX.utils.aoa_to_sheet(resultsData);
+            XLSX.utils.book_append_sheet(wb, resultsWs, 'Results');
+            
+            XLSX.writeFile(wb, `reconciliation-results-${new Date().toISOString().split('T')[0]}.xlsx`);
         }
     </script>
 </body>
