@@ -5,7 +5,11 @@ from datetime import datetime
 
 class AIAnalyzer:
     def __init__(self, api_key):
-        self.client = openai.OpenAI(api_key=api_key) if api_key else None
+        try:
+            self.client = openai.OpenAI(api_key=api_key) if api_key else None
+        except Exception as e:
+            print(f"OpenAI client initialization failed: {e}")
+            self.client = None
     
     def extract_contract_details(self, contract_text):
         """Extract key details from contract using GPT"""

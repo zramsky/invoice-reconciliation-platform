@@ -24,7 +24,11 @@ class LLMClient:
         
     def set_api_key(self, api_key: str):
         """Set OpenAI API key"""
-        self.client = openai.OpenAI(api_key=api_key)
+        try:
+            self.client = openai.OpenAI(api_key=api_key)
+        except Exception as e:
+            print(f"OpenAI client initialization failed: {e}")
+            self.client = None
     
     def call(self, 
              model: str, 
