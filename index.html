@@ -3,76 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Reconciliation Platform Pro - Precision Contract Validation</title>
+    <title>Unspend - Cut waste. Keep the signal.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         /* 
         ==============================================
-        COHESIVE THEME SYSTEM
+        UNSPEND BRAND SYSTEM
         ==============================================
-        Brand: "Precision Meets Trust"
-        A platform that feels like a secure, high-end financial tool—uncluttered, authoritative, and always on your side.
+        Brand: "Cut waste. Keep the signal."
+        Futuristic, sharp, and trustworthy. Tron energy meets modern fintech.
         */
 
         :root {
-            /* DARK MODE COLOR PALETTE */
-            --primary: #0D1B2A;        /* Deep Navy - main background */
-            --secondary: #1B4965;      /* Teal Blue - secondary surfaces */
-            --accent-cyan: #00D4FF;    /* Bright Cyan - highlights & CTAs (enhanced for dark) */
-            --accent-success: #00E676; /* Bright Green - success/validation (enhanced for dark) */
-            --neutral-dark: #2A3441;   /* Dark Gray - card backgrounds */
-            --neutral-medium: #394452; /* Medium Gray - elevated surfaces */
-            --neutral-light: #4A5568;  /* Light Gray - borders and subtle elements */
-            --text-primary: #F7FAFC;   /* Off-white - primary text */
-            --text-secondary: #CBD5E0; /* Light gray - secondary text */
-            --text-muted: #A0AEC0;     /* Muted gray - tertiary text */
-            --white: #FFFFFF;          /* Pure White - accents only */
-            --warning: #FFC107;        /* Bright Amber - enhanced for dark */
-            --error: #FF5252;          /* Bright Red - enhanced for dark */
+            /* UNSPEND ORANGE SYSTEM */
+            --orange-600: #FF7A1A;     /* Glow Orange - primary brand */
+            --orange-500: #FF8C3A;     /* Core Orange - main actions */
+            --orange-400: #FF9C66;     /* Mid Orange - hover states */
+            --orange-300: #FFB38A;     /* Apricot - soft highlights */
+            --orange-200: #FFD1B3;     /* Peach Highlight - subtle accents */
+            --orange-100: #FFE8D9;     /* Soft Haze - lightest orange */
+            --ember-700: #E04D00;      /* Deep Ember - shadows and depth */
             
-            /* DARK MODE BACKGROUNDS & BORDERS */
-            --error-bg: rgba(255, 82, 82, 0.15);
-            --error-bg-light: rgba(255, 82, 82, 0.25);
-            --warning-bg: rgba(255, 193, 7, 0.15);
-            --success-bg: rgba(0, 230, 118, 0.15);
-            --success-bg-light: rgba(0, 230, 118, 0.08);
-            --cyan-bg: rgba(0, 212, 255, 0.08);
-            --cyan-bg-light: rgba(0, 212, 255, 0.15);
-            --cyan-focus: rgba(0, 212, 255, 0.25);
-            --secondary-bg: rgba(27, 73, 101, 0.25);
-            --secondary-bg-light: rgba(27, 73, 101, 0.15);
+            /* UNSPEND NEUTRAL SYSTEM */
+            --ink-900: #0B0B0C;        /* Darkest - main background */
+            --ink-800: #111113;        /* Dark - card backgrounds */
+            --ink-600: #2A2A2E;        /* Medium - elevated surfaces */
+            --cloud-200: #EDEEF0;      /* Light neutral - borders */
+            --cloud-100: #F7F7F8;      /* Lightest - text on dark */
+            
+            /* UNSPEND GRADIENTS */
+            --grad-energy: linear-gradient(90deg, #FF7A1A 0%, #FF9C66 50%, #FFD1A3 100%);
+            --grad-surface: radial-gradient(circle at 40% 30%, #FFB38A, #FF8C3A 60%, #E04D00 100%);
+            --grad-background: linear-gradient(180deg, #FFE8D9 0%, #FFB38A 60%, #FF8C3A 100%);
+            
+            /* SEMANTIC COLORS */
+            --primary: var(--orange-600);
+            --secondary: var(--orange-500);
+            --success: #00E676;
+            --warning: #FFC107;
+            --error: #FF5252;
+            
+            /* TEXT COLORS */
+            --text-primary: var(--cloud-100);
+            --text-secondary: var(--cloud-200);
+            --text-muted: rgba(237, 238, 240, 0.7);
+            --text-on-orange: #FFFFFF;
+            
+            /* BACKGROUND SYSTEM */
+            --bg-main: var(--ink-900);
+            --bg-surface: var(--ink-800);
+            --bg-elevated: var(--ink-600);
+            --bg-orange: rgba(255, 122, 26, 0.1);
+            --bg-orange-light: rgba(255, 179, 138, 0.05);
+            
+            /* BORDER SYSTEM */
             --border-light: rgba(255, 255, 255, 0.08);
             --border-medium: rgba(255, 255, 255, 0.12);
             --border-strong: rgba(255, 255, 255, 0.16);
-            --border-dashed: rgba(255, 255, 255, 0.2);
-            --bg-subtle: rgba(255, 255, 255, 0.02);
-            --surface-1: rgba(42, 52, 65, 0.8);    /* Card backgrounds */
-            --surface-2: rgba(57, 68, 82, 0.9);    /* Elevated surfaces */
-            --surface-3: rgba(74, 85, 104, 0.95);  /* Highest elevation */
-            --surface-4: rgba(90, 103, 123, 0.98); /* Ultra-high elevation (modals) */
+            --border-orange: var(--orange-600);
+            --border-glow: rgba(255, 122, 26, 0.3);
             
             /* MODAL & CONNECTION STATUS SYSTEM */
-            --modal-backdrop: rgba(13, 27, 42, 0.85);
-            --modal-surface: var(--surface-3);
+            --modal-backdrop: rgba(11, 11, 12, 0.85);
+            --modal-surface: var(--bg-elevated);
             --overlay-blur: blur(20px);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-highlight: rgba(255, 255, 255, 0.05);
             
-            /* TYPOGRAPHY */
+            /* UNSPEND TYPOGRAPHY */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
             
-            /* DARK MODE SHADOWS & BORDERS */
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.25);
-            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
+            /* UNSPEND TYPE SCALE */
+            --text-display: 48px;
+            --text-h1: 40px;
+            --text-h2: 32px;
+            --text-h3: 24px;
+            --text-body: 16px;
+            --text-small: 14px;
+            --text-caption: 12px;
+            
+            /* UNSPEND SHADOWS & GLOWS */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.35);
             --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.3);
             --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.3);
+            --glow-orange: 0 0 12px rgba(255, 176, 107, 0.6), 0 0 24px rgba(255, 209, 163, 0.45);
+            --glow-orange-soft: 0 0 20px rgba(255, 122, 26, 0.3);
             --glow-success: 0 0 20px rgba(0, 230, 118, 0.3);
-            --border-radius: 6px;
-            --border-radius-large: 12px;
+            
+            /* UNSPEND BORDER RADIUS */
+            --radius-card: 16px;
+            --radius-pill: 999px;
+            --radius-button: 16px;
+            --radius-small: 8px;
             
             /* UI/UX INTERACTION SYSTEM */
             --button-min-height: 44px;
@@ -93,13 +119,13 @@
 
         body {
             font-family: var(--font-primary);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: var(--bg-main);
             background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
             color: var(--text-primary);
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: var(--text-body);
+            line-height: 1.5;
             overflow-x: hidden;
         }
 
@@ -125,14 +151,14 @@
         /* 1. BUTTON SYSTEM */
         .btn, button:not(.unstyled) {
             min-height: var(--button-min-height);
-            padding: 12px 20px;
+            padding: 14px 20px;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--radius-button);
             font-family: var(--font-primary);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: var(--text-small);
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--animation-standard) ease;
+            transition: all 200ms ease;
             margin: 8px;
             display: inline-flex;
             align-items: center;
@@ -145,60 +171,65 @@
             line-height: 1;
         }
 
-        /* Button Variants */
+        /* Unspend Button Variants */
         .btn-primary {
-            background: var(--accent-cyan);
-            color: var(--white);
+            background: var(--grad-energy);
+            color: var(--text-on-orange);
+            box-shadow: var(--shadow-button);
         }
 
         .btn-secondary {
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
         }
 
         .btn-success {
-            background: var(--accent-success);
-            color: var(--white);
+            background: var(--success);
+            color: var(--text-on-orange);
         }
 
         .btn-warning {
             background: var(--warning);
-            color: var(--neutral-dark);
+            color: var(--bg-main);
         }
 
         .btn-danger {
             background: var(--error);
-            color: var(--white);
+            color: var(--text-on-orange);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--accent-cyan);
-            color: var(--accent-cyan);
+            border: 2px solid var(--orange-600);
+            color: var(--orange-600);
         }
 
         .btn-ghost {
             background: transparent;
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             border: 1px solid var(--border-light);
         }
 
-        /* Button States - Hover */
+        /* Unspend Button States - Hover */
         .btn:hover:not(:disabled), button:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-button);
+            transform: translateY(-2px);
+            transition: all 200ms ease;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: var(--primary);
+            filter: brightness(1.05);
+            box-shadow: var(--glow-orange);
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: var(--accent-cyan);
+            background: var(--bg-elevated);
+            border-color: var(--border-strong);
         }
 
-        .btn-success:hover:not(:disabled) {
-            background: var(--secondary);
+        .btn-outline:hover:not(:disabled) {
+            background: var(--bg-orange);
+            box-shadow: var(--glow-orange-soft);
         }
 
         .btn-warning:hover:not(:disabled) {
@@ -1016,27 +1047,30 @@
         }
 
         .kpi-card {
-            background: var(--surface-2);
+            background: var(--bg-elevated);
             border: 1px solid var(--border-medium);
-            border-radius: var(--border-radius-large);
+            border-radius: var(--radius-card);
             padding: 24px;
             backdrop-filter: var(--overlay-blur);
-            transition: all var(--animation-standard) ease;
+            transition: all 200ms ease;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .kpi-card:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-            border-color: var(--accent-cyan);
+            box-shadow: var(--glow-orange);
+            border-color: var(--orange-600);
         }
 
         .kpi-value {
             font-size: 36px;
             font-weight: 700;
-            color: var(--accent-cyan);
+            color: var(--orange-500);
             margin-bottom: 8px;
             font-family: var(--font-mono);
+            text-shadow: 0 0 10px rgba(255, 140, 58, 0.3);
         }
 
         .kpi-label {
@@ -1966,6 +2000,59 @@
         header {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Unspend Logo */
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            border-radius: 50%;
+            background: var(--grad-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-orange-soft);
+            border: 2px solid var(--orange-600);
+        }
+
+        .logo-icon::before {
+            content: "";
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--orange-600) 0deg 72deg,
+                var(--orange-500) 72deg 144deg,
+                var(--orange-400) 144deg 216deg,
+                var(--orange-300) 216deg 288deg,
+                transparent 288deg 360deg
+            );
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-icon::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--bg-main);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.1); }
         }
 
 
@@ -2005,8 +2092,8 @@
 
         .section {
             margin-bottom: 32px;
-            background: var(--surface-2);
-            border-radius: var(--border-radius-large);
+            background: var(--bg-elevated);
+            border-radius: var(--radius-card);
             padding: 32px;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
@@ -2025,7 +2112,7 @@
         }
 
         .section.collapsed {
-            background: var(--surface-1);
+            background: var(--bg-surface);
             border-color: var(--border-medium);
         }
 
@@ -2036,8 +2123,8 @@
             cursor: pointer;
             margin-bottom: 24px;
             padding: 12px 20px;
-            border-radius: var(--border-radius);
-            transition: all var(--animation-standard) ease;
+            border-radius: var(--radius-small);
+            transition: all 200ms ease;
             background: transparent;
             border: 1px solid transparent;
         }
@@ -3057,8 +3144,11 @@
         <!-- Dashboard View -->
         <div class="page-view active" id="dashboardView">
             <header>
-                <h1>Contract Reconciliation Platform</h1>
-                <p class="subtitle">Precision contract validation at a glance. Your contracts, your rules. Verified every time.</p>
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <h1>Unspend</h1>
+                </div>
+                <p class="subtitle">Cut waste. Keep the signal. Your contracts, your rules. Verified every time.</p>
             </header>
 
             <!-- Dashboard Content -->

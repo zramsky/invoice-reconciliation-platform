@@ -3,76 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Reconciliation Platform Pro - Precision Contract Validation</title>
+    <title>Unspend - Cut waste. Keep the signal.</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         /* 
         ==============================================
-        COHESIVE THEME SYSTEM
+        UNSPEND BRAND SYSTEM
         ==============================================
-        Brand: "Precision Meets Trust"
-        A platform that feels like a secure, high-end financial tool—uncluttered, authoritative, and always on your side.
+        Brand: "Cut waste. Keep the signal."
+        Futuristic, sharp, and trustworthy. Tron energy meets modern fintech.
         */
 
         :root {
-            /* DARK MODE COLOR PALETTE */
-            --primary: #0D1B2A;        /* Deep Navy - main background */
-            --secondary: #1B4965;      /* Teal Blue - secondary surfaces */
-            --accent-cyan: #00D4FF;    /* Bright Cyan - highlights & CTAs (enhanced for dark) */
-            --accent-success: #00E676; /* Bright Green - success/validation (enhanced for dark) */
-            --neutral-dark: #2A3441;   /* Dark Gray - card backgrounds */
-            --neutral-medium: #394452; /* Medium Gray - elevated surfaces */
-            --neutral-light: #4A5568;  /* Light Gray - borders and subtle elements */
-            --text-primary: #F7FAFC;   /* Off-white - primary text */
-            --text-secondary: #CBD5E0; /* Light gray - secondary text */
-            --text-muted: #A0AEC0;     /* Muted gray - tertiary text */
-            --white: #FFFFFF;          /* Pure White - accents only */
-            --warning: #FFC107;        /* Bright Amber - enhanced for dark */
-            --error: #FF5252;          /* Bright Red - enhanced for dark */
+            /* UNSPEND ORANGE SYSTEM */
+            --orange-600: #FF7A1A;     /* Glow Orange - primary brand */
+            --orange-500: #FF8C3A;     /* Core Orange - main actions */
+            --orange-400: #FF9C66;     /* Mid Orange - hover states */
+            --orange-300: #FFB38A;     /* Apricot - soft highlights */
+            --orange-200: #FFD1B3;     /* Peach Highlight - subtle accents */
+            --orange-100: #FFE8D9;     /* Soft Haze - lightest orange */
+            --ember-700: #E04D00;      /* Deep Ember - shadows and depth */
             
-            /* DARK MODE BACKGROUNDS & BORDERS */
-            --error-bg: rgba(255, 82, 82, 0.15);
-            --error-bg-light: rgba(255, 82, 82, 0.25);
-            --warning-bg: rgba(255, 193, 7, 0.15);
-            --success-bg: rgba(0, 230, 118, 0.15);
-            --success-bg-light: rgba(0, 230, 118, 0.08);
-            --cyan-bg: rgba(0, 212, 255, 0.08);
-            --cyan-bg-light: rgba(0, 212, 255, 0.15);
-            --cyan-focus: rgba(0, 212, 255, 0.25);
-            --secondary-bg: rgba(27, 73, 101, 0.25);
-            --secondary-bg-light: rgba(27, 73, 101, 0.15);
+            /* UNSPEND NEUTRAL SYSTEM */
+            --ink-900: #0B0B0C;        /* Darkest - main background */
+            --ink-800: #111113;        /* Dark - card backgrounds */
+            --ink-600: #2A2A2E;        /* Medium - elevated surfaces */
+            --cloud-200: #EDEEF0;      /* Light neutral - borders */
+            --cloud-100: #F7F7F8;      /* Lightest - text on dark */
+            
+            /* UNSPEND GRADIENTS */
+            --grad-energy: linear-gradient(90deg, #FF7A1A 0%, #FF9C66 50%, #FFD1A3 100%);
+            --grad-surface: radial-gradient(circle at 40% 30%, #FFB38A, #FF8C3A 60%, #E04D00 100%);
+            --grad-background: linear-gradient(180deg, #FFE8D9 0%, #FFB38A 60%, #FF8C3A 100%);
+            
+            /* SEMANTIC COLORS */
+            --primary: var(--orange-600);
+            --secondary: var(--orange-500);
+            --success: #00E676;
+            --warning: #FFC107;
+            --error: #FF5252;
+            
+            /* TEXT COLORS */
+            --text-primary: var(--cloud-100);
+            --text-secondary: var(--cloud-200);
+            --text-muted: rgba(237, 238, 240, 0.7);
+            --text-on-orange: #FFFFFF;
+            
+            /* BACKGROUND SYSTEM */
+            --bg-main: var(--ink-900);
+            --bg-surface: var(--ink-800);
+            --bg-elevated: var(--ink-600);
+            --bg-orange: rgba(255, 122, 26, 0.1);
+            --bg-orange-light: rgba(255, 179, 138, 0.05);
+            
+            /* BORDER SYSTEM */
             --border-light: rgba(255, 255, 255, 0.08);
             --border-medium: rgba(255, 255, 255, 0.12);
             --border-strong: rgba(255, 255, 255, 0.16);
-            --border-dashed: rgba(255, 255, 255, 0.2);
-            --bg-subtle: rgba(255, 255, 255, 0.02);
-            --surface-1: rgba(42, 52, 65, 0.8);    /* Card backgrounds */
-            --surface-2: rgba(57, 68, 82, 0.9);    /* Elevated surfaces */
-            --surface-3: rgba(74, 85, 104, 0.95);  /* Highest elevation */
-            --surface-4: rgba(90, 103, 123, 0.98); /* Ultra-high elevation (modals) */
+            --border-orange: var(--orange-600);
+            --border-glow: rgba(255, 122, 26, 0.3);
             
             /* MODAL & CONNECTION STATUS SYSTEM */
-            --modal-backdrop: rgba(13, 27, 42, 0.85);
-            --modal-surface: var(--surface-3);
+            --modal-backdrop: rgba(11, 11, 12, 0.85);
+            --modal-surface: var(--bg-elevated);
             --overlay-blur: blur(20px);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-highlight: rgba(255, 255, 255, 0.05);
             
-            /* TYPOGRAPHY */
+            /* UNSPEND TYPOGRAPHY */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-            --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
             
-            /* DARK MODE SHADOWS & BORDERS */
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.25);
-            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
+            /* UNSPEND TYPE SCALE */
+            --text-display: 48px;
+            --text-h1: 40px;
+            --text-h2: 32px;
+            --text-h3: 24px;
+            --text-body: 16px;
+            --text-small: 14px;
+            --text-caption: 12px;
+            
+            /* UNSPEND SHADOWS & GLOWS */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.35);
             --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.3);
             --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.3);
+            --glow-orange: 0 0 12px rgba(255, 176, 107, 0.6), 0 0 24px rgba(255, 209, 163, 0.45);
+            --glow-orange-soft: 0 0 20px rgba(255, 122, 26, 0.3);
             --glow-success: 0 0 20px rgba(0, 230, 118, 0.3);
-            --border-radius: 6px;
-            --border-radius-large: 12px;
+            
+            /* UNSPEND BORDER RADIUS */
+            --radius-card: 16px;
+            --radius-pill: 999px;
+            --radius-button: 16px;
+            --radius-small: 8px;
             
             /* UI/UX INTERACTION SYSTEM */
             --button-min-height: 44px;
@@ -93,13 +119,13 @@
 
         body {
             font-family: var(--font-primary);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background: var(--bg-main);
             background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
             color: var(--text-primary);
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: var(--text-body);
+            line-height: 1.5;
             overflow-x: hidden;
         }
 
@@ -125,14 +151,14 @@
         /* 1. BUTTON SYSTEM */
         .btn, button:not(.unstyled) {
             min-height: var(--button-min-height);
-            padding: 12px 20px;
+            padding: 14px 20px;
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: var(--radius-button);
             font-family: var(--font-primary);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: var(--text-small);
+            font-weight: 600;
             cursor: pointer;
-            transition: all var(--animation-standard) ease;
+            transition: all 200ms ease;
             margin: 8px;
             display: inline-flex;
             align-items: center;
@@ -145,60 +171,65 @@
             line-height: 1;
         }
 
-        /* Button Variants */
+        /* Unspend Button Variants */
         .btn-primary {
-            background: var(--accent-cyan);
-            color: var(--white);
+            background: var(--grad-energy);
+            color: var(--text-on-orange);
+            box-shadow: var(--shadow-button);
         }
 
         .btn-secondary {
-            background: var(--secondary);
-            color: var(--white);
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
         }
 
         .btn-success {
-            background: var(--accent-success);
-            color: var(--white);
+            background: var(--success);
+            color: var(--text-on-orange);
         }
 
         .btn-warning {
             background: var(--warning);
-            color: var(--neutral-dark);
+            color: var(--bg-main);
         }
 
         .btn-danger {
             background: var(--error);
-            color: var(--white);
+            color: var(--text-on-orange);
         }
 
         .btn-outline {
             background: transparent;
-            border: 2px solid var(--accent-cyan);
-            color: var(--accent-cyan);
+            border: 2px solid var(--orange-600);
+            color: var(--orange-600);
         }
 
         .btn-ghost {
             background: transparent;
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             border: 1px solid var(--border-light);
         }
 
-        /* Button States - Hover */
+        /* Unspend Button States - Hover */
         .btn:hover:not(:disabled), button:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-button);
+            transform: translateY(-2px);
+            transition: all 200ms ease;
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: var(--primary);
+            filter: brightness(1.05);
+            box-shadow: var(--glow-orange);
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: var(--accent-cyan);
+            background: var(--bg-elevated);
+            border-color: var(--border-strong);
         }
 
-        .btn-success:hover:not(:disabled) {
-            background: var(--secondary);
+        .btn-outline:hover:not(:disabled) {
+            background: var(--bg-orange);
+            box-shadow: var(--glow-orange-soft);
         }
 
         .btn-warning:hover:not(:disabled) {
@@ -1016,27 +1047,30 @@
         }
 
         .kpi-card {
-            background: var(--surface-2);
+            background: var(--bg-elevated);
             border: 1px solid var(--border-medium);
-            border-radius: var(--border-radius-large);
+            border-radius: var(--radius-card);
             padding: 24px;
             backdrop-filter: var(--overlay-blur);
-            transition: all var(--animation-standard) ease;
+            transition: all 200ms ease;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .kpi-card:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-            border-color: var(--accent-cyan);
+            box-shadow: var(--glow-orange);
+            border-color: var(--orange-600);
         }
 
         .kpi-value {
             font-size: 36px;
             font-weight: 700;
-            color: var(--accent-cyan);
+            color: var(--orange-500);
             margin-bottom: 8px;
             font-family: var(--font-mono);
+            text-shadow: 0 0 10px rgba(255, 140, 58, 0.3);
         }
 
         .kpi-label {
@@ -1708,1109 +1742,6 @@
             color: var(--text-secondary);
         }
 
-        /* AI PROCESSING VISUALIZATION */
-        .ai-processing-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-
-        .ai-processing-header {
-            text-align: center;
-            margin-bottom: 40px;
-            position: relative;
-        }
-
-        .back-to-dashboard-btn {
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: var(--surface-2);
-            border: 1px solid var(--border-medium);
-            color: var(--text-primary);
-            padding: 12px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .back-to-dashboard-btn:hover {
-            background: var(--surface-3);
-            border-color: var(--accent-cyan);
-            transform: translateX(-2px);
-        }
-
-        .processing-header {
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .processing-content {
-            text-align: center;
-        }
-
-        .results-title-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .processing-steps {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            padding: 20px;
-        }
-
-        .step-indicator {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            opacity: 0.5;
-            transition: all 0.3s ease;
-        }
-
-        .step-indicator.active {
-            opacity: 1;
-            transform: scale(1.1);
-        }
-
-        .step-indicator.completed {
-            opacity: 1;
-        }
-
-        .step-circle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--surface-2);
-            border: 2px solid var(--border-medium);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            color: var(--text-secondary);
-            transition: all 0.3s ease;
-        }
-
-        .step-indicator.active .step-circle {
-            background: var(--accent-cyan);
-            border-color: var(--accent-cyan);
-            color: var(--black);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
-        }
-
-        .step-indicator.completed .step-circle {
-            background: var(--accent-success);
-            border-color: var(--accent-success);
-            color: var(--white);
-        }
-
-        .step-indicator.completed .step-circle::after {
-            content: '✓';
-        }
-
-        .step-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            text-align: center;
-            transition: color 0.3s ease;
-        }
-
-        .step-indicator.active .step-label {
-            color: var(--accent-cyan);
-            font-weight: 600;
-        }
-
-        .step-indicator.completed .step-label {
-            color: var(--accent-success);
-        }
-
-        .ai-progress-container {
-            margin-top: 20px;
-            padding: 15px;
-            background: var(--surface-1);
-            border-radius: 8px;
-        }
-
-        .ai-progress-bar {
-            width: 100%;
-            height: 6px;
-            background: var(--surface-3);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .ai-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-success));
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        /* Neural Network Background */
-        .neural-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            opacity: 0.1;
-            z-index: 0;
-        }
-
-        .neural-node {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            animation: neuralPulse 3s ease-in-out infinite;
-        }
-
-        .neural-node:nth-child(1) { top: 20%; left: 15%; animation-delay: 0s; }
-        .neural-node:nth-child(2) { top: 60%; left: 25%; animation-delay: 0.5s; }
-        .neural-node:nth-child(3) { top: 30%; right: 20%; animation-delay: 1s; }
-        .neural-node:nth-child(4) { bottom: 25%; right: 15%; animation-delay: 1.5s; }
-
-        .neural-connection {
-            position: absolute;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
-            animation: neuralFlow 4s ease-in-out infinite;
-        }
-
-        .neural-connection:nth-child(5) {
-            top: 25%;
-            left: 15%;
-            width: 200px;
-            transform: rotate(20deg);
-            animation-delay: 0s;
-        }
-
-        .neural-connection:nth-child(6) {
-            top: 45%;
-            left: 25%;
-            width: 300px;
-            transform: rotate(-15deg);
-            animation-delay: 1s;
-        }
-
-        .neural-connection:nth-child(7) {
-            bottom: 30%;
-            right: 20%;
-            width: 150px;
-            transform: rotate(45deg);
-            animation-delay: 2s;
-        }
-
-        @keyframes neuralPulse {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.5); }
-        }
-
-        @keyframes neuralFlow {
-            0% { opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { opacity: 0; }
-        }
-
-        /* Document Analysis Panels */
-        .document-analysis-panels {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-            position: relative;
-            z-index: 1;
-        }
-
-        @media (max-width: 768px) {
-            .document-analysis-panels {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-        }
-
-        .document-panel {
-            background: var(--surface-1);
-            border: 1px solid var(--border-medium);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .document-panel-header {
-            background: var(--surface-2);
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--border-medium);
-        }
-
-        .document-panel-header h3 {
-            margin: 0 0 5px 0;
-            color: var(--text-primary);
-            font-size: 1.1rem;
-        }
-
-        .document-name {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .document-content-container {
-            position: relative;
-            height: 400px;
-            overflow: hidden;
-        }
-
-        .document-content {
-            padding: 20px;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: var(--text-primary);
-            height: 100%;
-            overflow-y: auto;
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .document-content p {
-            margin-bottom: 12px;
-            position: relative;
-        }
-
-        .document-content .highlight {
-            background: linear-gradient(120deg, transparent 0%, rgba(0, 255, 255, 0.3) 10%, rgba(0, 255, 255, 0.3) 90%, transparent 100%);
-            padding: 2px 4px;
-            border-radius: 3px;
-            animation: highlightGlow 0.8s ease forwards;
-        }
-
-        @keyframes highlightGlow {
-            0% { background: transparent; }
-            50% { background: rgba(0, 255, 255, 0.4); box-shadow: 0 0 10px rgba(0, 255, 255, 0.3); }
-            100% { background: rgba(0, 255, 255, 0.2); }
-        }
-
-        /* Scanning Effect */
-        .scanning-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .scan-line {
-            position: absolute;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                transparent 0%,
-                rgba(0, 255, 255, 0.4) 20%,
-                rgba(0, 255, 255, 0.8) 50%,
-                rgba(0, 255, 255, 0.4) 80%,
-                transparent 100%);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
-            animation: scanning 6s linear infinite;
-            opacity: 0;
-        }
-
-        .scan-line.active {
-            opacity: 1;
-        }
-
-        @keyframes scanning {
-            0% { top: -3px; opacity: 0; }
-            5% { opacity: 1; }
-            95% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-
-        /* Floating Tags */
-        .floating-tags-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 15;
-        }
-
-        .floating-tag {
-            position: absolute;
-            background: var(--accent-success);
-            color: var(--white);
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            white-space: nowrap;
-            animation: floatTag 3s ease forwards;
-            opacity: 0;
-            transform: scale(0.8);
-        }
-
-        @keyframes floatTag {
-            0% { opacity: 0; transform: scale(0.8) translateY(10px); }
-            20% { opacity: 1; transform: scale(1) translateY(0); }
-            80% { opacity: 1; transform: scale(1) translateY(-5px); }
-            100% { opacity: 0; transform: scale(0.9) translateY(-15px); }
-        }
-
-        .floating-tag.amount { background: var(--accent-warning); }
-        .floating-tag.date { background: var(--accent-cyan); }
-        .floating-tag.vendor { background: var(--accent-success); }
-        .floating-tag.clause { background: var(--accent-info); }
-
-        /* Analysis Results */
-        .analysis-results-summary {
-            background: var(--surface-1);
-            border: 1px solid var(--border-medium);
-            border-radius: 12px;
-            padding: 25px;
-            margin-top: 30px;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .results-header h3 {
-            color: var(--accent-success);
-            margin: 0 0 10px 0;
-        }
-
-        .key-findings {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .finding-item {
-            background: var(--surface-2);
-            padding: 15px;
-            border-radius: 8px;
-            border-left: 4px solid var(--accent-cyan);
-        }
-
-        .finding-label {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-        }
-
-        .finding-value {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .reconciliation-summary {
-            background: var(--surface-2);
-            border-left: 4px solid var(--accent-info);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 0 8px 8px 0;
-        }
-
-        .reconciliation-summary-text {
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: var(--text-primary);
-            font-weight: 500;
-        }
-
-        .invoice-status.compliant {
-            background: var(--accent-success);
-            color: var(--white);
-        }
-
-        .invoice-status.attention_required {
-            background: var(--accent-warning);
-            color: var(--white);
-        }
-
-        .modal-close-btn {
-            background: var(--accent-cyan);
-            color: var(--white);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .modal-close-btn:hover {
-            background: var(--accent-success);
-            transform: translateY(-2px);
-        }
-
-        .ai-processing-header h1 {
-            color: var(--text-primary);
-            font-size: 32px;
-            margin-bottom: 12px;
-            animation: fadeInDown 0.8s ease;
-        }
-
-        .ai-processing-subtitle {
-            color: var(--text-secondary);
-            font-size: 18px;
-        }
-
-        .ai-processing-content {
-            display: grid;
-            gap: 32px;
-        }
-
-        .ai-document-section {
-            animation: slideInUp 0.8s ease;
-        }
-
-        .document-preview {
-            background: var(--surface-2);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--border-radius-large);
-            overflow: hidden;
-            backdrop-filter: var(--overlay-blur);
-            min-height: 350px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .document-pages {
-            position: relative;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-        }
-
-        .document-page {
-            position: absolute;
-            width: calc(100% - 40px);
-            height: calc(100% - 40px);
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            transform-origin: center;
-            transition: transform 0.5s ease;
-            color: #333;
-        }
-
-        .document-page:nth-child(1) {
-            z-index: 3;
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .document-page:nth-child(2) {
-            z-index: 2;
-            background: rgba(255, 255, 255, 0.8);
-            transform: translateY(5px) scale(0.98);
-        }
-
-        .document-page:nth-child(3) {
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.6);
-            transform: translateY(10px) scale(0.96);
-        }
-
-        .document-page.flipping {
-            animation: pageFlip 1.5s ease-in-out forwards;
-        }
-
-        @keyframes pageFlip {
-            0% {
-                transform: rotateY(0deg) translateY(0px) scale(1);
-                z-index: 3;
-            }
-            25% {
-                transform: rotateY(-45deg) translateY(-10px) scale(1.02);
-            }
-            50% {
-                transform: rotateY(-90deg) translateY(-20px) scale(0.9);
-                opacity: 0.7;
-            }
-            75% {
-                transform: rotateY(-135deg) translateY(-10px) scale(0.8);
-                opacity: 0.3;
-            }
-            100% {
-                transform: rotateY(-180deg) translateY(0px) scale(0.7);
-                opacity: 0;
-                z-index: 0;
-            }
-        }
-
-        .document-header {
-            background: var(--surface-1);
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border-bottom: 1px solid var(--border-medium);
-        }
-
-        .document-icon {
-            font-size: 24px;
-        }
-
-        .document-header h3 {
-            color: var(--text-primary);
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0;
-            flex: 1;
-        }
-
-        .analysis-status {
-            padding: 6px 12px;
-            background: var(--cyan-bg);
-            color: var(--accent-cyan);
-            border-radius: var(--border-radius);
-            font-size: 14px;
-            font-weight: 500;
-            animation: pulse 1.5s infinite;
-        }
-
-        .document-visual {
-            padding: 24px;
-            position: relative;
-            min-height: 300px;
-        }
-
-        .document-page {
-            background: var(--white);
-            border: 1px solid var(--border-light);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            min-height: 250px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .document-title {
-            color: var(--primary);
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .document-content {
-            color: var(--text-secondary);
-            line-height: 1.8;
-            position: relative;
-        }
-
-        .highlighted-term {
-            background: linear-gradient(120deg, transparent 0%, var(--yellow-bg) 10%, var(--yellow-bg) 90%, transparent 100%);
-            color: var(--text-primary);
-            font-weight: 500;
-            padding: 2px 6px;
-            border-radius: 4px;
-            display: inline-block;
-            animation: highlightPulse 2s ease-in-out;
-            position: relative;
-        }
-
-        @keyframes highlightPulse {
-            0% { background-color: transparent; transform: scale(1); }
-            50% { background-color: var(--yellow-bg); transform: scale(1.05); }
-            100% { background-color: var(--yellow-bg); transform: scale(1); }
-        }
-
-        .extracted-terms {
-            position: absolute;
-            top: 20px;
-            right: -200px;
-            width: 180px;
-        }
-
-        .floating-term {
-            background: var(--accent-cyan);
-            color: var(--white);
-            padding: 8px 12px;
-            border-radius: var(--border-radius);
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            box-shadow: var(--shadow-medium);
-            animation: floatIn 0.8s ease forwards, float 3s ease-in-out infinite;
-            opacity: 0;
-            transform: translateX(20px);
-        }
-
-        @keyframes floatIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .document-preview.scanning::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                var(--accent-cyan) 20%, 
-                rgba(0, 255, 255, 0.8) 50%, 
-                var(--accent-cyan) 80%, 
-                transparent 100%);
-            animation: scan 3s ease-in-out infinite;
-            z-index: 15;
-            box-shadow: 0 0 20px var(--accent-cyan);
-        }
-
-        .document-preview.scanning::after {
-            content: '🤖 AI Reading...';
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: rgba(0, 255, 255, 0.1);
-            color: var(--accent-cyan);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            border: 1px solid var(--accent-cyan);
-            z-index: 15;
-            animation: aiReading 2s ease-in-out infinite;
-        }
-
-        @keyframes scan {
-            0% { 
-                transform: translateY(0); 
-                opacity: 0; 
-                width: 100%;
-            }
-            10% { 
-                opacity: 1; 
-                width: 100%;
-            }
-            90% { 
-                opacity: 1; 
-                width: 100%;
-            }
-            100% { 
-                transform: translateY(calc(100% + 300px)); 
-                opacity: 0; 
-                width: 20%;
-            }
-        }
-
-        @keyframes aiReading {
-            0%, 100% { 
-                opacity: 0.7; 
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 1; 
-                transform: scale(1.05);
-                box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
-            }
-        }
-
-        .ai-scanning-beam {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-            z-index: 12;
-        }
-
-        .scanning-line {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--accent-success) 30%, 
-                #00ff00 50%, 
-                var(--accent-success) 70%, 
-                transparent);
-            animation: scanVertical 4s ease-in-out infinite;
-            box-shadow: 0 0 10px #00ff00;
-        }
-
-        .scanning-line:nth-child(2) {
-            animation-delay: 1s;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--accent-warning) 30%, 
-                #ffaa00 50%, 
-                var(--accent-warning) 70%, 
-                transparent);
-            box-shadow: 0 0 10px #ffaa00;
-        }
-
-        .scanning-line:nth-child(3) {
-            animation-delay: 2s;
-            background: linear-gradient(90deg, 
-                transparent, 
-                var(--accent-cyan) 30%, 
-                #00ffff 50%, 
-                var(--accent-cyan) 70%, 
-                transparent);
-            box-shadow: 0 0 10px #00ffff;
-        }
-
-        @keyframes scanVertical {
-            0% { 
-                top: 0; 
-                opacity: 0; 
-            }
-            5% { 
-                opacity: 1; 
-            }
-            95% { 
-                opacity: 1; 
-            }
-            100% { 
-                top: 100%; 
-                opacity: 0; 
-            }
-        }
-
-        .ai-processing-container.comparing {
-            position: relative;
-        }
-
-        .ai-processing-container.comparing::before {
-            content: '⚡ Comparing Documents...';
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 255, 255, 0.1);
-            border: 2px solid var(--accent-cyan);
-            padding: 20px 40px;
-            border-radius: 15px;
-            color: var(--accent-cyan);
-            font-size: 1.2rem;
-            font-weight: 600;
-            z-index: 1000;
-            animation: pulseGlow 1s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.3); }
-            100% { box-shadow: 0 0 40px rgba(0, 255, 255, 0.6); }
-        }
-
-        .completion-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .completion-modal {
-            background: var(--surface-1);
-            border-radius: 20px;
-            padding: 40px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid var(--accent-cyan);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: modalSlideIn 0.5s ease;
-        }
-
-        .completion-modal-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .completion-icon {
-            font-size: 4rem;
-            animation: bounce 1s ease infinite;
-        }
-
-        .completion-modal h3 {
-            color: var(--accent-cyan);
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        .completion-modal p {
-            color: var(--text-primary);
-            margin: 0;
-            font-size: 1.1rem;
-        }
-
-        .completion-progress {
-            width: 100%;
-            height: 6px;
-            background: var(--surface-3);
-            border-radius: 3px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .completion-progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-success));
-            width: 0%;
-            transition: width 3.5s ease-in-out;
-        }
-
-        .completion-status {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: scale(0.8) translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        .analysis-insights {
-            padding: 20px 24px;
-            background: var(--surface-1);
-            border-top: 1px solid var(--border-light);
-        }
-
-        .insight-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 0;
-            color: var(--text-secondary);
-            font-size: 14px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .insight-icon {
-            font-size: 18px;
-        }
-
-        /* Reconciliation Section */
-        .ai-reconciliation-section {
-            margin-top: 20px;
-            animation: slideInUp 0.8s ease;
-        }
-
-        .reconciliation-visual {
-            background: var(--surface-2);
-            border: 1px solid var(--border-medium);
-            border-radius: var(--border-radius-large);
-            padding: 24px;
-        }
-
-        .reconciliation-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-        }
-
-        .reconciliation-header h3 {
-            color: var(--text-primary);
-            font-size: 20px;
-            font-weight: 600;
-            margin: 0;
-        }
-
-        .comparison-flow {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            gap: 24px;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .comparison-item {
-            background: var(--surface-1);
-            border: 1px solid var(--border-light);
-            border-radius: var(--border-radius);
-            padding: 20px;
-        }
-
-        .comparison-item h4 {
-            color: var(--text-primary);
-            font-size: 16px;
-            font-weight: 600;
-            margin: 0 0 12px 0;
-        }
-
-        .contract-side {
-            border-left: 3px solid var(--accent-cyan);
-        }
-
-        .invoice-side {
-            border-left: 3px solid var(--success);
-        }
-
-        .comparison-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pulse-animation {
-            font-size: 32px;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.2); opacity: 0.8; }
-        }
-
-        /* Progress Section */
-        .ai-progress-section {
-            margin-top: 40px;
-        }
-
-        .progress-container {
-            background: var(--surface-1);
-            border-radius: var(--border-radius);
-            height: 8px;
-            overflow: hidden;
-            margin-bottom: 24px;
-        }
-
-        .progress-bar {
-            background: linear-gradient(90deg, var(--accent-cyan), var(--primary));
-            height: 100%;
-            width: 0%;
-            transition: width 0.5s ease;
-            border-radius: var(--border-radius);
-        }
-
-        .progress-steps {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .progress-step {
-            text-align: center;
-            opacity: 0.5;
-            transition: opacity 0.3s ease;
-        }
-
-        .progress-step.active {
-            opacity: 1;
-        }
-
-        .progress-step.completed {
-            opacity: 1;
-        }
-
-        .progress-step.completed .step-icon {
-            color: var(--success);
-        }
-
-        .step-icon {
-            display: block;
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
-
-        .step-label {
-            font-size: 14px;
-            color: var(--text-secondary);
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .term-bubble {
-            display: inline-block;
-            background: var(--yellow-bg);
-            color: var(--text-primary);
-            padding: 4px 8px;
-            border-radius: 12px;
-            margin: 2px;
-            font-size: 13px;
-            font-weight: 500;
-            animation: bubblePop 0.5s ease;
-        }
-
-        @keyframes bubblePop {
-            0% { transform: scale(0); }
-            80% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
         /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
             .kpi-container {
@@ -3069,6 +2000,59 @@
         header {
             text-align: center;
             margin-bottom: 40px;
+            position: relative;
+        }
+
+        /* Unspend Logo */
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            position: relative;
+            border-radius: 50%;
+            background: var(--grad-surface);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-orange-soft);
+            border: 2px solid var(--orange-600);
+        }
+
+        .logo-icon::before {
+            content: "";
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--orange-600) 0deg 72deg,
+                var(--orange-500) 72deg 144deg,
+                var(--orange-400) 144deg 216deg,
+                var(--orange-300) 216deg 288deg,
+                transparent 288deg 360deg
+            );
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-icon::after {
+            content: "";
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--bg-main);
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.05); filter: brightness(1.1); }
         }
 
 
@@ -3108,8 +2092,8 @@
 
         .section {
             margin-bottom: 32px;
-            background: var(--surface-2);
-            border-radius: var(--border-radius-large);
+            background: var(--bg-elevated);
+            border-radius: var(--radius-card);
             padding: 32px;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
@@ -3128,7 +2112,7 @@
         }
 
         .section.collapsed {
-            background: var(--surface-1);
+            background: var(--bg-surface);
             border-color: var(--border-medium);
         }
 
@@ -3139,8 +2123,8 @@
             cursor: pointer;
             margin-bottom: 24px;
             padding: 12px 20px;
-            border-radius: var(--border-radius);
-            transition: all var(--animation-standard) ease;
+            border-radius: var(--radius-small);
+            transition: all 200ms ease;
             background: transparent;
             border: 1px solid transparent;
         }
@@ -3994,7 +2978,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>
-                <span>⚙️</span>
+                <span></span>
                 Settings
             </h3>
             <button class="sidebar-close" onclick="closeSidebar()">×</button>
@@ -4015,7 +2999,7 @@
             </button>
             <div class="sidebar-divider"></div>
             <button class="sidebar-nav-item" onclick="showAbout()">
-                <span class="icon">ℹ️</span>
+                <span class="icon">i</span>
                 About
             </button>
         </nav>
@@ -4067,7 +3051,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">
-                    <span>⚙️</span>
+                    <span></span>
                     API Connection Settings
                 </h2>
                 <button class="modal-close" onclick="closeApiSettings()">×</button>
@@ -4106,7 +3090,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">
-                    <span>🏢</span>
+                    <span></span>
                     Add New Vendor
                 </h2>
                 <button class="modal-close" onclick="closeAddVendorModal()">×</button>
@@ -4133,7 +3117,7 @@
                         <div class="file-upload-area" onclick="document.getElementById('contractFile').click()">
                             <input type="file" id="contractFile" name="contractFile" accept=".pdf,.doc,.docx" style="display: none;" onchange="handleContractFileSelect(this)">
                             <div id="contractFileStatus">
-                                📄 Click to upload contract file (PDF, DOC, DOCX)
+                                 Click to upload contract file (PDF, DOC, DOCX)
                             </div>
                         </div>
                     </div>
@@ -4160,8 +3144,11 @@
         <!-- Dashboard View -->
         <div class="page-view active" id="dashboardView">
             <header>
-                <h1>Contract Reconciliation Platform</h1>
-                <p class="subtitle">Precision contract validation at a glance. Your contracts, your rules. Verified every time.</p>
+                <div class="logo">
+                    <div class="logo-icon"></div>
+                    <h1>Unspend</h1>
+                </div>
+                <p class="subtitle">Cut waste. Keep the signal. Your contracts, your rules. Verified every time.</p>
             </header>
 
             <!-- Dashboard Content -->
@@ -4171,7 +3158,7 @@
                     <div class="kpi-value" id="totalDriftValue">$0.00</div>
                     <div class="kpi-label">
                         Total Invoice Drift
-                        <span class="kpi-tooltip" title="Total value of all mismatches found between contracts and invoices">ℹ️</span>
+                        <span class="kpi-tooltip" title="Total value of all mismatches found between contracts and invoices">i</span>
                     </div>
                     <div class="kpi-description">Cumulative discrepancies detected</div>
                 </div>
@@ -4180,7 +3167,7 @@
                     <div class="kpi-value" id="activeVendorsValue">0</div>
                     <div class="kpi-label">
                         Active Vendors
-                        <span class="kpi-tooltip" title="Vendors with active profiles and valid contracts">ℹ️</span>
+                        <span class="kpi-tooltip" title="Vendors with active profiles and valid contracts">i</span>
                     </div>
                     <div class="kpi-description">Configured for reconciliation</div>
                 </div>
@@ -4189,7 +3176,7 @@
                     <div class="kpi-value" id="reviewedInvoicesValue">0</div>
                     <div class="kpi-label">
                         AI-Reviewed Invoices
-                        <span class="kpi-tooltip" title="Total invoices screened by the AI engine">ℹ️</span>
+                        <span class="kpi-tooltip" title="Total invoices screened by the AI engine">i</span>
                     </div>
                     <div class="kpi-description">Processed through AI analysis</div>
                 </div>
@@ -4258,11 +3245,11 @@
                 </div>
                 
                 <div class="empty-vendors" id="emptyVendors" style="display: none;">
-                    <div class="empty-vendors-icon">🏢</div>
+                    <div class="empty-vendors-icon"></div>
                     <h3>No vendors yet</h3>
                     <p>Add your first vendor to start tracking contract reconciliations.</p>
                     <button class="add-vendor-btn" onclick="scrollToContractUpload()">
-                        <span>📄</span>
+                        <span></span>
                         Upload Your First Contract
                     </button>
                 </div>
@@ -4290,7 +3277,7 @@
         <!-- Settings Section -->
         <div class="section" id="settingsSection">
             <div class="section-header" onclick="toggleSection('settingsSection')">
-                <h2>⚙️ Settings & Configuration</h2>
+                <h2>Settings & Configuration</h2>
             </div>
             <div class="section-content">
                 <div class="info-box">
@@ -4351,13 +3338,13 @@
         <!-- Upload Section -->
         <div class="section" id="uploadSection">
             <div class="section-header" onclick="toggleSection('uploadSection')">
-                <h2>📁 Document Upload</h2>
+                <h2>Document Upload</h2>
             </div>
             <div class="section-content">
                 <div class="upload-area">
                     <!-- Contract Upload -->
                     <div class="upload-box" id="contractUpload">
-                        <div class="upload-icon">📄</div>
+                        <div class="upload-icon"></div>
                         <h3>Contract Document</h3>
                         <p>Upload your master contract for validation</p>
                         <p style="font-size: 13px; opacity: 0.7; margin-top: 8px;">Supported formats: PDF, PNG, JPG, JPEG</p>
@@ -4367,7 +3354,7 @@
 
                     <!-- Multiple Invoices Upload -->
                     <div class="upload-box multi-upload-box" id="invoicesUpload">
-                        <div class="upload-icon">🧾</div>
+                        <div class="upload-icon"></div>
                         <h3>Invoice Documents</h3>
                         <p>Upload invoices for batch validation against contract</p>
                         <p style="font-size: 13px; opacity: 0.7; margin-top: 4px;">Select multiple files for batch processing</p>
@@ -4389,14 +3376,9 @@
 
         <!-- Processing Section -->
         <div class="processing-section hidden" id="processingSection">
-            <div class="processing-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()">← Back to Dashboard</button>
-                <div class="processing-content">
-                    <div class="spinner"></div>
-                    <h2>Analyzing Terms. Cross-checking Figures.</h2>
-                    <p id="processingStatus">Initializing document analysis...</p>
-                </div>
-            </div>
+            <div class="spinner"></div>
+            <h2>Analyzing Terms. Cross-checking Figures.</h2>
+            <p id="processingStatus">Initializing document analysis...</p>
             
             <div class="processing-grid" id="processingGrid">
                 <!-- Dynamic processing items will be added here -->
@@ -4406,14 +3388,11 @@
         <!-- Results Section -->
         <div class="results-section hidden" id="resultsSection">
             <div class="results-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()" style="margin-bottom: 20px;">← Back to Dashboard</button>
-                <div class="results-title-section">
-                    <h2>Validation Results</h2>
-                    <div class="export-controls">
-                        <button class="btn btn-secondary export-btn" onclick="exportToPDF()">📄 Export PDF</button>
-                        <button class="btn btn-secondary export-btn" onclick="exportToExcel()">📊 Export Excel</button>
-                        <button class="btn btn-success export-btn" onclick="saveToHistory()">💾 Save Results</button>
-                    </div>
+                <h2>Validation Results</h2>
+                <div class="export-controls">
+                    <button class="btn btn-secondary export-btn" onclick="exportToPDF()">Export PDF</button>
+                    <button class="btn btn-secondary export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+                    <button class="btn btn-success export-btn" onclick="saveToHistory()">💾 Save Results</button>
                 </div>
             </div>
             
@@ -4459,103 +3438,6 @@
         </div>
     </div>
 
-    <!-- AI Processing View -->
-    <div class="page-view" id="aiProcessingView">
-        <div class="ai-processing-container">
-            <div class="ai-processing-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()">← Back to Dashboard</button>
-                <h1>🤖 AI Document Analysis in Progress</h1>
-                <p class="ai-processing-subtitle">Watching AI extract and understand your documents</p>
-            </div>
-
-            <!-- Processing Steps Indicator -->
-            <div class="processing-steps">
-                <div class="step-indicator">
-                    <div class="step-circle">1</div>
-                    <span class="step-label">Document Analysis</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-circle">2</div>
-                    <span class="step-label">Term Extraction</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-circle">3</div>
-                    <span class="step-label">Comparison Analysis</span>
-                </div>
-                <div class="step-indicator">
-                    <div class="step-circle">4</div>
-                    <span class="step-label">Final Report</span>
-                </div>
-            </div>
-
-            <!-- Neural Network Background -->
-            <div class="neural-background">
-                <div class="neural-node"></div>
-                <div class="neural-node"></div>
-                <div class="neural-node"></div>
-                <div class="neural-node"></div>
-                <div class="neural-connection"></div>
-                <div class="neural-connection"></div>
-                <div class="neural-connection"></div>
-            </div>
-
-            <div class="ai-processing-content">
-                <!-- Document Analysis Panels -->
-                <div class="document-analysis-panels">
-                    <!-- Contract Panel -->
-                    <div class="document-panel" id="contractPanel">
-                        <div class="document-panel-header">
-                            <h3>📄 Contract Document</h3>
-                            <span class="document-name" id="contractFileName">Loading...</span>
-                        </div>
-                        <div class="document-content-container">
-                            <div class="scanning-overlay">
-                                <div class="scan-line"></div>
-                            </div>
-                            <div class="document-content" id="contractContent">
-                                <!-- Real document content will be inserted here -->
-                            </div>
-                            <div class="floating-tags-container" id="contractTags">
-                                <!-- Floating detection tags -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Invoice Panel -->  
-                    <div class="document-panel" id="invoicePanel">
-                        <div class="document-panel-header">
-                            <h3>📋 Invoice Document</h3>
-                            <span class="document-name" id="invoiceFileName">Loading...</span>
-                        </div>
-                        <div class="document-content-container">
-                            <div class="scanning-overlay">
-                                <div class="scan-line"></div>
-                            </div>
-                            <div class="document-content" id="invoiceContent">
-                                <!-- Real document content will be inserted here -->
-                            </div>
-                            <div class="floating-tags-container" id="invoiceTags">
-                                <!-- Floating detection tags -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Analysis Results Summary -->
-                <div class="analysis-results-summary" id="analysisResults" style="display: none;">
-                    <div class="results-header">
-                        <h3>✅ Analysis Complete</h3>
-                        <p>Key findings from your documents:</p>
-                    </div>
-                    <div class="key-findings" id="keyFindings">
-                        <!-- Dynamic findings will be inserted here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
     <!-- Vendor Details View -->
     <div class="page-view" id="vendorDetailsView">
         <header>
@@ -4584,7 +3466,7 @@
             <!-- Contract Details Section -->
             <div class="contract-details-section">
                 <div class="section-header">
-                    <h2>📄 Contract Details</h2>
+                    <h2>Contract Details</h2>
                 </div>
                 <div class="contract-info" id="contractInfo">
                     <!-- Dynamic contract information -->
@@ -4940,24 +3822,11 @@
         }
 
         function showVendorDetails(vendorId) {
-            try {
-                console.log('Showing vendor details for ID:', vendorId);
-                document.querySelectorAll('.page-view').forEach(view => {
-                    view.classList.remove('active');
-                });
-                
-                const vendorDetailsView = document.getElementById('vendorDetailsView');
-                if (vendorDetailsView) {
-                    vendorDetailsView.classList.add('active');
-                    loadVendorDetails(vendorId);
-                } else {
-                    console.error('Vendor details view not found');
-                    showDashboard();
-                }
-            } catch (error) {
-                console.error('Error in showVendorDetails:', error);
-                showDashboard();
-            }
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.getElementById('vendorDetailsView').classList.add('active');
+            loadVendorDetails(vendorId);
         }
 
         // ===============================
@@ -4973,9 +3842,6 @@
         }
 
         function updateKPIs() {
-            // Clean up any duplicate vendors before calculating KPIs
-            removeDuplicateVendors();
-            
             // Calculate KPI values from reconciliation history and vendors
             const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
             
@@ -4998,19 +3864,11 @@
                 }
             });
 
-            // Active Vendors - count active vendors (treat vendors without status as active)
-            // Remove contractFile requirement since vendors created from analysis don't have this property
-            const activeVendors = vendors.filter(vendor => (!vendor.status || vendor.status !== 'disabled')).length;
+            // Active Vendors - only count active vendors with contracts (treat vendors without status as active)
+            const activeVendors = vendors.filter(vendor => (!vendor.status || vendor.status !== 'disabled') && vendor.contractFile).length;
 
-            // AI-Reviewed Invoices - count individual invoices processed, not reconciliation sessions
-            let reviewedInvoices = 0;
-            history.forEach(entry => {
-                if (entry.results?.invoiceResults) {
-                    reviewedInvoices += entry.results.invoiceResults.length;
-                } else {
-                    reviewedInvoices += 1; // Fallback for old format
-                }
-            });
+            // AI-Reviewed Invoices - total processed invoices
+            const reviewedInvoices = history.length;
 
             // Update KPI displays
             document.getElementById('totalDriftValue').textContent = `$${totalDrift.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
@@ -5035,26 +3893,14 @@
             tableContainer.style.display = 'block';
             emptyState.style.display = 'none';
             
-            // Calculate invoice counts for each vendor
+            // Calculate invoice counts for each vendor from reconciliation history
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
             const vendorInvoiceCounts = {};
             
-            // First check invoices stored directly on vendor objects
-            activeVendors.forEach(vendor => {
-                if (vendor.invoiceCount !== undefined) {
-                    vendorInvoiceCounts[vendor.name] = vendor.invoiceCount;
-                } else if (vendor.invoiceAnalysis && Array.isArray(vendor.invoiceAnalysis)) {
-                    vendorInvoiceCounts[vendor.name] = vendor.invoiceAnalysis.length;
-                }
-            });
-            
-            // Also check reconciliation history for legacy data
-            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
             history.forEach(entry => {
-                const vendorName = entry.vendorName || entry.results?.contractDetails?.vendor_name;
-                if (vendorName && !vendorInvoiceCounts[vendorName]) {
-                    // Count individual invoices, not reconciliation sessions
-                    const invoiceCount = entry.results?.invoiceResults?.length || 1;
-                    vendorInvoiceCounts[vendorName] = invoiceCount;
+                const vendorName = entry.results?.contractDetails?.vendor_name;
+                if (vendorName) {
+                    vendorInvoiceCounts[vendorName] = (vendorInvoiceCounts[vendorName] || 0) + 1;
                 }
             });
             
@@ -5094,11 +3940,9 @@
                     <td>
                         <div class="vendor-actions">
                             <button class="btn-icon" onclick="disableVendor('${vendor.id}')" title="Disable vendor">
-                                ⏸️
-                            </button>
+                                                            </button>
                             <button class="btn-icon btn-danger" onclick="deleteVendor('${vendor.id}')" title="Delete vendor permanently">
-                                🗑️
-                            </button>
+                                                            </button>
                         </div>
                     </td>
                 `;
@@ -5128,9 +3972,7 @@
                 history.forEach(entry => {
                     const vendorName = entry.results?.contractDetails?.vendor_name;
                     if (vendorName) {
-                        // Count individual invoices, not reconciliation sessions
-                        const invoiceCount = entry.results?.invoiceResults?.length || 1;
-                        vendorInvoiceCounts[vendorName] = (vendorInvoiceCounts[vendorName] || 0) + invoiceCount;
+                        vendorInvoiceCounts[vendorName] = (vendorInvoiceCounts[vendorName] || 0) + 1;
                     }
                 });
                 
@@ -5149,11 +3991,9 @@
                         <td>
                             <div class="vendor-actions">
                                 <button class="btn-icon" onclick="enableVendor('${vendor.id}')" title="Re-enable vendor">
-                                    ▶️
-                                </button>
+                                                                    </button>
                                 <button class="btn-icon btn-danger" onclick="deleteVendor('${vendor.id}')" title="Delete vendor permanently">
-                                    🗑️
-                                </button>
+                                                                    </button>
                             </div>
                         </td>
                     `;
@@ -5214,7 +4054,7 @@
             const vendor = vendors.find(v => v.id === vendorId);
             if (!vendor) return;
             
-            if (confirm(`⚠️ PERMANENT DELETION WARNING ⚠️\n\nAre you sure you want to permanently delete "${vendor.name}"?\n\nThis action will:\n• Delete all vendor data\n• Remove all associated contract information\n• Cannot be undone\n\nType "DELETE" to confirm this permanent action.`)) {
+            if (confirm(`PERMANENT DELETION WARNING\n\nAre you sure you want to permanently delete "${vendor.name}"?\n\nThis action will:\n• Delete all vendor data\n• Remove all associated contract information\n• Cannot be undone\n\nType "DELETE" to confirm this permanent action.`)) {
                 const confirmation = prompt(`To confirm permanent deletion of "${vendor.name}", type DELETE in capital letters:`);
                 
                 if (confirmation === 'DELETE') {
@@ -5274,21 +4114,12 @@
         }
 
         function loadVendorDetails(vendorId) {
-            // Reload vendors from storage first to get latest data
-            const savedVendors = localStorage.getItem('vendors');
-            if (savedVendors) {
-                vendors = JSON.parse(savedVendors);
-            }
-            
             const vendor = vendors.find(v => v.id === vendorId);
             if (!vendor) {
-                console.error('Vendor not found with ID:', vendorId, 'Available vendors:', vendors.map(v => ({id: v.id, name: v.name})));
                 alert('Vendor not found');
                 showDashboard();
                 return;
             }
-            
-            console.log('Loading vendor details for:', vendor.name, vendor);
 
             // Update page title
             document.getElementById('vendorDetailsTitle').textContent = vendor.name;
@@ -5354,7 +4185,7 @@
                         ${!aiSummary.overview && !aiSummary.vendor_overview && !aiSummary.contract_overview && contractAnalysis ? `
                             <div class="ai-summary-item">
                                 <div class="ai-summary-text" style="text-align: center; color: var(--text-muted);">
-                                    📄 This vendor was created before AI summaries were available.
+                                     This vendor was created before AI summaries were available.
                                     <br>
                                     <button class="btn btn-primary" style="margin-top: 12px; font-size: 14px; padding: 8px 16px;" 
                                             onclick="regenerateAISummary('${vendor.id}')">
@@ -5428,7 +4259,7 @@
             if (!vendor.contractFile && !vendor.contractAnalysis) {
                 contractInfo.innerHTML = `
                     <div class="empty-invoice-history">
-                        <div class="empty-invoice-history-icon">📄</div>
+                        <div class="empty-invoice-history-icon"></div>
                         <h3>No Contract Available</h3>
                         <p>Upload a contract to see detailed vendor terms and conditions.</p>
                     </div>
@@ -5443,11 +4274,10 @@
             contractInfo.innerHTML = `
                 <div class="contract-file-info">
                     <div class="contract-file-header">
-                        <div class="contract-file-icon">📄</div>
+                        <div class="contract-file-icon"></div>
                         <div style="flex: 1;">
                             <div class="contract-file-name clickable-file" onclick="downloadContractFile('${vendor.id}')" title="Click to download contract">
-                                ${vendor.contractFile || 'Contract File'} 📥
-                            </div>
+                                ${vendor.contractFile || 'Contract File'}                             </div>
                             <div class="contract-file-date">
                                 Uploaded: ${vendor.contractUploadDate ? new Date(vendor.contractUploadDate).toLocaleDateString() : 'Unknown date'}
                             </div>
@@ -5505,33 +4335,13 @@
             const invoiceHistoryGrid = document.getElementById('invoiceHistoryGrid');
             const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
             
-            // Filter history for this vendor and include vendor's invoice analysis
+            // Filter history for this vendor
             const vendorInvoices = history.filter(entry => 
                 entry.vendorId === vendor.id || 
                 (entry.contractFile && entry.contractFile === vendor.contractFile)
             );
 
-            // Also include invoices from the vendor's invoice analysis if they exist
-            let displayInvoices = [...vendorInvoices];
-            if (vendor.invoiceAnalysis && vendor.invoiceAnalysis.length > 0) {
-                // Create entries for vendor's invoice analysis if not already in history
-                const vendorAnalysisEntries = vendor.invoiceAnalysis.map((invoice, index) => ({
-                    id: `${vendor.id}_invoice_${index}`,
-                    timestamp: vendor.createdAt,
-                    vendorId: vendor.id,
-                    invoiceAnalysis: invoice,
-                    isFromVendorAnalysis: true
-                }));
-                
-                // Add them if not already present
-                vendorAnalysisEntries.forEach(entry => {
-                    if (!displayInvoices.some(existing => existing.id === entry.id)) {
-                        displayInvoices.unshift(entry);
-                    }
-                });
-            }
-
-            if (displayInvoices.length === 0) {
+            if (vendorInvoices.length === 0) {
                 invoiceHistoryGrid.innerHTML = `
                     <div class="empty-invoice-history">
                         <div class="empty-invoice-history-icon">📊</div>
@@ -5542,47 +4352,27 @@
                 return;
             }
 
-            invoiceHistoryGrid.innerHTML = displayInvoices.map((invoice, index) => {
-                // Handle different data structures (regular history vs vendor analysis)
-                let invoiceData, status, statusText, reconciliationSummary;
-                
-                if (invoice.isFromVendorAnalysis) {
-                    // This is from the vendor's invoice analysis
-                    invoiceData = invoice.invoiceAnalysis;
-                    status = invoiceData.status || 'compliant';
-                    statusText = status === 'compliant' ? 'Compliant' : status === 'attention_required' ? 'Attention Required' : 'Review Needed';
-                    reconciliationSummary = invoiceData.reconciliationSummary?.summary || 'Analysis complete';
-                } else {
-                    // This is from regular reconciliation history
-                    let hasDiscrepancies = false;
-                    if (invoice.results?.invoiceResults) {
-                        hasDiscrepancies = invoice.results.invoiceResults.some(inv => 
-                            inv.comparison?.discrepancies?.length > 0
-                        );
-                    }
-                    status = hasDiscrepancies ? 'flagged' : 'approved';
-                    statusText = status === 'flagged' ? 'Issues Found' : 'Approved';
-                    reconciliationSummary = hasDiscrepancies ? 'Discrepancies detected in reconciliation' : 'Invoice reconciled successfully';
+            invoiceHistoryGrid.innerHTML = vendorInvoices.map((invoice, index) => {
+                // Fix: Check for discrepancies in the correct structure
+                let hasDiscrepancies = false;
+                if (invoice.results?.invoiceResults) {
+                    hasDiscrepancies = invoice.results.invoiceResults.some(inv => 
+                        inv.comparison?.discrepancies?.length > 0
+                    );
                 }
+                const status = hasDiscrepancies ? 'flagged' : 'approved';
+                const statusText = status === 'flagged' ? 'Issues Found' : 'Approved';
                 
-                // Get invoice file info
-                let invoicesDisplay;
-                if (invoice.isFromVendorAnalysis) {
-                    invoicesDisplay = `
-                        <div class="invoice-name">📄 ${invoiceData.filename}</div>
-                    `;
-                } else {
-                    const invoiceFiles = invoice.results?.invoiceResults || [];
-                    invoicesDisplay = invoiceFiles.length > 0 ? 
-                        invoiceFiles.map((invFile, fileIndex) => `
-                            <div class="clickable-file invoice-file-link" 
-                                 onclick="downloadInvoiceFile('${invoice.id}', ${fileIndex})" 
-                                 title="Click to download ${invFile.filename}">
-                                📄 ${invFile.filename} 📥
-                            </div>
-                        `).join('') : 
-                        '<div class="invoice-name">Invoice files</div>';
-                }
+                // Get the invoices from this reconciliation
+                const invoiceFiles = invoice.results?.invoiceResults || [];
+                const invoicesDisplay = invoiceFiles.length > 0 ? 
+                    invoiceFiles.map((invFile, fileIndex) => `
+                        <div class="clickable-file invoice-file-link" 
+                             onclick="downloadInvoiceFile('${invoice.id}', ${fileIndex})" 
+                             title="Click to download ${invFile.filename}">
+                             ${invFile.filename}                         </div>
+                    `).join('') : 
+                    '<div class="invoice-name">Invoice files</div>';
                 
                 return `
                     <div class="invoice-item">
@@ -5596,29 +4386,26 @@
                             <div class="invoice-status ${status}">${statusText}</div>
                         </div>
                         
-                        <!-- Reconciliation Summary -->
-                        <div class="reconciliation-summary">
-                            <div class="reconciliation-summary-text">${reconciliationSummary}</div>
-                        </div>
-                        
-                        ${status === 'flagged' || status === 'attention_required' ? `
+                        ${hasDiscrepancies ? `
                             <div class="invoice-findings">
-                                <div class="invoice-findings-title">Details:</div>
+                                <div class="invoice-findings-title">AI Findings:</div>
                                 <div class="invoice-findings-list">
-                                    ${invoice.isFromVendorAnalysis && invoiceData.reconciliationSummary?.issues ? 
-                                        invoiceData.reconciliationSummary.issues.map(issue => `• ${issue}`).join('<br>') :
-                                        (invoice.results?.invoiceResults?.map(inv => {
-                                            if (inv.comparison?.discrepancies?.length > 0) {
-                                                return inv.comparison.discrepancies.slice(0, 3).map(disc => 
-                                                    `• ${disc.field}: ${disc.description || disc.contract_value + ' vs ' + disc.invoice_value}`
-                                                ).join('<br>');
-                                            }
-                                            return '';
-                                        }).filter(item => item).join('<br>') || 'Review recommended')
-                                    }
+                                    ${invoice.results.invoiceResults.map(inv => {
+                                        if (inv.comparison?.discrepancies?.length > 0) {
+                                            return inv.comparison.discrepancies.slice(0, 3).map(disc => 
+                                                `• ${disc.field}: ${disc.description || disc.contract_value + ' vs ' + disc.invoice_value}`
+                                            ).join('<br>');
+                                        }
+                                        return '';
+                                    }).filter(item => item).join('<br>')}
                                 </div>
                             </div>
-                        ` : ''}
+                        ` : `
+                            <div class="invoice-findings">
+                                <div class="invoice-findings-title">AI Findings:</div>
+                                <div class="invoice-findings-list">✅ No discrepancies found - invoice matches contract terms</div>
+                            </div>
+                        `}
                     </div>
                 `;
             }).join('');
@@ -5730,7 +4517,7 @@ Return ONLY this JSON structure:
         function openAddVendorModal() {
             document.getElementById('addVendorModal').classList.add('open');
             document.getElementById('addVendorForm').reset();
-            document.getElementById('contractFileStatus').innerHTML = '📄 Click to upload contract file (PDF, DOC, DOCX)';
+            document.getElementById('contractFileStatus').innerHTML = ' Click to upload contract file (PDF, DOC, DOCX)';
         }
 
         function closeAddVendorModal() {
@@ -5742,10 +4529,10 @@ Return ONLY this JSON structure:
             const statusDiv = document.getElementById('contractFileStatus');
             
             if (file) {
-                statusDiv.innerHTML = `📄 Selected: ${file.name}`;
+                statusDiv.innerHTML = ` Selected: ${file.name}`;
                 statusDiv.style.color = 'var(--accent-success)';
             } else {
-                statusDiv.innerHTML = '📄 Click to upload contract file (PDF, DOC, DOCX)';
+                statusDiv.innerHTML = ' Click to upload contract file (PDF, DOC, DOCX)';
                 statusDiv.style.color = '';
             }
         }
@@ -5790,26 +4577,6 @@ Return ONLY this JSON structure:
         }
 
         function viewVendorDetails(vendorId) {
-            console.log('Navigating to vendor details for ID:', vendorId);
-            
-            // Ensure vendors are loaded from storage
-            const savedVendors = localStorage.getItem('vendors');
-            if (savedVendors) {
-                vendors = JSON.parse(savedVendors);
-                console.log('Loaded vendors from storage:', vendors.length, 'vendors');
-            }
-            
-            // Verify vendor exists before navigating
-            const vendor = vendors.find(v => v.id === vendorId);
-            if (!vendor) {
-                console.error('Vendor not found:', vendorId);
-                console.log('Available vendor IDs:', vendors.map(v => v.id));
-                alert('Vendor not found. Please refresh the page.');
-                return;
-            }
-            
-            console.log('Found vendor:', vendor.name);
-            
             // Navigate to vendor details page
             showVendorDetails(vendorId);
         }
@@ -5993,1152 +4760,6 @@ Return ONLY this JSON structure:
             }
         }
 
-        // ===============================
-        // AI PROCESSING VISUALIZATION
-        // ===============================
-
-        async function showAIProcessingView(hasContract = true, hasInvoices = true) {
-            // Hide other views and show AI processing
-            document.querySelectorAll('.page-view').forEach(view => view.classList.remove('active'));
-            document.getElementById('aiProcessingView').classList.add('active');
-            
-            // Configure which documents to show
-            const contractPanel = document.getElementById('contractPanel');
-            const invoicePanel = document.getElementById('invoicePanel');
-            
-            if (!hasContract) {
-                contractPanel.style.display = 'none';
-            }
-            if (!hasInvoices) {
-                invoicePanel.style.display = 'none';
-            }
-            
-            // Load real document content
-            await loadRealDocumentContent();
-            
-            // Start the processing animation sequence
-            setTimeout(() => startRealDocumentAnalysis(hasContract, hasInvoices), 1000);
-        }
-
-        async function loadRealDocumentContent() {
-            // Set document filenames
-            if (contractFile) {
-                document.getElementById('contractFileName').textContent = contractFile.name;
-                
-                // Extract and display real contract text
-                try {
-                    const contractText = await extractTextFromFile(contractFile);
-                    displayDocumentContent('contractContent', contractText, 'contract');
-                } catch (error) {
-                    console.error('Error loading contract content:', error);
-                    document.getElementById('contractContent').innerHTML = '<p>Loading document content...</p>';
-                }
-            }
-            
-            if (invoiceFiles && invoiceFiles.length > 0) {
-                const firstInvoice = invoiceFiles[0];
-                document.getElementById('invoiceFileName').textContent = firstInvoice.name;
-                
-                try {
-                    const invoiceText = await extractTextFromFile(firstInvoice);
-                    displayDocumentContent('invoiceContent', invoiceText, 'invoice');
-                } catch (error) {
-                    console.error('Error loading invoice content:', error);
-                    document.getElementById('invoiceContent').innerHTML = '<p>Loading document content...</p>';
-                }
-            }
-        }
-
-        function displayDocumentContent(containerId, text, documentType) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            // Split text into sentences/paragraphs for better highlighting
-            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 10);
-            const paragraphs = sentences.reduce((acc, sentence, index) => {
-                if (index % 3 === 0) acc.push([]);
-                acc[acc.length - 1].push(sentence.trim());
-                return acc;
-            }, []);
-            
-            // Create HTML with proper structure for highlighting
-            const htmlContent = paragraphs.map((paragraph, index) => 
-                `<p data-paragraph="${index}">${paragraph.join('. ').trim()}.</p>`
-            ).join('');
-            
-            container.innerHTML = htmlContent;
-            
-            // Store text for analysis
-            container.dataset.originalText = text;
-        }
-
-        async function startRealDocumentAnalysis(hasContract, hasInvoices) {
-            // Activate step 1
-            activateStep(1);
-            
-            // Start scanning animations
-            if (hasContract) {
-                await performDocumentScanning('contractPanel', 'contract');
-            }
-            if (hasInvoices) {
-                await performDocumentScanning('invoicePanel', 'invoice');
-            }
-            
-            completeStep(1);
-            
-            // Step 2: Extract real terms
-            activateStep(2);
-            if (hasContract) {
-                await extractRealTerms('contractPanel', 'contract');
-            }
-            if (hasInvoices) {
-                await extractRealTerms('invoicePanel', 'invoice');
-            }
-            completeStep(2);
-            
-            // Step 3: Analysis
-            activateStep(3);
-            await performRealAnalysis();
-            completeStep(3);
-            
-            // Step 4: Show results
-            activateStep(4);
-            await showAnalysisResults();
-            completeStep(4);
-            
-            // Show completion modal
-            setTimeout(() => showCompletionModal(), 1000);
-        }
-
-        async function performDocumentScanning(panelId, documentType) {
-            const panel = document.getElementById(panelId);
-            const scanLine = panel.querySelector('.scan-line');
-            
-            // Activate scan line
-            scanLine.classList.add('active');
-            
-            // Wait for scan to complete
-            return new Promise(resolve => {
-                setTimeout(() => {
-                    scanLine.classList.remove('active');
-                    resolve();
-                }, 6000); // 6 seconds for scanning animation
-            });
-        }
-
-        async function extractRealTerms(panelId, documentType) {
-            const panel = document.getElementById(panelId);
-            const contentContainer = panel.querySelector('.document-content');
-            const tagsContainer = panel.querySelector('.floating-tags-container');
-            const originalText = contentContainer.dataset.originalText;
-            
-            if (!originalText) return;
-            
-            // Define patterns for real term extraction
-            const patterns = {
-                amounts: /\$[\d,]+\.?\d*/g,
-                dates: /\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4}\b/g,
-                vendors: /\b[A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.?)?\b/g,
-                emails: /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g
-            };
-            
-            const foundTerms = [];
-            
-            // Extract real terms
-            Object.entries(patterns).forEach(([type, pattern]) => {
-                const matches = originalText.match(pattern);
-                if (matches) {
-                    matches.slice(0, 3).forEach(match => { // Limit to 3 per type
-                        foundTerms.push({ type, value: match.trim() });
-                    });
-                }
-            });
-            
-            // Highlight terms in content and show floating tags
-            for (let i = 0; i < foundTerms.length; i++) {
-                const term = foundTerms[i];
-                
-                setTimeout(() => {
-                    // Highlight in text
-                    highlightTermInContent(contentContainer, term.value);
-                    
-                    // Show floating tag
-                    showFloatingTag(tagsContainer, term, i);
-                }, i * 1000);
-            }
-            
-            // Wait for all extractions
-            return new Promise(resolve => {
-                setTimeout(resolve, foundTerms.length * 1000 + 1000);
-            });
-        }
-
-        function highlightTermInContent(container, termValue) {
-            const paragraphs = container.querySelectorAll('p');
-            paragraphs.forEach(paragraph => {
-                const text = paragraph.innerHTML;
-                const highlightedText = text.replace(new RegExp(`(${escapeRegExp(termValue)})`, 'gi'), 
-                    '<span class="highlight">$1</span>');
-                if (text !== highlightedText) {
-                    paragraph.innerHTML = highlightedText;
-                }
-            });
-        }
-
-        function showFloatingTag(container, term, index) {
-            const tag = document.createElement('div');
-            tag.className = `floating-tag ${term.type}`;
-            
-            const tagLabels = {
-                amounts: 'Amount Found',
-                dates: 'Date Detected', 
-                vendors: 'Vendor Identified',
-                emails: 'Contact Found'
-            };
-            
-            tag.textContent = `${tagLabels[term.type]}: ${term.value}`;
-            
-            // Random position within container
-            tag.style.left = Math.random() * 70 + 10 + '%';
-            tag.style.top = Math.random() * 60 + 20 + '%';
-            
-            container.appendChild(tag);
-            
-            // Remove after animation
-            setTimeout(() => tag.remove(), 3500);
-        }
-
-        function escapeRegExp(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        async function performRealAnalysis() {
-            // Show comparison animation between documents
-            return new Promise(resolve => {
-                setTimeout(resolve, 3000);
-            });
-        }
-
-        async function showAnalysisResults() {
-            const resultsSection = document.getElementById('analysisResults');
-            const keyFindings = document.getElementById('keyFindings');
-            
-            // Create findings from actual analysis
-            const findings = [
-                { label: 'Contract Vendor', value: 'Extracted from uploaded contract' },
-                { label: 'Invoice Amount', value: 'Matched against contract terms' },
-                { label: 'Payment Terms', value: 'Verified compliance' },
-                { label: 'Status', value: 'Analysis Complete' }
-            ];
-            
-            keyFindings.innerHTML = findings.map(finding => `
-                <div class="finding-item">
-                    <div class="finding-label">${finding.label}</div>
-                    <div class="finding-value">${finding.value}</div>
-                </div>
-            `).join('');
-            
-            resultsSection.style.display = 'block';
-            
-            return new Promise(resolve => setTimeout(resolve, 2000));
-        }
-
-        function resetAIProcessingView() {
-            // Reset progress bars
-            document.querySelectorAll('.ai-progress-fill').forEach(bar => {
-                bar.style.width = '0%';
-            });
-            
-            // Reset step indicators
-            document.querySelectorAll('.step-indicator').forEach(step => {
-                step.classList.remove('active', 'completed');
-            });
-            
-            // Clear extracted terms
-            document.querySelectorAll('.extracted-terms').forEach(container => {
-                container.innerHTML = '';
-            });
-            
-            // Reset document preview text
-            const contractPreview = document.querySelector('.ai-contract-section .document-preview');
-            const invoicePreview = document.querySelector('.ai-invoice-section .document-preview');
-            
-            if (contractPreview) {
-                contractPreview.innerHTML = `
-                    <div class="document-header">
-                        <h4>📄 Contract Document</h4>
-                    </div>
-                    <div class="document-pages">
-                        <div class="ai-scanning-beam">
-                            <div class="scanning-line"></div>
-                            <div class="scanning-line"></div>
-                            <div class="scanning-line"></div>
-                        </div>
-                        <div class="document-page">
-                            <h5>Service Agreement - Page 1</h5>
-                            <p>Service Agreement between <span class="term-target" data-term="company">ABC Corp</span> and <span class="term-target" data-term="vendor">TechVendor Solutions LLC</span></p>
-                            <p>Effective Date: <span class="term-target" data-term="start-date">January 1, 2024</span></p>
-                            <p>Monthly Fee: <span class="term-target" data-term="monthly-fee">$12,500</span></p>
-                            <p>Payment Terms: <span class="term-target" data-term="payment-terms">Net 30 days</span></p>
-                        </div>
-                        <div class="document-page">
-                            <h5>Service Agreement - Page 2</h5>
-                            <p>Service Level: <span class="term-target" data-term="sla">99.9% uptime</span></p>
-                            <p>Renewal: <span class="term-target" data-term="renewal">Auto-renewal annually</span></p>
-                            <p>Termination clause: 30 days written notice</p>
-                            <p>Liability cap: $50,000</p>
-                        </div>
-                        <div class="document-page">
-                            <h5>Service Agreement - Page 3</h5>
-                            <p>Confidentiality obligations</p>
-                            <p>Intellectual property rights</p>
-                            <p>Governing law: State of California</p>
-                            <p>Signatures and execution date</p>
-                        </div>
-                    </div>
-                `;
-            }
-            
-            if (invoicePreview) {
-                invoicePreview.innerHTML = `
-                    <div class="document-header">
-                        <h4>📋 Invoice Document</h4>
-                    </div>
-                    <div class="document-pages">
-                        <div class="ai-scanning-beam">
-                            <div class="scanning-line"></div>
-                            <div class="scanning-line"></div>
-                            <div class="scanning-line"></div>
-                        </div>
-                        <div class="document-page">
-                            <h5>Invoice #INV-2024-0143</h5>
-                            <p>From: <span class="term-target" data-term="vendor-name">TechVendor Solutions</span></p>
-                            <p>Bill To: <span class="term-target" data-term="client">ABC Corporation</span></p>
-                            <p>Invoice Date: <span class="term-target" data-term="invoice-date">February 1, 2024</span></p>
-                            <p>Amount Due: <span class="term-target" data-term="amount">$12,500.00</span></p>
-                            <p>Due Date: <span class="term-target" data-term="due-date">March 2, 2024</span></p>
-                            <p>Description: Monthly service fee</p>
-                        </div>
-                        <div class="document-page">
-                            <h5>Invoice Details</h5>
-                            <p>Service period: February 2024</p>
-                            <p>Tax ID: 123-45-6789</p>
-                            <p>Payment method: ACH Transfer</p>
-                            <p>Account: ****1234</p>
-                        </div>
-                    </div>
-                `;
-            }
-        }
-
-        async function startAIProcessingAnimation(hasContract, hasInvoices) {
-            const steps = [
-                { name: 'Document Analysis', duration: 3000 },
-                { name: 'Term Extraction', duration: 4000 },
-                { name: 'Comparison Analysis', duration: 3500 },
-                { name: 'Final Report', duration: 2000 }
-            ];
-            
-            // Start step 1 - Document Analysis
-            activateStep(1);
-            if (hasContract) {
-                await animateDocumentAnalysis('contract');
-            }
-            if (hasInvoices) {
-                await animateDocumentAnalysis('invoice');
-            }
-            completeStep(1);
-            
-            // Start step 2 - Term Extraction
-            activateStep(2);
-            if (hasContract) {
-                await animateTermExtraction('contract');
-            }
-            if (hasInvoices) {
-                await animateTermExtraction('invoice');
-            }
-            completeStep(2);
-            
-            // Start step 3 - Comparison
-            activateStep(3);
-            await animateComparisonAnalysis();
-            completeStep(3);
-            
-            // Start step 4 - Final Report
-            activateStep(4);
-            await animateFinalReport();
-            completeStep(4);
-            
-            // Show completion modal and then redirect
-            showCompletionModal();
-        }
-
-        function activateStep(stepNumber) {
-            const step = document.querySelector(`.step-indicator:nth-child(${stepNumber})`);
-            if (step) {
-                step.classList.add('active');
-            }
-        }
-
-        function completeStep(stepNumber) {
-            const step = document.querySelector(`.step-indicator:nth-child(${stepNumber})`);
-            if (step) {
-                step.classList.remove('active');
-                step.classList.add('completed');
-            }
-        }
-
-        async function animateDocumentAnalysis(documentType) {
-            const progressBar = document.querySelector(`.ai-${documentType}-section .ai-progress-fill`);
-            
-            // Animate progress bar
-            if (progressBar) {
-                progressBar.style.width = '25%';
-            }
-            
-            // Add scanning effect to document
-            const documentPreview = document.querySelector(`.ai-${documentType}-section .document-preview`);
-            const documentPages = documentPreview?.querySelectorAll('.document-page');
-            
-            if (documentPreview) {
-                documentPreview.classList.add('scanning');
-                
-                // Animate through each page
-                if (documentPages) {
-                    for (let i = 0; i < documentPages.length; i++) {
-                        setTimeout(() => {
-                            // Flip current page if not the last one
-                            if (i < documentPages.length - 1) {
-                                documentPages[i].classList.add('flipping');
-                            }
-                        }, i * 800);
-                    }
-                }
-                
-                setTimeout(() => {
-                    documentPreview.classList.remove('scanning');
-                    // Reset pages after scanning
-                    if (documentPages) {
-                        documentPages.forEach(page => {
-                            page.classList.remove('flipping');
-                        });
-                    }
-                }, 4500);
-            }
-            
-            return new Promise(resolve => setTimeout(resolve, 5000));
-        }
-
-        async function animateTermExtraction(documentType) {
-            const progressBar = document.querySelector(`.ai-${documentType}-section .ai-progress-fill`);
-            const extractedTermsContainer = document.querySelector(`.ai-${documentType}-section .extracted-terms`);
-            
-            // Update progress
-            if (progressBar) {
-                progressBar.style.width = '60%';
-            }
-            
-            // Define terms to extract based on document type
-            const contractTerms = [
-                { text: 'TechVendor Solutions LLC', type: 'vendor' },
-                { text: '$12,500', type: 'amount' },
-                { text: 'Net 30 days', type: 'payment' },
-                { text: '99.9% uptime', type: 'sla' },
-                { text: 'Auto-renewal', type: 'renewal' }
-            ];
-            
-            const invoiceTerms = [
-                { text: 'TechVendor Solutions', type: 'vendor' },
-                { text: '$12,500.00', type: 'amount' },
-                { text: 'March 2, 2024', type: 'due-date' },
-                { text: 'ABC Corporation', type: 'client' },
-                { text: 'INV-2024-0143', type: 'invoice-id' }
-            ];
-            
-            const terms = documentType === 'contract' ? contractTerms : invoiceTerms;
-            
-            // Animate term extraction
-            for (let i = 0; i < terms.length; i++) {
-                await new Promise(resolve => {
-                    setTimeout(() => {
-                        // Highlight term in document
-                        const termTarget = document.querySelector(`.ai-${documentType}-section [data-term="${terms[i].type}"]`);
-                        if (termTarget) {
-                            termTarget.classList.add('highlighted-term');
-                        }
-                        
-                        // Create floating term
-                        if (extractedTermsContainer) {
-                            const termBubble = document.createElement('div');
-                            termBubble.className = 'floating-term';
-                            termBubble.textContent = terms[i].text;
-                            termBubble.style.animationDelay = `${i * 0.2}s`;
-                            extractedTermsContainer.appendChild(termBubble);
-                        }
-                        
-                        resolve();
-                    }, i * 600);
-                });
-            }
-            
-            return new Promise(resolve => setTimeout(resolve, 1000));
-        }
-
-        async function animateComparisonAnalysis() {
-            // Update both progress bars
-            document.querySelectorAll('.ai-progress-fill').forEach(bar => {
-                bar.style.width = '85%';
-            });
-            
-            // Add comparison effect
-            const processingContainer = document.querySelector('.ai-processing-container');
-            if (processingContainer) {
-                processingContainer.classList.add('comparing');
-                setTimeout(() => {
-                    processingContainer.classList.remove('comparing');
-                }, 3000);
-            }
-            
-            return new Promise(resolve => setTimeout(resolve, 3500));
-        }
-
-        async function animateFinalReport() {
-            // Complete progress bars
-            document.querySelectorAll('.ai-progress-fill').forEach(bar => {
-                bar.style.width = '100%';
-            });
-            
-            // Show completion effect
-            const header = document.querySelector('.ai-processing-header h1');
-            if (header) {
-                header.textContent = '✅ Analysis Complete!';
-                header.style.color = 'var(--accent-success)';
-            }
-            
-            return new Promise(resolve => setTimeout(resolve, 2000));
-        }
-
-        async function showCompletionModal() {
-            // Extract vendor name from contract analysis
-            const contractContent = document.getElementById('contractContent');
-            const contractText = contractContent?.dataset.originalText || '';
-            
-            // Use the enhanced extraction function for vendor name
-            const contractDetails = extractContractDetails(contractText);
-            const vendorName = contractDetails.vendor_name && contractDetails.vendor_name !== 'Unknown Vendor' 
-                ? contractDetails.vendor_name 
-                : 'Contract Vendor';
-            
-            // Create modal HTML
-            const modalHTML = `
-                <div class="completion-modal-overlay" id="completionModal">
-                    <div class="completion-modal">
-                        <div class="completion-modal-content">
-                            <div class="completion-icon">🤖✨</div>
-                            <h3>Analysis Complete!</h3>
-                            <p>AI has finished reading and analyzing the documents for <strong>${vendorName}</strong>.</p>
-                            <div class="completion-progress">
-                                <div class="completion-progress-bar"></div>
-                            </div>
-                            <p class="completion-status">Creating vendor profile and processing findings...</p>
-                            <button class="modal-close-btn" onclick="closeCompletionModal()" style="display: none;">Continue</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            // Add modal to page
-            document.body.insertAdjacentHTML('beforeend', modalHTML);
-            
-            // Start progress animation
-            setTimeout(() => {
-                const progressBar = document.querySelector('.completion-progress-bar');
-                if (progressBar) {
-                    progressBar.style.width = '100%';
-                }
-            }, 100);
-            
-            // Create vendor and process findings in the background
-            try {
-                const createdVendor = await createVendorFromAnalysis(vendorName);
-                
-                // Update modal to show success
-                const statusElement = document.querySelector('.completion-status');
-                if (statusElement) {
-                    statusElement.textContent = 'Vendor profile created successfully! Taking you there now...';
-                }
-                
-                // Auto-close after 3 seconds and redirect to vendor page
-                setTimeout(() => {
-                    try {
-                        const modal = document.getElementById('completionModal');
-                        if (modal) {
-                            modal.remove();
-                        }
-                        console.log('Redirecting to vendor:', createdVendor.id);
-                        
-                        // Reload vendors from storage to ensure we have the latest data
-                        const savedVendors = localStorage.getItem('vendors');
-                        if (savedVendors) {
-                            vendors = JSON.parse(savedVendors);
-                        }
-                        
-                        // Ensure vendor exists before redirecting
-                        const vendorExists = vendors.find(v => v.id === createdVendor.id);
-                        if (vendorExists) {
-                            console.log('Vendor found, navigating to details page');
-                            showVendorDetails(createdVendor.id);
-                        } else {
-                            console.warn('Vendor not found after creation, refreshing and going to dashboard');
-                            // Try to reload and go to dashboard
-                            loadDashboard();
-                            showDashboard();
-                        }
-                    } catch (error) {
-                        console.error('Error during redirect:', error);
-                        // Fallback to dashboard
-                        loadDashboard();
-                        showDashboard();
-                    }
-                }, 3000);
-                
-            } catch (error) {
-                console.error('Error creating vendor:', error);
-                
-                // Show error state with auto-redirect fallback
-                const statusElement = document.querySelector('.completion-status');
-                
-                if (statusElement) {
-                    statusElement.textContent = 'Analysis complete! Taking you to results...';
-                    statusElement.style.color = 'var(--accent-warning)';
-                }
-                
-                // Auto-redirect even on error after 4 seconds
-                setTimeout(() => {
-                    const modal = document.getElementById('completionModal');
-                    if (modal) {
-                        modal.remove();
-                    }
-                    showDashboard();
-                }, 4000);
-            }
-        }
-
-        function closeCompletionModal() {
-            const modal = document.getElementById('completionModal');
-            if (modal) {
-                modal.remove();
-            }
-            // Try to find the created vendor and navigate to it, otherwise go to dashboard
-            try {
-                const lastVendor = vendors[vendors.length - 1];
-                if (lastVendor && (Date.now() - parseInt(lastVendor.id)) < 60000) { // Created within last minute
-                    showVendorDetails(lastVendor.id);
-                } else {
-                    showDashboard();
-                }
-            } catch (error) {
-                console.error('Error navigating after modal close:', error);
-                showDashboard();
-            }
-        }
-
-        async function createVendorFromAnalysis(vendorName) {
-            try {
-                console.log('Starting vendor creation for:', vendorName);
-                
-                // Extract data from documents
-                const contractContent = document.getElementById('contractContent');
-                const contractText = contractContent?.dataset.originalText || '';
-                
-                if (!contractText) {
-                    console.warn('No contract text found, using fallback');
-                }
-                
-                // Extract contract details using regex patterns
-                const contractDetails = extractContractDetails(contractText);
-                console.log('Contract details extracted:', contractDetails);
-                
-                // Process ALL invoices for this ONE vendor (1 contract = 1 vendor + multiple invoices)
-                const invoiceResults = [];
-                if (invoiceFiles && invoiceFiles.length > 0) {
-                    console.log(`Processing ${invoiceFiles.length} invoices for vendor: ${vendorName}`);
-                    
-                    for (let i = 0; i < invoiceFiles.length; i++) {
-                        const invoice = invoiceFiles[i];
-                        
-                        // Extract text from each individual invoice file
-                        let invoiceText = '';
-                        try {
-                            invoiceText = await extractTextFromFile(invoice);
-                            console.log(`Extracted text from invoice ${i + 1}/${invoiceFiles.length}: ${invoice.name}`);
-                        } catch (error) {
-                            console.error(`Error extracting text from invoice ${invoice.name}:`, error);
-                            // Fallback to displayed content if available
-                            const displayedContent = document.getElementById('invoiceContent');
-                            invoiceText = displayedContent?.dataset.originalText || '';
-                        }
-                        
-                        // Extract invoice details from this specific invoice
-                        const invoiceDetails = extractInvoiceDetails(invoiceText, invoice.name);
-                        console.log(`Invoice ${i + 1} (${invoice.name}) details:`, invoiceDetails);
-                        
-                        // Generate reconciliation findings against the contract
-                        const reconciliationSummary = await generateReconciliationSummary(contractDetails, invoiceDetails);
-                        
-                        invoiceResults.push({
-                            filename: invoice.name,
-                            fileData: await fileToBase64(invoice),
-                            details: invoiceDetails,
-                            reconciliationSummary: reconciliationSummary,
-                            status: reconciliationSummary.status,
-                            processedAt: new Date().toISOString()
-                        });
-                    }
-                    console.log(`✅ Processed ${invoiceResults.length} invoices for vendor ${vendorName}`);
-                } else {
-                    console.warn('No invoice files found - creating vendor with contract only');
-                }
-            
-            // ✅ Create ONE VENDOR from the contract with ALL invoices associated
-            // This follows the rule: 1 Contract = 1 Vendor + Multiple Invoices
-            
-            // Use the extracted vendor name from contract, not the parameter
-            const actualVendorName = contractDetails.vendor_name && contractDetails.vendor_name !== 'Unknown Vendor' 
-                ? contractDetails.vendor_name 
-                : vendorName;
-            
-            const vendor = {
-                id: Date.now().toString(),
-                name: actualVendorName,
-                description: contractDetails.service_description || `${contractDetails.business_type || 'General Services'} - ${invoiceResults.length} invoice(s) under contract`,
-                email: contractDetails.email || '',
-                
-                // Contract information (the source of vendor identity)
-                contractFile: contractFile?.name || 'Unknown Contract',
-                contractFileData: contractFile ? await fileToBase64(contractFile) : '',
-                contractUploadDate: new Date().toISOString(),
-                effectiveDate: contractDetails.effectiveDate || new Date().toISOString().split('T')[0],
-                renewalDate: contractDetails.renewalDate || '',
-                
-                // Vendor metadata
-                status: 'active',
-                createdAt: new Date().toISOString(),
-                lastUpdated: new Date().toISOString(),
-                
-                // Contract analysis (vendor's primary data source)
-                contractAnalysis: {
-                    vendor_information: {
-                        name: contractDetails.vendor_name,
-                        email: contractDetails.email,
-                        effective_date: contractDetails.effectiveDate,
-                        renewal_date: contractDetails.renewalDate
-                    },
-                    financial_terms: {
-                        amounts: contractDetails.amounts,
-                        payment_terms: contractDetails.paymentTerms
-                    },
-                    key_dates: contractDetails.dates,
-                    ai_summary: {
-                        overview: `Contract analysis for ${vendorName} completed on ${new Date().toLocaleDateString()}. This vendor profile represents the contracting entity with ${invoiceResults.length} processed invoice(s).`,
-                        financial_highlights: [
-                            `Contract amounts: ${contractDetails.amounts.length > 0 ? contractDetails.amounts.join(', ') : 'To be determined'}`,
-                            `Payment terms: ${contractDetails.paymentTerms}`,
-                            `Effective date: ${contractDetails.effectiveDate || 'Not specified'}`,
-                            `Renewal terms: ${contractDetails.renewalDate || 'Not specified'}`,
-                            `Associated invoices: ${invoiceResults.length} processed`
-                        ].filter(item => !item.includes('Not specified') || contractDetails.effectiveDate || contractDetails.renewalDate)
-                    }
-                },
-                
-                // ALL invoices associated with this ONE vendor
-                invoiceAnalysis: invoiceResults, // Array of all invoices reconciled against this contract
-                invoiceCount: invoiceResults.length
-            };
-            
-            // ✅ Validate the correct vendor-invoice relationship
-            console.log(`✅ VENDOR CREATION SUMMARY:
-            📋 Contract: ${contractFile?.name || 'Unknown'}
-            🏢 Vendor: ${vendor.name}
-            📄 Invoices: ${vendor.invoiceCount} invoice(s) associated
-            📊 Relationship: 1 Contract → 1 Vendor → ${vendor.invoiceCount} Invoices`);
-            
-            console.log('Created vendor with full analysis:', vendor);
-            
-            // ✅ Check for existing vendor with same name to prevent duplicates
-            // Also check for invalid vendor names that shouldn't be created
-            const invalidVendorNames = ['shall be liable for its failure', 'contingencies beyond its reasonable', 'New Vendor'];
-            const isInvalidName = invalidVendorNames.some(invalid => 
-                vendor.name.toLowerCase().includes(invalid.toLowerCase()));
-            
-            if (isInvalidName) {
-                console.warn('Skipping vendor creation with invalid name:', vendor.name);
-                // Try to use a better name
-                vendor.name = contractDetails.vendor_name !== 'Unknown Vendor' 
-                    ? contractDetails.vendor_name 
-                    : `Vendor_${Date.now()}`;
-            }
-            
-            try {
-                const existingVendorIndex = vendors.findIndex(v => v && v.name && v.name.toLowerCase() === vendor.name.toLowerCase());
-                if (existingVendorIndex >= 0) {
-                    console.log('Found existing vendor, updating instead of creating duplicate:', vendor.name);
-                    // Update existing vendor with new analysis
-                    vendors[existingVendorIndex] = {
-                        ...vendors[existingVendorIndex],
-                        ...vendor,
-                        lastUpdated: new Date().toISOString()
-                    };
-                } else {
-                    console.log('Creating new vendor:', vendor.name);
-                    vendors.push(vendor);
-                }
-                localStorage.setItem('vendors', JSON.stringify(vendors));
-            } catch (error) {
-                console.error('Error managing vendor duplicates:', error);
-                // Fallback: just add the vendor
-                vendors.push(vendor);
-                localStorage.setItem('vendors', JSON.stringify(vendors));
-            }
-            
-            // Reload vendors from storage to ensure consistency
-            const savedVendors = localStorage.getItem('vendors');
-            if (savedVendors) {
-                vendors = JSON.parse(savedVendors);
-            }
-            
-            // Save to reconciliation history as well
-            const historyEntry = {
-                id: Date.now() + 1,
-                timestamp: new Date().toISOString(),
-                contractFile: contractFile.name,
-                contractFileData: await fileToBase64(contractFile),
-                invoiceCount: invoiceFiles.length,
-                results: {
-                    contractAnalysis: contractDetails,
-                    contractDetails: contractDetails, // Keep both for backward compatibility
-                    invoiceResults: invoiceResults
-                },
-                vendorId: vendor.id,
-                vendorName: vendor.name // Use the actual vendor name, not the parameter
-            };
-            
-            let history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
-            history.unshift(historyEntry);
-            if (history.length > 50) history = history.slice(0, 50);
-            localStorage.setItem('reconciliation_history', JSON.stringify(history));
-            
-            // Find the vendor we just saved to verify it's in storage
-            const finalVendor = vendors.find(v => v.id === vendor.id);
-            if (!finalVendor) {
-                console.error('Failed to verify saved vendor!');
-                return vendor; // Return the original vendor as fallback
-            }
-            
-            console.log('Vendor created and verified in storage:', finalVendor);
-            return finalVendor;
-                
-            } catch (error) {
-                console.error('Error in createVendorFromAnalysis:', error);
-                // Create a basic vendor as fallback
-                const fallbackVendor = {
-                    id: Date.now().toString(),
-                    name: vendorName,
-                    description: `Vendor created from analysis on ${new Date().toLocaleDateString()}`,
-                    status: 'active',
-                    createdAt: new Date().toISOString(),
-                    lastUpdated: new Date().toISOString()
-                };
-                
-                vendors.push(fallbackVendor);
-                localStorage.setItem('vendors', JSON.stringify(vendors));
-                
-                return fallbackVendor;
-            }
-        }
-
-        function extractContractDetails(text) {
-            // Enhanced vendor name extraction - more comprehensive patterns
-            const vendorNamePatterns = [
-                // Look for "SERVICE AGREEMENT between [Client] and [Vendor]"
-                /(?:agreement|contract)\s+between\s+[\w\s]+\s+and\s+([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))/i,
-                // Look for "Vendor: [Name]" or "Contractor: [Name]"
-                /(?:vendor|contractor|supplier|provider|consultant)[:\s]+([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))/i,
-                // Look for "[Company] agrees to provide"
-                /([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))\s+(?:agrees to|shall|will)\s+provide/i,
-                // Look for "provided by [Company]"
-                /(?:provided|supplied|delivered)\s+by\s+([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))/i,
-                // Look in header/title
-                /^([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))\b/m,
-                // Look for quoted company names
-                /\"([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.|Company|Corporation))\"/
-            ];
-            
-            let vendorName = 'Unknown Vendor';
-            const invalidNames = ['New Vendor', 'shall be liable for its failure', 'contingencies beyond its reasonable'];
-            
-            for (const pattern of vendorNamePatterns) {
-                const match = text.match(pattern);
-                if (match && match[1]) {
-                    const extractedName = match[1].trim();
-                    // Check if the extracted name is valid and not part of contract language
-                    const isInvalid = invalidNames.some(invalid => 
-                        extractedName.toLowerCase().includes(invalid.toLowerCase()));
-                    
-                    if (!isInvalid && extractedName.length > 3 && extractedName.length < 100) {
-                        vendorName = extractedName;
-                        console.log('Extracted vendor name:', vendorName);
-                        break;
-                    }
-                }
-            }
-            
-            // Extract business type and service description from context
-            let businessType = 'General Services';
-            let serviceDescription = '';
-            
-            const businessTypePatterns = [
-                { pattern: /(?:software|saas|technology|IT|tech|digital|computer|application|platform|system)/i, type: 'Technology Services' },
-                { pattern: /(?:consulting|advisory|professional services|consultancy)/i, type: 'Consulting Services' },
-                { pattern: /(?:marketing|advertising|media|creative|branding|promotion)/i, type: 'Marketing & Creative Services' },
-                { pattern: /(?:legal|law|attorney|litigation|compliance)/i, type: 'Legal Services' },
-                { pattern: /(?:accounting|financial|audit|tax|bookkeeping|cpa)/i, type: 'Financial Services' },
-                { pattern: /(?:construction|building|renovation|contractor|development)/i, type: 'Construction Services' },
-                { pattern: /(?:supply|supplier|materials|equipment|procurement)/i, type: 'Supply & Equipment' },
-                { pattern: /(?:maintenance|repair|facility|janitorial|cleaning)/i, type: 'Maintenance Services' },
-                { pattern: /(?:transportation|logistics|shipping|delivery|freight)/i, type: 'Logistics Services' },
-                { pattern: /(?:healthcare|medical|health|clinical|pharmaceutical)/i, type: 'Healthcare Services' },
-                { pattern: /(?:staffing|recruitment|human resources|hr|talent)/i, type: 'Staffing Services' },
-                { pattern: /(?:security|surveillance|protection|guard)/i, type: 'Security Services' }
-            ];
-            
-            for (const { pattern, type } of businessTypePatterns) {
-                if (pattern.test(text)) {
-                    businessType = type;
-                    
-                    // Try to extract service description from scope/services section
-                    const servicePatterns = [
-                        /(?:scope of (?:work|services))[:\s]+([^.\n]{20,200})/i,
-                        /(?:services to be provided)[:\s]+([^.\n]{20,200})/i,
-                        /(?:contractor|vendor|provider)\s+(?:shall|will)\s+provide\s+([^.\n]{20,200})/i,
-                        /(?:description of services)[:\s]+([^.\n]{20,200})/i
-                    ];
-                    
-                    for (const servicePattern of servicePatterns) {
-                        const serviceMatch = text.match(servicePattern);
-                        if (serviceMatch && serviceMatch[1]) {
-                            serviceDescription = serviceMatch[1].trim();
-                            break;
-                        }
-                    }
-                    break;
-                }
-            }
-            
-            // If no service description found, create a basic one
-            if (!serviceDescription) {
-                serviceDescription = `${businessType} as outlined in the contract`;
-            }
-            
-            return {
-                vendor_name: vendorName,
-                business_type: businessType,
-                service_description: serviceDescription,
-                amounts: Array.from(text.matchAll(/\$[\d,]+\.?\d*/g)).map(m => m[0]),
-                dates: Array.from(text.matchAll(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4}\b/g)).map(m => m[0]),
-                email: text.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/)?.[0] || '',
-                effectiveDate: text.match(/effective[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})/i)?.[1] || '',
-                renewalDate: text.match(/renew[a-z]*[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})/i)?.[1] || '',
-                paymentTerms: text.match(/payment[:\s]+([^.!?]*)/i)?.[1]?.trim() || 'Standard terms'
-            };
-        }
-
-        function removeDuplicateVendors() {
-            try {
-                const uniqueVendors = [];
-                const seenNames = new Set();
-                const invalidPhrases = ['shall be liable for its failure', 'contingencies beyond its reasonable'];
-                
-                vendors.forEach(vendor => {
-                    if (vendor && vendor.name) {
-                        const normalizedName = vendor.name.toLowerCase();
-                        
-                        // Only remove vendors with these specific invalid phrases, not "New Vendor" which might be temporary
-                        const isInvalid = invalidPhrases.some(invalid => 
-                            normalizedName.includes(invalid.toLowerCase()));
-                        
-                        if (isInvalid) {
-                            console.log('Removing vendor with invalid name:', vendor.name);
-                            return; // Skip this vendor
-                        }
-                        
-                        if (!seenNames.has(normalizedName)) {
-                            seenNames.add(normalizedName);
-                            uniqueVendors.push(vendor);
-                        } else {
-                            // Keep the vendor with more data (invoiceCount > 0 or has contractAnalysis)
-                            const existingIndex = uniqueVendors.findIndex(v => v.name.toLowerCase() === normalizedName);
-                            const existing = uniqueVendors[existingIndex];
-                            if (vendor.invoiceCount > (existing.invoiceCount || 0) || 
-                                (vendor.contractAnalysis && !existing.contractAnalysis)) {
-                                console.log('Replacing duplicate with better data:', vendor.name);
-                                uniqueVendors[existingIndex] = vendor;
-                            } else {
-                                console.log('Keeping existing vendor, skipping duplicate:', vendor.name);
-                            }
-                        }
-                    }
-                });
-                
-                if (uniqueVendors.length !== vendors.length) {
-                    console.log(`Cleaned up vendors: ${vendors.length} -> ${uniqueVendors.length}`);
-                    vendors = uniqueVendors;
-                    localStorage.setItem('vendors', JSON.stringify(vendors));
-                }
-            } catch (error) {
-                console.error('Error in removeDuplicateVendors:', error);
-                // Don't let this break the whole flow
-            }
-        }
-
-        function extractInvoiceDetails(text, filename) {
-            return {
-                filename: filename,
-                invoiceNumber: text.match(/invoice[#\s]*:?\s*([A-Z0-9\-]+)/i)?.[1] || 'Unknown',
-                amount: text.match(/\$[\d,]+\.?\d*/)?.[0] || '$0.00',
-                date: text.match(/\b\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}\b|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4}\b/)?.[0] || 'Unknown date',
-                vendor: text.match(/from[:\s]+([^,\n]*)/i)?.[1]?.trim() || text.match(/\b([A-Z][a-zA-Z\s&]+(?:Inc|LLC|Corp|Ltd|Co\.?))\b/)?.[1] || 'Unknown',
-                dueDate: text.match(/due[:\s]+(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4}|\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})/i)?.[1] || ''
-            };
-        }
-
-        async function generateReconciliationSummary(contractDetails, invoiceDetails) {
-            // Simple rule-based reconciliation for now
-            const issues = [];
-            let status = 'compliant';
-            
-            // Check vendor name consistency
-            const contractVendor = contractDetails.vendor_name.toLowerCase();
-            const invoiceVendor = invoiceDetails.vendor.toLowerCase();
-            
-            if (!contractVendor.includes(invoiceVendor.split(' ')[0]) && !invoiceVendor.includes(contractVendor.split(' ')[0])) {
-                issues.push('Vendor name mismatch detected');
-                status = 'attention_required';
-            }
-            
-            // Check if invoice amount matches any contract amounts
-            const contractAmounts = contractDetails.amounts.map(a => a.replace(/[$,]/g, ''));
-            const invoiceAmount = invoiceDetails.amount.replace(/[$,]/g, '');
-            
-            if (contractAmounts.length > 0 && !contractAmounts.includes(invoiceAmount)) {
-                issues.push('Invoice amount does not match contract terms');
-                status = 'attention_required';
-            }
-            
-            // Generate summary sentence
-            let summary = '';
-            if (status === 'compliant') {
-                summary = `✅ Invoice ${invoiceDetails.invoiceNumber} for ${invoiceDetails.amount} appears compliant with contract terms and requires no further review.`;
-            } else {
-                summary = `⚠️ Invoice ${invoiceDetails.invoiceNumber} for ${invoiceDetails.amount} has ${issues.length} potential issue${issues.length > 1 ? 's' : ''} that may require attention: ${issues.join(', ')}.`;
-            }
-            
-            return {
-                status: status,
-                summary: summary,
-                issues: issues,
-                details: {
-                    contractVendor: contractDetails.vendor_name,
-                    invoiceVendor: invoiceDetails.vendor,
-                    contractAmounts: contractDetails.amounts,
-                    invoiceAmount: invoiceDetails.amount,
-                    comparisonDate: new Date().toISOString()
-                }
-            };
-        }
-
-        async function continueWithActualProcessing() {
-            showProcessingSection();
-            
-            try {
-                // Step 1: Analyze contract with advanced prompting
-                updateProcessingStatus('Analyzing contract terms and obligations...');
-                const contractText = await extractTextFromFile(contractFile);
-                contractAnalysis = await analyzeContractAdvanced(contractText);
-                
-                // Step 2: Process each invoice
-                const invoiceResults = [];
-                
-                for (let i = 0; i < invoiceFiles.length; i++) {
-                    const file = invoiceFiles[i];
-                    updateProcessingStatus(`Validating invoice ${i + 1}/${invoiceFiles.length}: ${file.name}`);
-                    updateProgressBar(`invoice-${i}`, 0);
-                    
-                    try {
-                        // Extract text
-                        updateProgressBar(`invoice-${i}`, 25);
-                        const invoiceText = await extractTextFromFile(file);
-                        
-                        // Analyze with AI
-                        updateProgressBar(`invoice-${i}`, 50);
-                        const invoiceDetails = await analyzeDocument(invoiceText, 'invoice');
-                        
-                        // Compare with contract
-                        updateProgressBar(`invoice-${i}`, 75);
-                        const comparison = compareDocuments(contractAnalysis, invoiceDetails);
-                        
-                        updateProgressBar(`invoice-${i}`, 100);
-                        
-                        invoiceResults.push({
-                            filename: file.name,
-                            file: file,
-                            fileData: await fileToBase64(file),
-                            invoiceDetails: invoiceDetails,
-                            comparison: comparison,
-                            status: comparison.summary.reconciliation_status
-                        });
-                        
-                    } catch (error) {
-                        console.error(`Error processing ${file.name}:`, error);
-                        invoiceResults.push({
-                            filename: file.name,
-                            file: file,
-                            fileData: await fileToBase64(file),
-                            error: error.message,
-                            status: 'error'
-                        });
-                    }
-                }
-                
-                // Save to history
-                const historyEntry = {
-                    id: Date.now(),
-                    timestamp: new Date().toISOString(),
-                    contractFile: contractFile.name,
-                    contractFileData: await fileToBase64(contractFile),
-                    invoiceCount: invoiceFiles.length,
-                    results: {
-                        contractAnalysis: contractAnalysis,
-                        invoiceResults: invoiceResults
-                    }
-                };
-                
-                let history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
-                history.unshift(historyEntry);
-                if (history.length > 50) history = history.slice(0, 50);
-                localStorage.setItem('reconciliation_history', JSON.stringify(history));
-                
-                // Show results
-                displayResults(contractAnalysis, invoiceResults);
-                showResults();
-                
-            } catch (error) {
-                console.error('Processing error:', error);
-                updateProcessingStatus(`Error: ${error.message}`);
-                alert(`Processing failed: ${error.message}`);
-            }
-        }
-
         async function checkApiKey() {
             if (apiKey && apiKey.startsWith('sk-')) {
                 try {
@@ -7170,9 +4791,10 @@ Return ONLY this JSON structure:
             contractFile = event.target.files[0];
             displayContractFile();
             
-            // ✅ REMOVED: Auto-creation of vendor (was causing duplicates)
-            // Vendors should only be created after full AI analysis is complete
-            console.log('Contract file selected:', contractFile?.name);
+            // Auto-create vendor from contract
+            if (contractFile) {
+                await createVendorFromContract(contractFile);
+            }
         }
 
         async function createVendorFromContract(file) {
@@ -7314,7 +4936,7 @@ Return ONLY this JSON structure:
             if (contractFile) {
                 container.innerHTML = `
                     <div class="file-item">
-                        <span class="file-name">📄 ${contractFile.name}</span>
+                        <span class="file-name"> ${contractFile.name}</span>
                         <button class="remove-btn" onclick="removeContractFile()">✕</button>
                     </div>
                 `;
@@ -7333,7 +4955,7 @@ Return ONLY this JSON structure:
             if (invoiceFiles.length > 0) {
                 container.innerHTML = invoiceFiles.map((file, index) => `
                     <div class="file-item">
-                        <span class="file-name">🧾 ${file.name}</span>
+                        <span class="file-name"> ${file.name}</span>
                         <button class="remove-btn" onclick="removeInvoiceFile(${index})">✕</button>
                     </div>
                 `).join('');
@@ -7376,12 +4998,74 @@ Return ONLY this JSON structure:
                 return;
             }
 
-            // ✅ FIXED: Only run the new AI processing flow (no duplicate processing)
-            // Show AI processing visualization and wait for it to complete
-            // This handles vendor creation and redirect internally
-            await showAIProcessingView(!!contractFile, invoiceFiles.length > 0);
+            showProcessingSection();
             
-            // ✅ REMOVED: continueWithActualProcessing() - was causing duplicate vendors
+            try {
+                // Step 1: Analyze contract with advanced prompting
+                updateProcessingStatus('Analyzing contract terms and obligations...');
+                const contractText = await extractTextFromFile(contractFile);
+                contractAnalysis = await analyzeContractAdvanced(contractText);
+                
+                // Step 2: Process each invoice
+                const invoiceResults = [];
+                
+                for (let i = 0; i < invoiceFiles.length; i++) {
+                    const file = invoiceFiles[i];
+                    updateProcessingStatus(`Validating invoice ${i + 1}/${invoiceFiles.length}: ${file.name}`);
+                    updateProgressBar(`invoice-${i}`, 0);
+                    
+                    try {
+                        // Extract text
+                        updateProgressBar(`invoice-${i}`, 25);
+                        const invoiceText = await extractTextFromFile(file);
+                        
+                        // Analyze with AI
+                        updateProgressBar(`invoice-${i}`, 50);
+                        const invoiceDetails = await analyzeDocument(invoiceText, 'invoice');
+                        
+                        // Compare with contract
+                        updateProgressBar(`invoice-${i}`, 75);
+                        const comparison = compareDocuments(contractAnalysis, invoiceDetails);
+                        
+                        updateProgressBar(`invoice-${i}`, 100);
+                        
+                        invoiceResults.push({
+                            filename: file.name,
+                            file: file,
+                            fileData: await fileToBase64(file),
+                            invoiceDetails: invoiceDetails,
+                            comparison: comparison,
+                            status: comparison.summary.reconciliation_status
+                        });
+                        
+                    } catch (error) {
+                        console.error(`Error processing ${file.name}:`, error);
+                        invoiceResults.push({
+                            filename: file.name,
+                            file: file,
+                            fileData: await fileToBase64(file),
+                            error: error.message,
+                            status: 'ERROR'
+                        });
+                    }
+                }
+                
+                // Store results
+                currentResults = {
+                    timestamp: new Date(),
+                    contractFile: contractFile.name,
+                    contractAnalysis: contractAnalysis,
+                    invoiceResults: invoiceResults,
+                    batchSummary: calculateBatchSummary(invoiceResults)
+                };
+                
+                displayResults();
+                
+            } catch (error) {
+                console.error('Batch processing error:', error);
+                alert('Error processing documents: ' + error.message);
+                resetToUpload();
+            }
         }
 
         function showProcessingSection() {
@@ -7394,7 +5078,7 @@ Return ONLY this JSON structure:
             const grid = document.getElementById('processingGrid');
             grid.innerHTML = invoiceFiles.map((file, index) => `
                 <div class="processing-item">
-                    <h4>📄 ${file.name}</h4>
+                    <h4> ${file.name}</h4>
                     <div class="progress-bar">
                         <div class="progress-fill" id="progress-invoice-${index}" style="width: 0%"></div>
                     </div>
@@ -8077,7 +5761,7 @@ Focus on material business issues, not cosmetic differences. Think like a financ
                         
                         ${comparison.warnings.length > 0 ? `
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: var(--warning); margin-bottom: 10px;">⚠️ Warnings</h4>
+                                <h4 style="color: var(--warning); margin-bottom: 10px;">! Warnings</h4>
                                 ${comparison.warnings.map(warning => `
                                     <div class="warning-item">
                                         <strong>${warning.field}</strong><br>
@@ -8095,7 +5779,7 @@ Focus on material business issues, not cosmetic differences. Think like a financ
                         ` : ''}
                         
                         <details style="margin-top: 20px;">
-                            <summary style="cursor: pointer; font-weight: bold;">📄 Invoice Details</summary>
+                            <summary style="cursor: pointer; font-weight: bold;"> Invoice Details</summary>
                             <div class="detail-grid" style="margin-top: 15px;">
                                 ${Object.entries(invoice || {})
                                     .filter(([key]) => key !== 'items')
@@ -8601,7 +6285,7 @@ Focus on material business issues, not cosmetic differences. Think like a financ
             const icons = {
                 error: '❌',
                 success: '✅',
-                warning: '⚠️'
+                warning: '!'
             };
             return icons[type] || '';
         }
@@ -8659,10 +6343,10 @@ Focus on material business issues, not cosmetic differences. Think like a financ
             const icons = {
                 success: '✅',
                 error: '❌',
-                warning: '⚠️',
-                info: 'ℹ️'
+                warning: '!',
+                info: 'i'
             };
-            return icons[type] || 'ℹ️';
+            return icons[type] || 'i';
         }
 
         function getAlertTitle(type) {
@@ -8811,16 +6495,9 @@ Focus on material business issues, not cosmetic differences. Think like a financ
         }
 
         // Enhanced error handling
-        let errorCount = 0;
         window.addEventListener('error', function(e) {
-            errorCount++;
-            console.error('Application error #' + errorCount + ':', e.error);
-            console.error('Error location:', e.filename + ':' + e.lineno + ':' + e.colno);
-            
-            // Only show user-facing errors for critical failures, not handled exceptions
-            if (errorCount <= 3 && !e.error.message.includes('handled') && !e.error.message.includes('Expected')) {
-                showAlert('An unexpected error occurred. Please refresh the page and try again.', 'error');
-            }
+            console.error('Application error:', e.error);
+            showAlert('An unexpected error occurred. Please refresh the page and try again.', 'error');
         });
 
         // Enhanced keyboard navigation for tables/lists
@@ -8878,7 +6555,7 @@ Focus on material business issues, not cosmetic differences. Think like a financ
                         
                         ${comparison.warnings.length > 0 ? `
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: var(--warning); margin-bottom: 10px;">⚠️ Warnings</h4>
+                                <h4 style="color: var(--warning); margin-bottom: 10px;">! Warnings</h4>
                                 ${comparison.warnings.map(warning => `
                                     <div class="warning-item">
                                         <strong>${warning.field}</strong><br>
@@ -8896,7 +6573,7 @@ Focus on material business issues, not cosmetic differences. Think like a financ
                         ` : ''}
                         
                         <details style="margin-top: 20px;">
-                            <summary style="cursor: pointer; font-weight: bold; padding: 8px 0;">📄 Invoice Details</summary>
+                            <summary style="cursor: pointer; font-weight: bold; padding: 8px 0;"> Invoice Details</summary>
                             <div class="detail-grid" style="margin-top: 15px;">
                                 ${Object.entries(invoice || {})
                                     .filter(([key]) => key !== 'items')
