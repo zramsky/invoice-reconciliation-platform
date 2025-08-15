@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Reconciliation Platform</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Invoice Reconciliation Platform</h1>
+            <p class="subtitle">AI-powered contract and invoice comparison</p>
+        </header>
+
+        <div class="upload-section" id="uploadSection">
+            <h2>Upload Documents</h2>
+            <div class="upload-grid">
+                <div class="upload-box">
+                    <label for="contractFile" class="upload-label">
+                        <div class="upload-icon">📄</div>
+                        <h3>Contract</h3>
+                        <p>Select contract PDF or image</p>
+                        <input type="file" id="contractFile" accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp" />
+                        <span class="file-name" id="contractFileName"></span>
+                    </label>
+                </div>
+                <div class="upload-box">
+                    <label for="invoiceFile" class="upload-label">
+                        <div class="upload-icon">🧾</div>
+                        <h3>Invoice</h3>
+                        <p>Select invoice PDF or image</p>
+                        <input type="file" id="invoiceFile" accept=".pdf,.png,.jpg,.jpeg,.tiff,.bmp" />
+                        <span class="file-name" id="invoiceFileName"></span>
+                    </label>
+                </div>
+            </div>
+            <button id="processBtn" class="process-btn" disabled>Start Reconciliation</button>
+        </div>
+
+        <div class="processing-section hidden" id="processingSection">
+            <div class="spinner"></div>
+            <h2>Processing Documents...</h2>
+            <p id="processingStatus">Uploading files...</p>
+        </div>
+
+        <div class="results-section hidden" id="resultsSection">
+            <h2>Reconciliation Results</h2>
+            
+            <div class="summary-card" id="summaryCard">
+                <h3>Summary</h3>
+                <div class="summary-content">
+                    <div class="status-badge" id="statusBadge"></div>
+                    <div class="summary-stats" id="summaryStats"></div>
+                </div>
+            </div>
+
+            <div class="discrepancies-card" id="discrepanciesCard">
+                <h3>Discrepancies Found</h3>
+                <div id="discrepanciesList" class="discrepancies-list"></div>
+            </div>
+
+            <div class="warnings-card" id="warningsCard">
+                <h3>Warnings</h3>
+                <div id="warningsList" class="warnings-list"></div>
+            </div>
+
+            <div class="matches-card" id="matchesCard">
+                <h3>Matching Fields</h3>
+                <div id="matchesList" class="matches-list"></div>
+            </div>
+
+            <div class="details-grid">
+                <div class="details-card">
+                    <h3>Contract Details</h3>
+                    <div id="contractDetails" class="details-content"></div>
+                </div>
+                <div class="details-card">
+                    <h3>Invoice Details</h3>
+                    <div id="invoiceDetails" class="details-content"></div>
+                </div>
+            </div>
+
+            <button id="newReconciliationBtn" class="new-btn">New Reconciliation</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
