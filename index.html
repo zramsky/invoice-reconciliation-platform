@@ -17,43 +17,64 @@
         */
 
         :root {
-            /* COLOR PALETTE */
-            --primary: #0D1B2A;        /* Deep Navy - trust & brand anchor */
-            --secondary: #1B4965;      /* Teal Blue - intelligence & energy */
-            --accent-cyan: #00A8E8;    /* Bright Cyan - highlights & CTAs */
-            --accent-success: #2ECC71; /* Emerald Green - success/validation */
-            --neutral-dark: #3E4E50;   /* Charcoal Gray */
-            --neutral-light: #F5F7FA;  /* Soft Gray */
-            --white: #FFFFFF;          /* Pure White */
-            --warning: #F1C40F;        /* Amber */
-            --error: #E74C3C;          /* Crimson */
+            /* DARK MODE COLOR PALETTE */
+            --primary: #0D1B2A;        /* Deep Navy - main background */
+            --secondary: #1B4965;      /* Teal Blue - secondary surfaces */
+            --accent-cyan: #00D4FF;    /* Bright Cyan - highlights & CTAs (enhanced for dark) */
+            --accent-success: #00E676; /* Bright Green - success/validation (enhanced for dark) */
+            --neutral-dark: #2A3441;   /* Dark Gray - card backgrounds */
+            --neutral-medium: #394452; /* Medium Gray - elevated surfaces */
+            --neutral-light: #4A5568;  /* Light Gray - borders and subtle elements */
+            --text-primary: #F7FAFC;   /* Off-white - primary text */
+            --text-secondary: #CBD5E0; /* Light gray - secondary text */
+            --text-muted: #A0AEC0;     /* Muted gray - tertiary text */
+            --white: #FFFFFF;          /* Pure White - accents only */
+            --warning: #FFC107;        /* Bright Amber - enhanced for dark */
+            --error: #FF5252;          /* Bright Red - enhanced for dark */
             
-            /* LIGHT BACKGROUNDS & BORDERS */
-            --error-bg: rgba(231, 76, 60, 0.05);
-            --error-bg-light: rgba(231, 76, 60, 0.1);
-            --warning-bg: rgba(241, 196, 15, 0.05);
-            --success-bg: rgba(46, 204, 113, 0.1);
-            --success-bg-light: rgba(46, 204, 113, 0.03);
-            --cyan-bg: rgba(0, 168, 232, 0.02);
-            --cyan-bg-light: rgba(0, 168, 232, 0.05);
-            --cyan-focus: rgba(0, 168, 232, 0.1);
-            --secondary-bg: rgba(27, 73, 101, 0.03);
-            --secondary-bg-light: rgba(27, 73, 101, 0.05);
-            --border-light: rgba(13, 27, 42, 0.08);
-            --border-medium: rgba(13, 27, 42, 0.12);
-            --border-strong: rgba(13, 27, 42, 0.15);
-            --border-dashed: rgba(13, 27, 42, 0.2);
-            --bg-subtle: rgba(13, 27, 42, 0.02);
+            /* DARK MODE BACKGROUNDS & BORDERS */
+            --error-bg: rgba(255, 82, 82, 0.15);
+            --error-bg-light: rgba(255, 82, 82, 0.25);
+            --warning-bg: rgba(255, 193, 7, 0.15);
+            --success-bg: rgba(0, 230, 118, 0.15);
+            --success-bg-light: rgba(0, 230, 118, 0.08);
+            --cyan-bg: rgba(0, 212, 255, 0.08);
+            --cyan-bg-light: rgba(0, 212, 255, 0.15);
+            --cyan-focus: rgba(0, 212, 255, 0.25);
+            --secondary-bg: rgba(27, 73, 101, 0.25);
+            --secondary-bg-light: rgba(27, 73, 101, 0.15);
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-medium: rgba(255, 255, 255, 0.12);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --border-dashed: rgba(255, 255, 255, 0.2);
+            --bg-subtle: rgba(255, 255, 255, 0.02);
+            --surface-1: rgba(42, 52, 65, 0.8);    /* Card backgrounds */
+            --surface-2: rgba(57, 68, 82, 0.9);    /* Elevated surfaces */
+            --surface-3: rgba(74, 85, 104, 0.95);  /* Highest elevation */
             
             /* TYPOGRAPHY */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
             --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
             
-            /* SHADOWS & BORDERS */
-            --shadow-soft: 0 4px 20px rgba(13, 27, 42, 0.06);
-            --shadow-medium: 0 8px 30px rgba(13, 27, 42, 0.12);
+            /* DARK MODE SHADOWS & BORDERS */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.25);
+            --shadow-medium: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --shadow-button: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            --glow-cyan: 0 0 20px rgba(0, 212, 255, 0.3);
+            --glow-success: 0 0 20px rgba(0, 230, 118, 0.3);
             --border-radius: 6px;
             --border-radius-large: 12px;
+            
+            /* UI/UX INTERACTION SYSTEM */
+            --button-min-height: 44px;
+            --button-min-height-mobile: 48px;
+            --button-margin: 16px;
+            --dropdown-item-height: 40px;
+            --table-row-height: 48px;
+            --animation-fast: 150ms;
+            --animation-standard: 200ms;
+            --animation-slow: 300ms;
         }
 
         * {
@@ -65,20 +86,798 @@
         body {
             font-family: var(--font-primary);
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            background-attachment: fixed;
             min-height: 100vh;
             padding: 20px;
-            color: var(--neutral-dark);
+            color: var(--text-primary);
             font-size: 16px;
             line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Dark mode gradient overlay for depth */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(0, 230, 118, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* ===================================
+           UI/UX INTERACTION CONSISTENCY SYSTEM
+           =================================== */
+
+        /* 1. BUTTON SYSTEM */
+        .btn, button:not(.unstyled) {
+            min-height: var(--button-min-height);
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--animation-standard) ease;
+            margin: 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            user-select: none;
+            line-height: 1;
+        }
+
+        /* Button Variants */
+        .btn-primary {
+            background: var(--accent-cyan);
+            color: var(--white);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--white);
+        }
+
+        .btn-success {
+            background: var(--accent-success);
+            color: var(--white);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--neutral-dark);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-cyan);
+            color: var(--accent-cyan);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--neutral-dark);
+            border: 1px solid var(--border-light);
+        }
+
+        /* Button States - Hover */
+        .btn:hover:not(:disabled), button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-button);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--accent-cyan);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: var(--secondary);
+        }
+
+        .btn-warning:hover:not(:disabled) {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: var(--warning);
+            color: var(--neutral-dark);
+        }
+
+        .btn-outline:hover:not(:disabled) {
+            background: var(--accent-cyan);
+            color: var(--white);
+        }
+
+        .btn-ghost:hover:not(:disabled) {
+            background: var(--neutral-light);
+            border-color: var(--border-medium);
+        }
+
+        /* Button States - Active/Pressed */
+        .btn:active:not(:disabled), button:active:not(:disabled) {
+            transform: translateY(-1px) scale(0.98);
+            transition: all var(--animation-fast) ease;
+        }
+
+        /* Button States - Disabled */
+        .btn:disabled, button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Button States - Loading */
+        .btn.loading, button.loading {
+            color: transparent;
+            pointer-events: none;
+        }
+
+        .btn.loading::after, button.loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid currentColor;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Button Sizes */
+        .btn-small {
+            min-height: 32px;
+            padding: 6px 12px;
+            font-size: 12px;
+            margin: 4px;
+        }
+
+        .btn-large {
+            min-height: 52px;
+            padding: 16px 32px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Mobile Button Adjustments */
+        @media (max-width: 768px) {
+            .btn, button:not(.unstyled) {
+                min-height: var(--button-min-height-mobile);
+                margin: var(--button-margin) 8px;
+            }
+        }
+
+        /* 2. DROPDOWN SYSTEM */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-toggle {
+            background: var(--white);
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius);
+            padding: 12px 16px;
+            font-family: var(--font-primary);
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 150px;
+            transition: all var(--animation-standard) ease;
+        }
+
+        .dropdown-toggle:hover {
+            border-color: var(--border-medium);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .dropdown-toggle:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--cyan-focus);
+        }
+
+        .dropdown-toggle.open {
+            border-color: var(--accent-cyan);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        .dropdown-arrow {
+            transition: transform var(--animation-standard) ease;
+            font-size: 12px;
+            color: var(--neutral-dark);
+        }
+
+        .dropdown-toggle.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border: 2px solid var(--accent-cyan);
+            border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--shadow-medium);
+            z-index: 1000;
+            max-height: 320px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all var(--animation-standard) ease;
+        }
+
+        .dropdown-menu.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu.open-upward {
+            top: auto;
+            bottom: 100%;
+            border: 2px solid var(--accent-cyan);
+            border-bottom: none;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            transform: translateY(10px);
+        }
+
+        .dropdown-menu.open-upward.open {
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            min-height: var(--dropdown-item-height);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            color: var(--neutral-dark);
+            font-size: 14px;
+            border-bottom: 1px solid var(--border-light);
+            transition: background-color var(--animation-fast) ease;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover, .dropdown-item.focused {
+            background: var(--cyan-bg-light);
+            color: var(--primary);
+        }
+
+        .dropdown-item.selected {
+            background: var(--success-bg);
+            color: var(--accent-success);
+            font-weight: 500;
+        }
+
+        .dropdown-search {
+            padding: 12px 16px;
+            border: none;
+            border-bottom: 2px solid var(--border-light);
+            width: 100%;
+            font-family: var(--font-primary);
+            font-size: 14px;
+            background: var(--neutral-light);
+        }
+
+        .dropdown-search:focus {
+            outline: none;
+            border-bottom-color: var(--accent-cyan);
+            background: var(--white);
+        }
+
+        /* 3. FORM & INPUT SYSTEM */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--neutral-dark);
+            font-size: 14px;
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: var(--error);
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-light);
+            border-radius: var(--border-radius);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            background: var(--white);
+            transition: all var(--animation-standard) ease;
+            line-height: 1.4;
+        }
+
+        .form-input:hover, .form-textarea:hover, .form-select:hover {
+            border-color: var(--border-medium);
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px var(--cyan-focus);
+        }
+
+        .form-input.error, .form-textarea.error, .form-select.error {
+            border-color: var(--error);
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .form-input.success, .form-textarea.success, .form-select.success {
+            border-color: var(--accent-success);
+            box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+        }
+
+        .form-feedback {
+            margin-top: 6px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-feedback.error {
+            color: var(--error);
+        }
+
+        .form-feedback.success {
+            color: var(--accent-success);
+        }
+
+        .form-feedback.warning {
+            color: var(--warning);
+        }
+
+        .form-input-short {
+            max-width: 120px;
+        }
+
+        .form-input-medium {
+            max-width: 200px;
+        }
+
+        /* 4. TABLE & LIST SYSTEM */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .data-table thead {
+            background: var(--neutral-light);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .data-table th {
+            padding: 16px 20px;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .data-table th.text-left { text-align: left; }
+        .data-table th.text-center { text-align: center; }
+        .data-table th.text-right { text-align: right; }
+
+        .data-table td {
+            padding: 16px 20px;
+            min-height: var(--table-row-height);
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .data-table td.text-left { text-align: left; }
+        .data-table td.text-center { text-align: center; }
+        .data-table td.text-right { text-align: right; }
+
+        .data-table tbody tr {
+            transition: background-color var(--animation-fast) ease;
+            cursor: pointer;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--cyan-bg);
+        }
+
+        .data-table tbody tr.selected {
+            background: var(--success-bg-light);
+        }
+
+        .data-list {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .data-list-item {
+            min-height: var(--table-row-height);
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            transition: background-color var(--animation-fast) ease;
+            cursor: pointer;
+        }
+
+        .data-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .data-list-item:hover {
+            background: var(--cyan-bg);
+        }
+
+        .data-list-item.selected {
+            background: var(--success-bg-light);
+        }
+
+        /* 5. MODAL & OVERLAY SYSTEM */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(13, 27, 42, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all var(--animation-standard) ease;
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: var(--border-radius-large);
+            box-shadow: var(--shadow-medium);
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: all var(--animation-standard) ease;
+            position: relative;
+        }
+
+        .modal-backdrop.open .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            padding: 24px 32px 20px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--neutral-dark);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: var(--border-radius);
+            transition: all var(--animation-fast) ease;
+        }
+
+        .modal-close:hover {
+            background: var(--error-bg-light);
+            color: var(--error);
+        }
+
+        .modal-body {
+            padding: 24px 32px;
+        }
+
+        .modal-footer {
+            padding: 20px 32px 24px;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* 6. NAVIGATION SYSTEM */
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-light);
+            margin-bottom: 24px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--neutral-dark);
+            font-family: var(--font-primary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--animation-standard) ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tab:hover {
+            color: var(--accent-cyan);
+            background: var(--cyan-bg);
+        }
+
+        .nav-tab.active {
+            color: var(--accent-cyan);
+            border-bottom-color: var(--accent-cyan);
+            background: var(--cyan-bg-light);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .breadcrumb-item {
+            color: var(--neutral-dark);
+            text-decoration: none;
+            transition: color var(--animation-fast) ease;
+        }
+
+        .breadcrumb-item:hover:not(.current) {
+            color: var(--accent-cyan);
+        }
+
+        .breadcrumb-item.current {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .breadcrumb-separator {
+            color: var(--border-medium);
+        }
+
+        /* 7. FEEDBACK & STATE SYSTEM */
+        .alert {
+            padding: 16px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border-left: 4px solid;
+            animation: slideInDown var(--animation-standard) ease;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert.success {
+            background: var(--success-bg);
+            color: var(--accent-success);
+            border-left-color: var(--accent-success);
+        }
+
+        .alert.error {
+            background: var(--error-bg-light);
+            color: var(--error);
+            border-left-color: var(--error);
+        }
+
+        .alert.warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+            border-left-color: var(--warning);
+        }
+
+        .alert.info {
+            background: var(--cyan-bg-light);
+            color: var(--accent-cyan);
+            border-left-color: var(--accent-cyan);
+        }
+
+        .alert-icon {
+            font-size: 18px;
+            margin-top: 1px;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .alert-dismiss {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity var(--animation-fast) ease;
+        }
+
+        .alert-dismiss:hover {
+            opacity: 1;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            animation: slideInRight var(--animation-standard) ease;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--neutral-light) 25%, var(--border-light) 50%, var(--neutral-light) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--border-radius);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text.large {
+            height: 20px;
+        }
+
+        .skeleton-text.small {
+            height: 12px;
+        }
+
+        .skeleton-button {
+            height: var(--button-min-height);
+            width: 120px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--neutral-dark);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+
+        .empty-state-description {
+            font-size: 14px;
+            margin-bottom: 24px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: var(--white);
+            background: var(--surface-1);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-light);
             border-radius: var(--border-radius-large);
             padding: 40px;
             box-shadow: var(--shadow-medium);
+            position: relative;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         header {
@@ -94,33 +893,20 @@
         }
 
         .header-controls button {
-            background: var(--secondary);
-            color: var(--white);
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            font-family: var(--font-primary);
-        }
-
-        .header-controls button:hover {
-            background: var(--accent-cyan);
-            transform: translateY(-1px);
+            /* Use new button system - inherits from .btn base styles */
         }
 
         h1 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 12px;
             letter-spacing: -0.02em;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .subtitle {
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             font-size: 18px;
             margin-bottom: 24px;
             font-weight: 400;
@@ -146,15 +932,27 @@
 
         .section {
             margin-bottom: 32px;
-            background: var(--neutral-light);
+            background: var(--surface-2);
             border-radius: var(--border-radius-large);
             padding: 32px;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .section.collapsed {
-            background: var(--white);
+            background: var(--surface-1);
             border-color: var(--border-medium);
         }
 
@@ -167,7 +965,7 @@
         }
 
         .section-header h2 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 24px;
             font-weight: 600;
             display: flex;
@@ -191,18 +989,30 @@
         }
 
         .setting-item {
-            background: var(--white);
+            background: var(--surface-3);
             padding: 20px;
             border-radius: var(--border-radius);
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .setting-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .setting-item label {
             display: block;
             font-weight: 500;
             margin-bottom: 8px;
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             font-size: 14px;
         }
 
@@ -213,8 +1023,9 @@
             border-radius: var(--border-radius);
             font-size: 14px;
             font-family: var(--font-primary);
-            background: var(--white);
-            transition: border-color 0.2s ease;
+            background: var(--neutral-dark);
+            color: var(--text-primary);
+            transition: all 0.2s ease;
         }
 
         .setting-item input:focus, .setting-item select:focus {
@@ -247,21 +1058,7 @@
         }
 
         .save-key-btn {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 16px 24px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: var(--font-primary);
-            transition: all 0.2s ease;
-        }
-
-        .save-key-btn:hover {
-            background: var(--accent-cyan);
-            transform: translateY(-1px);
+            /* Use new button system - inherits from .btn-primary */
         }
 
         .api-status {
@@ -305,25 +1102,39 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: var(--white);
+            background: var(--surface-2);
+            backdrop-filter: blur(10px);
+        }
+
+        .upload-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .upload-box:hover {
             border-color: var(--accent-cyan);
             background: var(--cyan-bg);
+            box-shadow: var(--glow-cyan);
         }
 
         .upload-box.drag-over {
             border-color: var(--accent-cyan);
             background: var(--cyan-bg-light);
             transform: scale(1.01);
-            box-shadow: var(--shadow-medium);
+            box-shadow: var(--glow-cyan), var(--shadow-medium);
         }
 
         .upload-box.has-files {
             border-color: var(--accent-success);
             background: var(--success-bg-light);
             border-style: solid;
+            box-shadow: var(--glow-success);
         }
 
         .multi-upload-box {
@@ -337,16 +1148,16 @@
         }
 
         .upload-box h3 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 18px;
             font-weight: 600;
             margin-bottom: 8px;
         }
 
         .upload-box p {
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             font-size: 14px;
-            opacity: 0.8;
+            opacity: 0.9;
         }
 
         .file-list {
@@ -359,15 +1170,27 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 16px;
-            background: var(--bg-subtle);
+            background: var(--surface-3);
             border-radius: var(--border-radius);
             margin-bottom: 8px;
             border: 1px solid var(--border-light);
+            position: relative;
+        }
+
+        .file-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .file-item .file-name {
             flex: 1;
-            color: var(--neutral-dark);
+            color: var(--text-primary);
             font-size: 14px;
             font-family: var(--font-mono);
         }
@@ -394,32 +1217,10 @@
         }
 
         .process-btn {
-            background: var(--accent-cyan);
-            color: var(--white);
-            border: none;
-            padding: 18px 48px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all 0.2s ease;
+            /* Use new button system - inherits from .btn-primary .btn-large */
             display: block;
             margin: 0 auto;
-            position: relative;
-            font-family: var(--font-primary);
             letter-spacing: 0.01em;
-        }
-
-        .process-btn:hover:not(:disabled) {
-            background: var(--primary);
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-medium);
-        }
-
-        .process-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .processing-section {
@@ -428,14 +1229,15 @@
         }
 
         .processing-section h2 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 16px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .processing-section p {
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             font-size: 16px;
             margin-bottom: 32px;
         }
@@ -448,16 +1250,28 @@
         }
 
         .processing-item {
-            background: var(--white);
+            background: var(--surface-2);
             border-radius: var(--border-radius-large);
             padding: 24px;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .processing-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .processing-item h4 {
             margin-bottom: 16px;
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 16px;
             font-weight: 600;
             font-family: var(--font-mono);
@@ -466,10 +1280,11 @@
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: var(--neutral-light);
+            background: var(--neutral-dark);
             border-radius: 3px;
             overflow: hidden;
             margin: 16px 0;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .progress-fill {
@@ -482,11 +1297,12 @@
         .spinner {
             width: 48px;
             height: 48px;
-            border: 3px solid var(--neutral-light);
+            border: 3px solid var(--neutral-dark);
             border-top: 3px solid var(--accent-cyan);
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 24px;
+            box-shadow: var(--glow-cyan);
         }
 
         @keyframes spin {
@@ -515,9 +1331,10 @@
         }
 
         .results-header h2 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 24px;
             font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .export-controls {
@@ -526,33 +1343,32 @@
         }
 
         .export-btn {
-            background: var(--secondary);
-            color: var(--white);
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            font-family: var(--font-primary);
-            transition: all 0.2s ease;
-        }
-
-        .export-btn:hover {
-            background: var(--accent-cyan);
-            transform: translateY(-1px);
+            /* Use new button system - inherits from .btn-secondary */
         }
 
         .batch-summary {
-            background: linear-gradient(135deg, var(--neutral-light) 0%, var(--secondary-bg-light) 100%);
+            background: linear-gradient(135deg, var(--surface-2) 0%, var(--secondary-bg-light) 100%);
             border-radius: var(--border-radius-large);
             padding: 32px;
             margin-bottom: 32px;
             border: 1px solid var(--border-light);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .batch-summary::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .batch-summary h3 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 20px;
@@ -566,12 +1382,25 @@
         }
 
         .stat-card {
-            background: var(--white);
+            background: var(--surface-3);
             padding: 24px;
             border-radius: var(--border-radius);
             text-align: center;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .stat-value {
@@ -586,7 +1415,7 @@
         .stat-value.warning { color: var(--warning); }
 
         .stat-label {
-            color: var(--neutral-dark);
+            color: var(--text-secondary);
             font-size: 14px;
             font-weight: 500;
         }
@@ -597,11 +1426,24 @@
         }
 
         .invoice-result-card {
-            background: var(--white);
+            background: var(--surface-2);
             border-radius: var(--border-radius-large);
             padding: 32px;
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .invoice-result-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .invoice-result-header {
@@ -610,11 +1452,11 @@
             align-items: center;
             margin-bottom: 24px;
             padding-bottom: 20px;
-            border-bottom: 2px solid var(--neutral-light);
+            border-bottom: 2px solid var(--border-light);
         }
 
         .invoice-result-header h3 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 18px;
             font-weight: 600;
             display: flex;
@@ -679,10 +1521,23 @@
             padding: 32px;
             margin-bottom: 32px;
             border: 1px solid var(--border-light);
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .contract-details::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
         }
 
         .contract-details h3 {
-            color: var(--primary);
+            color: var(--text-primary);
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 20px;
@@ -696,16 +1551,28 @@
         }
 
         .detail-item {
-            background: var(--white);
+            background: var(--surface-3);
             padding: 16px;
             border-radius: var(--border-radius);
             border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+
+        .detail-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .detail-label {
             font-weight: 600;
-            color: var(--secondary);
+            color: var(--accent-cyan);
             font-size: 12px;
             margin-bottom: 8px;
             text-transform: uppercase;
@@ -713,7 +1580,7 @@
         }
 
         .detail-value {
-            color: var(--neutral-dark);
+            color: var(--text-primary);
             word-break: break-word;
             font-size: 14px;
             font-family: var(--font-mono);
@@ -767,8 +1634,10 @@
             right: -400px;
             width: 400px;
             height: 100vh;
-            background: var(--white);
-            box-shadow: -5px 0 30px var(--border-strong);
+            background: var(--surface-1);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid var(--border-light);
+            box-shadow: -5px 0 30px rgba(0, 0, 0, 0.4);
             transition: right 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
@@ -780,11 +1649,22 @@
 
         .history-header {
             padding: 24px;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
+        }
+
+        .history-header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
         }
 
         .history-header h3 {
@@ -803,13 +1683,26 @@
             margin-bottom: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: var(--white);
+            background: var(--surface-2);
+            position: relative;
+        }
+
+        .history-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--shadow-inset);
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .history-item:hover {
-            background: var(--neutral-light);
+            background: var(--surface-3);
             transform: translateX(4px);
             box-shadow: var(--shadow-soft);
+            border-color: var(--accent-cyan);
         }
 
         .info-box {
@@ -892,8 +1785,8 @@
     <div class="container">
         <header>
             <div class="header-controls">
-                <button onclick="toggleHistory()">📚 History</button>
-                <button onclick="resetAll()">🔄 Reset</button>
+                <button class="btn btn-secondary" onclick="toggleHistory()">📚 History</button>
+                <button class="btn btn-ghost" onclick="resetAll()">🔄 Reset</button>
             </div>
             <h1>Contract Reconciliation Platform</h1>
             <p class="subtitle">Precision contract validation at a glance. Your contracts, your rules. Verified every time.</p>
@@ -922,17 +1815,21 @@
                 <div class="api-key-input-group">
                     <input type="password" 
                            id="apiKeyInput" 
-                           class="api-key-input" 
-                           placeholder="Enter your OpenAI API key (sk-...)" 
+                           class="form-input api-key-input" 
+                           placeholder="Enter your OpenAI API key (sk-...)"
+                           required
                            value="">
-                    <button id="saveApiKeyBtn" class="save-key-btn">Save & Test Key</button>
+                    <button id="saveApiKeyBtn" 
+                            class="btn btn-primary save-key-btn"
+                            data-loading-text="Testing Key..."
+                            data-tooltip="Please enter a valid API key first">Save & Test Key</button>
                 </div>
                 <div id="apiStatus" class="api-status hidden"></div>
 
                 <div class="settings-grid">
                     <div class="setting-item">
                         <label for="aiModel" class="tooltip" data-tooltip="GPT-4 is more accurate but costs more">AI Model</label>
-                        <select id="aiModel">
+                        <select id="aiModel" class="form-select">
                             <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Fast & Cheap)</option>
                             <option value="gpt-4">GPT-4 (Most Accurate)</option>
                             <option value="gpt-4-turbo-preview">GPT-4 Turbo (Best Performance)</option>
@@ -940,11 +1837,11 @@
                     </div>
                     <div class="setting-item">
                         <label for="tolerance" class="tooltip" data-tooltip="Allow small differences in amounts">Amount Tolerance ($)</label>
-                        <input type="number" id="tolerance" value="0.01" step="0.01" min="0">
+                        <input type="number" id="tolerance" class="form-input form-input-short" value="0.01" step="0.01" min="0">
                     </div>
                     <div class="setting-item">
                         <label for="contractType" class="tooltip" data-tooltip="Helps AI understand contract format">Contract Type</label>
-                        <select id="contractType">
+                        <select id="contractType" class="form-select">
                             <option value="general">General Business Contract</option>
                             <option value="service">Service Agreement</option>
                             <option value="supply">Supply/Purchase Contract</option>
@@ -954,7 +1851,7 @@
                     </div>
                     <div class="setting-item">
                         <label for="strictMode">Validation Mode</label>
-                        <select id="strictMode">
+                        <select id="strictMode" class="form-select">
                             <option value="normal">Normal (Recommended)</option>
                             <option value="strict">Strict (Zero Tolerance)</option>
                             <option value="lenient">Lenient (Business Friendly)</option>
@@ -994,7 +1891,11 @@
                     </div>
                 </div>
 
-                <button id="processBtn" class="process-btn" disabled>
+                <button id="processBtn" 
+                        class="btn btn-primary btn-large process-btn" 
+                        disabled
+                        data-loading-text="Processing Documents..."
+                        data-tooltip="Please upload contract and at least one invoice, and enter your API key">
                     <span id="processBtnText">Analyze Documents</span>
                 </button>
             </div>
@@ -1016,9 +1917,9 @@
             <div class="results-header">
                 <h2>Validation Results</h2>
                 <div class="export-controls">
-                    <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
-                    <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
-                    <button class="export-btn" onclick="saveToHistory()">💾 Save Results</button>
+                    <button class="btn btn-secondary export-btn" onclick="exportToPDF()">📄 Export PDF</button>
+                    <button class="btn btn-secondary export-btn" onclick="exportToExcel()">📊 Export Excel</button>
+                    <button class="btn btn-success export-btn" onclick="saveToHistory()">💾 Save Results</button>
                 </div>
             </div>
             
@@ -1052,7 +1953,7 @@
     <div class="history-panel" id="historyPanel">
         <div class="history-header">
             <h3>📚 Reconciliation History</h3>
-            <button onclick="toggleHistory()" style="background: none; border: none; color: var(--white); font-size: 1.2rem; cursor: pointer;">✕</button>
+            <button class="unstyled" onclick="toggleHistory()" style="background: none; border: none; color: var(--white); font-size: 1.2rem; cursor: pointer;">✕</button>
         </div>
         <div class="history-content" id="historyContent">
             <!-- Dynamic history items -->
@@ -2038,6 +2939,606 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
             XLSX.utils.book_append_sheet(wb, resultsWs, 'Results');
             
             XLSX.writeFile(wb, `reconciliation-results-${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+
+        // ===================================
+        // UI/UX INTERACTION ENHANCEMENT SYSTEM
+        // ===================================
+
+        // Enhanced Button Functionality
+        function initializeButtons() {
+            // Add loading states for async operations
+            document.querySelectorAll('button[data-loading-text]').forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!this.disabled) {
+                        this.classList.add('loading');
+                        this.setAttribute('aria-busy', 'true');
+                    }
+                });
+            });
+
+            // Add tooltip functionality for disabled buttons
+            document.querySelectorAll('button[disabled][data-tooltip]').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    showTooltip(this, this.dataset.tooltip);
+                });
+                button.addEventListener('mouseleave', hideTooltip);
+            });
+        }
+
+        // Enhanced Dropdown Functionality
+        function initializeDropdowns() {
+            document.querySelectorAll('select').forEach(select => {
+                // Convert regular selects to enhanced dropdowns
+                convertToEnhancedDropdown(select);
+            });
+        }
+
+        function convertToEnhancedDropdown(select) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'dropdown';
+            select.parentNode.insertBefore(wrapper, select);
+
+            const toggle = document.createElement('button');
+            toggle.className = 'dropdown-toggle';
+            toggle.type = 'button';
+            toggle.innerHTML = `
+                <span class="dropdown-text">${select.options[select.selectedIndex]?.text || 'Select option'}</span>
+                <span class="dropdown-arrow">▼</span>
+            `;
+
+            const menu = document.createElement('div');
+            menu.className = 'dropdown-menu';
+            
+            // Add search for long lists
+            if (select.options.length > 8) {
+                const search = document.createElement('input');
+                search.className = 'dropdown-search';
+                search.placeholder = 'Search options...';
+                search.addEventListener('input', (e) => filterDropdownItems(menu, e.target.value));
+                menu.appendChild(search);
+            }
+
+            // Create dropdown items
+            Array.from(select.options).forEach((option, index) => {
+                const item = document.createElement('div');
+                item.className = 'dropdown-item';
+                if (option.selected) item.classList.add('selected');
+                item.textContent = option.text;
+                item.dataset.value = option.value;
+                item.dataset.index = index;
+                
+                item.addEventListener('click', () => {
+                    selectDropdownItem(select, toggle, menu, item, index);
+                });
+                
+                menu.appendChild(item);
+            });
+
+            wrapper.appendChild(toggle);
+            wrapper.appendChild(menu);
+            select.style.display = 'none';
+
+            // Add event listeners
+            toggle.addEventListener('click', () => toggleDropdown(toggle, menu));
+            toggle.addEventListener('keydown', (e) => handleDropdownKeyboard(e, menu));
+            
+            // Close on outside click
+            document.addEventListener('click', (e) => {
+                if (!wrapper.contains(e.target)) {
+                    closeDropdown(toggle, menu);
+                }
+            });
+
+            // Auto-detect direction
+            toggle.addEventListener('click', () => {
+                const rect = toggle.getBoundingClientRect();
+                const spaceBelow = window.innerHeight - rect.bottom;
+                const spaceAbove = rect.top;
+                
+                if (spaceBelow < 200 && spaceAbove > spaceBelow) {
+                    menu.classList.add('open-upward');
+                } else {
+                    menu.classList.remove('open-upward');
+                }
+            });
+        }
+
+        function toggleDropdown(toggle, menu) {
+            const isOpen = menu.classList.contains('open');
+            
+            // Close all other dropdowns
+            document.querySelectorAll('.dropdown-menu.open').forEach(m => {
+                if (m !== menu) closeDropdown(m.previousElementSibling, m);
+            });
+
+            if (isOpen) {
+                closeDropdown(toggle, menu);
+            } else {
+                openDropdown(toggle, menu);
+            }
+        }
+
+        function openDropdown(toggle, menu) {
+            toggle.classList.add('open');
+            menu.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+            
+            // Focus first item or search
+            const search = menu.querySelector('.dropdown-search');
+            const firstItem = menu.querySelector('.dropdown-item');
+            
+            setTimeout(() => {
+                if (search) {
+                    search.focus();
+                } else if (firstItem) {
+                    firstItem.classList.add('focused');
+                }
+            }, 150);
+        }
+
+        function closeDropdown(toggle, menu) {
+            toggle.classList.remove('open');
+            menu.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+            
+            // Clear focused states
+            menu.querySelectorAll('.dropdown-item.focused').forEach(item => {
+                item.classList.remove('focused');
+            });
+        }
+
+        function selectDropdownItem(select, toggle, menu, item, index) {
+            // Update original select
+            select.selectedIndex = index;
+            select.dispatchEvent(new Event('change'));
+            
+            // Update dropdown appearance
+            toggle.querySelector('.dropdown-text').textContent = item.textContent;
+            menu.querySelectorAll('.dropdown-item').forEach(i => i.classList.remove('selected'));
+            item.classList.add('selected');
+            
+            closeDropdown(toggle, menu);
+        }
+
+        function handleDropdownKeyboard(e, menu) {
+            const items = menu.querySelectorAll('.dropdown-item');
+            const focused = menu.querySelector('.dropdown-item.focused');
+            let focusedIndex = focused ? Array.from(items).indexOf(focused) : -1;
+
+            switch (e.key) {
+                case 'Enter':
+                case ' ':
+                    e.preventDefault();
+                    if (focused) {
+                        focused.click();
+                    }
+                    break;
+                
+                case 'ArrowDown':
+                    e.preventDefault();
+                    focusedIndex = Math.min(focusedIndex + 1, items.length - 1);
+                    updateFocusedItem(items, focusedIndex);
+                    break;
+                
+                case 'ArrowUp':
+                    e.preventDefault();
+                    focusedIndex = Math.max(focusedIndex - 1, 0);
+                    updateFocusedItem(items, focusedIndex);
+                    break;
+                
+                case 'Escape':
+                    closeDropdown(e.target, menu);
+                    break;
+            }
+        }
+
+        function updateFocusedItem(items, index) {
+            items.forEach(item => item.classList.remove('focused'));
+            if (items[index]) {
+                items[index].classList.add('focused');
+                items[index].scrollIntoView({ block: 'nearest' });
+            }
+        }
+
+        function filterDropdownItems(menu, searchTerm) {
+            const items = menu.querySelectorAll('.dropdown-item');
+            const term = searchTerm.toLowerCase();
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(term) ? 'flex' : 'none';
+            });
+        }
+
+        // Enhanced Form Functionality
+        function initializeForms() {
+            // Auto-focus first input
+            document.querySelectorAll('form').forEach(form => {
+                const firstInput = form.querySelector('input, textarea, select');
+                if (firstInput && !firstInput.disabled) {
+                    setTimeout(() => firstInput.focus(), 100);
+                }
+            });
+
+            // Real-time validation
+            document.querySelectorAll('input, textarea').forEach(input => {
+                input.addEventListener('input', () => validateField(input));
+                input.addEventListener('blur', () => validateField(input));
+            });
+
+            // Enhanced keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && e.target.form) {
+                    const form = e.target.form;
+                    const submitButton = form.querySelector('button[type="submit"], button:not([type])');
+                    
+                    if (submitButton && !submitButton.disabled && isFormValid(form)) {
+                        e.preventDefault();
+                        submitButton.click();
+                    }
+                }
+            });
+        }
+
+        function validateField(field) {
+            const value = field.value.trim();
+            const required = field.hasAttribute('required');
+            const type = field.type;
+            let isValid = true;
+            let message = '';
+
+            // Clear previous states
+            field.classList.remove('error', 'success');
+            
+            // Required validation
+            if (required && !value) {
+                isValid = false;
+                message = 'This field is required';
+            }
+            
+            // Type-specific validation
+            else if (value) {
+                switch (type) {
+                    case 'email':
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (!emailRegex.test(value)) {
+                            isValid = false;
+                            message = 'Please enter a valid email address';
+                        }
+                        break;
+                        
+                    case 'number':
+                        if (isNaN(value)) {
+                            isValid = false;
+                            message = 'Please enter a valid number';
+                        }
+                        break;
+                }
+            }
+
+            // Update field state
+            field.classList.add(isValid ? 'success' : 'error');
+            updateFieldFeedback(field, message, isValid ? 'success' : 'error');
+            
+            return isValid;
+        }
+
+        function updateFieldFeedback(field, message, type) {
+            let feedback = field.parentNode.querySelector('.form-feedback');
+            
+            if (!feedback) {
+                feedback = document.createElement('div');
+                feedback.className = 'form-feedback';
+                field.parentNode.appendChild(feedback);
+            }
+            
+            feedback.className = `form-feedback ${type}`;
+            feedback.innerHTML = message ? `<span>${getStatusIcon(type)}</span> ${message}` : '';
+        }
+
+        function getStatusIcon(type) {
+            const icons = {
+                error: '❌',
+                success: '✅',
+                warning: '⚠️'
+            };
+            return icons[type] || '';
+        }
+
+        function isFormValid(form) {
+            const inputs = form.querySelectorAll('input[required], textarea[required], select[required]');
+            return Array.from(inputs).every(input => input.value.trim() !== '');
+        }
+
+        // Enhanced Feedback System
+        function showAlert(message, type = 'info', duration = 5000) {
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.innerHTML = `
+                <span class="alert-icon">${getAlertIcon(type)}</span>
+                <div class="alert-content">
+                    <div class="alert-title">${getAlertTitle(type)}</div>
+                    <div>${message}</div>
+                </div>
+                <button class="alert-dismiss" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            document.body.appendChild(alert);
+            
+            if (duration > 0) {
+                setTimeout(() => {
+                    if (alert.parentNode) {
+                        alert.remove();
+                    }
+                }, duration);
+            }
+            
+            return alert;
+        }
+
+        function showToast(message, type = 'info', duration = 3000) {
+            const toast = document.createElement('div');
+            toast.className = `toast alert ${type}`;
+            toast.innerHTML = `
+                <span class="alert-icon">${getAlertIcon(type)}</span>
+                <div class="alert-content">${message}</div>
+                <button class="alert-dismiss" onclick="this.parentElement.remove()">×</button>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, duration);
+        }
+
+        function getAlertIcon(type) {
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            return icons[type] || 'ℹ️';
+        }
+
+        function getAlertTitle(type) {
+            const titles = {
+                success: 'Success',
+                error: 'Error',
+                warning: 'Warning',
+                info: 'Information'
+            };
+            return titles[type] || 'Notice';
+        }
+
+        // Initialize all enhanced UI/UX systems
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeButtons();
+            initializeDropdowns();
+            initializeForms();
+            
+            // Add global keyboard shortcuts
+            document.addEventListener('keydown', (e) => {
+                // ESC to close modals/dropdowns
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal-backdrop.open').forEach(modal => {
+                        modal.classList.remove('open');
+                    });
+                    document.querySelectorAll('.dropdown-menu.open').forEach(menu => {
+                        const toggle = menu.previousElementSibling;
+                        closeDropdown(toggle, menu);
+                    });
+                }
+            });
+        });
+
+        // Update existing functions to use new feedback system
+        function showApiStatus(message, type) {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.textContent = message;
+            statusDiv.className = `api-status ${type}`;
+            statusDiv.classList.remove('hidden');
+            
+            // Also show as toast for better UX
+            if (type === 'success') {
+                showToast(message, 'success');
+            } else if (type === 'error') {
+                showToast(message, 'error');
+            }
+        }
+
+        // Tooltip system for disabled buttons
+        let currentTooltip = null;
+
+        function showTooltip(element, text) {
+            hideTooltip();
+            
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip-popup';
+            tooltip.style.cssText = `
+                position: absolute;
+                background: var(--neutral-dark);
+                color: var(--white);
+                padding: 8px 12px;
+                border-radius: var(--border-radius);
+                font-size: 12px;
+                white-space: nowrap;
+                z-index: 10000;
+                pointer-events: none;
+                opacity: 0;
+                transition: opacity var(--animation-fast) ease;
+            `;
+            tooltip.textContent = text;
+            
+            document.body.appendChild(tooltip);
+            
+            const rect = element.getBoundingClientRect();
+            tooltip.style.left = `${rect.left + rect.width / 2 - tooltip.offsetWidth / 2}px`;
+            tooltip.style.top = `${rect.top - tooltip.offsetHeight - 8}px`;
+            
+            setTimeout(() => tooltip.style.opacity = '1', 10);
+            currentTooltip = tooltip;
+        }
+
+        function hideTooltip() {
+            if (currentTooltip) {
+                currentTooltip.remove();
+                currentTooltip = null;
+            }
+        }
+
+        // Enhanced history panel with keyboard navigation
+        function toggleHistory() {
+            const panel = document.getElementById('historyPanel');
+            const isOpen = panel.classList.contains('open');
+            
+            if (isOpen) {
+                panel.classList.remove('open');
+                document.body.style.overflow = '';
+            } else {
+                panel.classList.add('open');
+                document.body.style.overflow = 'hidden'; // Prevent background scroll
+                loadHistory();
+                
+                // Focus first history item for keyboard navigation
+                setTimeout(() => {
+                    const firstItem = panel.querySelector('.history-item');
+                    if (firstItem) firstItem.focus();
+                }, 300);
+            }
+        }
+
+        // Enhanced processing with better loading states
+        function updateProcessingStatus(status) {
+            document.getElementById('processingStatus').textContent = status;
+            
+            // Also update page title to show progress
+            if (status.includes('Processing') || status.includes('Analyzing')) {
+                document.title = `⏳ ${status} - Invoice Reconciliation Platform`;
+            }
+        }
+
+        // Reset page title when done
+        function displayResults() {
+            document.title = 'Invoice Reconciliation Platform Pro - Precision Contract Validation';
+            
+            document.getElementById('processingSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+            
+            // Display batch summary
+            displayBatchSummary(currentResults.batchSummary);
+            
+            // Display contract analysis
+            displayContractAnalysis(currentResults.contractAnalysis);
+            
+            // Display individual invoice results
+            displayInvoiceResults(currentResults.invoiceResults);
+            
+            // Show success toast
+            showToast(`✅ Reconciliation complete! Processed ${currentResults.invoiceResults.length} invoices`, 'success');
+        }
+
+        // Enhanced error handling
+        window.addEventListener('error', function(e) {
+            console.error('Application error:', e.error);
+            showAlert('An unexpected error occurred. Please refresh the page and try again.', 'error');
+        });
+
+        // Enhanced keyboard navigation for tables/lists
+        function initializeTableNavigation() {
+            document.querySelectorAll('.data-table tbody tr, .data-list-item').forEach((row, index) => {
+                row.setAttribute('tabindex', '0');
+                row.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        row.click();
+                    }
+                });
+            });
+        }
+
+        // Initialize table navigation when results are displayed
+        function displayInvoiceResults(invoiceResults) {
+            const container = document.getElementById('invoiceResults');
+            container.innerHTML = invoiceResults.map((result, index) => {
+                if (result.error) {
+                    return `
+                        <div class="invoice-result-card" tabindex="0">
+                            <div class="invoice-result-header">
+                                <h3>❌ ${result.filename}</h3>
+                                <span class="status-badge failed">ERROR</span>
+                            </div>
+                            <p style="color: var(--error);">Error: ${result.error}</p>
+                        </div>
+                    `;
+                }
+
+                const comparison = result.comparison;
+                const invoice = result.invoiceDetails;
+                
+                return `
+                    <div class="invoice-result-card" tabindex="0">
+                        <div class="invoice-result-header">
+                            <h3>${getStatusIcon(result.status)} ${result.filename}</h3>
+                            <span class="status-badge ${result.status.toLowerCase()}">${result.status}</span>
+                        </div>
+                        
+                        ${comparison.discrepancies.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: var(--error); margin-bottom: 10px;">🚨 Discrepancies Found</h4>
+                                ${comparison.discrepancies.map(disc => `
+                                    <div class="discrepancy-item">
+                                        <strong>${disc.field}</strong><br>
+                                        Contract: ${disc.contract_value}<br>
+                                        Invoice: ${disc.invoice_value}
+                                        ${disc.difference ? `<br>Difference: ${disc.difference}` : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${comparison.warnings.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: var(--warning); margin-bottom: 10px;">⚠️ Warnings</h4>
+                                ${comparison.warnings.map(warning => `
+                                    <div class="warning-item">
+                                        <strong>${warning.field}</strong><br>
+                                        ${warning.message}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        ${comparison.matches.length > 0 ? `
+                            <div style="margin-bottom: 20px;">
+                                <h4 style="color: var(--accent-success); margin-bottom: 10px;">✅ Matches</h4>
+                                ${comparison.matches.map(match => `<span class="match-badge">${match}</span>`).join('')}
+                            </div>
+                        ` : ''}
+                        
+                        <details style="margin-top: 20px;">
+                            <summary style="cursor: pointer; font-weight: bold; padding: 8px 0;">📄 Invoice Details</summary>
+                            <div class="detail-grid" style="margin-top: 15px;">
+                                ${Object.entries(invoice || {})
+                                    .filter(([key]) => key !== 'items')
+                                    .map(([key, value]) => `
+                                        <div class="detail-item">
+                                            <div class="detail-label">${key.replace(/_/g, ' ')}</div>
+                                            <div class="detail-value">${value || 'N/A'}</div>
+                                        </div>
+                                    `).join('')}
+                            </div>
+                        </details>
+                    </div>
+                `;
+            }).join('');
+            
+            // Initialize keyboard navigation for the new results
+            setTimeout(initializeTableNavigation, 100);
         }
     </script>
 </body>
