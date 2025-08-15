@@ -24,8 +24,26 @@
             --accent-success: #2ECC71; /* Emerald Green - success/validation */
             --neutral-dark: #3E4E50;   /* Charcoal Gray */
             --neutral-light: #F5F7FA;  /* Soft Gray */
+            --white: #FFFFFF;          /* Pure White */
             --warning: #F1C40F;        /* Amber */
             --error: #E74C3C;          /* Crimson */
+            
+            /* LIGHT BACKGROUNDS & BORDERS */
+            --error-bg: rgba(231, 76, 60, 0.05);
+            --error-bg-light: rgba(231, 76, 60, 0.1);
+            --warning-bg: rgba(241, 196, 15, 0.05);
+            --success-bg: rgba(46, 204, 113, 0.1);
+            --success-bg-light: rgba(46, 204, 113, 0.03);
+            --cyan-bg: rgba(0, 168, 232, 0.02);
+            --cyan-bg-light: rgba(0, 168, 232, 0.05);
+            --cyan-focus: rgba(0, 168, 232, 0.1);
+            --secondary-bg: rgba(27, 73, 101, 0.03);
+            --secondary-bg-light: rgba(27, 73, 101, 0.05);
+            --border-light: rgba(13, 27, 42, 0.08);
+            --border-medium: rgba(13, 27, 42, 0.12);
+            --border-strong: rgba(13, 27, 42, 0.15);
+            --border-dashed: rgba(13, 27, 42, 0.2);
+            --bg-subtle: rgba(13, 27, 42, 0.02);
             
             /* TYPOGRAPHY */
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
@@ -57,7 +75,7 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: var(--white);
             border-radius: var(--border-radius-large);
             padding: 40px;
             box-shadow: var(--shadow-medium);
@@ -77,7 +95,7 @@
 
         .header-controls button {
             background: var(--secondary);
-            color: white;
+            color: var(--white);
             border: none;
             padding: 12px 20px;
             border-radius: var(--border-radius);
@@ -118,7 +136,7 @@
 
         .badge {
             background: var(--accent-success);
-            color: white;
+            color: var(--white);
             padding: 8px 16px;
             border-radius: var(--border-radius);
             font-size: 13px;
@@ -131,13 +149,13 @@
             background: var(--neutral-light);
             border-radius: var(--border-radius-large);
             padding: 32px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
         .section.collapsed {
-            background: white;
-            border-color: rgba(13, 27, 42, 0.12);
+            background: var(--white);
+            border-color: var(--border-medium);
         }
 
         .section-header {
@@ -173,10 +191,10 @@
         }
 
         .setting-item {
-            background: white;
+            background: var(--white);
             padding: 20px;
             border-radius: var(--border-radius);
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
@@ -191,18 +209,18 @@
         .setting-item input, .setting-item select {
             width: 100%;
             padding: 12px;
-            border: 1px solid rgba(13, 27, 42, 0.15);
+            border: 1px solid var(--border-strong);
             border-radius: var(--border-radius);
             font-size: 14px;
             font-family: var(--font-primary);
-            background: white;
+            background: var(--white);
             transition: border-color 0.2s ease;
         }
 
         .setting-item input:focus, .setting-item select:focus {
             outline: none;
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
+            box-shadow: 0 0 0 3px var(--cyan-focus);
         }
 
         .api-key-input-group {
@@ -214,23 +232,23 @@
         .api-key-input {
             flex: 1;
             padding: 16px;
-            border: 2px solid rgba(13, 27, 42, 0.15);
+            border: 2px solid var(--border-strong);
             border-radius: var(--border-radius);
             font-size: 16px;
             font-family: var(--font-mono);
-            background: white;
+            background: var(--white);
             transition: border-color 0.2s ease;
         }
 
         .api-key-input:focus {
             outline: none;
             border-color: var(--accent-cyan);
-            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
+            box-shadow: 0 0 0 3px var(--cyan-focus);
         }
 
         .save-key-btn {
             background: var(--primary);
-            color: white;
+            color: var(--white);
             border: none;
             padding: 16px 24px;
             border-radius: var(--border-radius);
@@ -257,13 +275,13 @@
         }
 
         .api-status.success {
-            background: rgba(46, 204, 113, 0.1);
+            background: var(--success-bg);
             color: var(--accent-success);
             border-left-color: var(--accent-success);
         }
 
         .api-status.error {
-            background: rgba(231, 76, 60, 0.1);
+            background: var(--error-bg-light);
             color: var(--error);
             border-left-color: var(--error);
         }
@@ -276,7 +294,7 @@
         }
 
         .upload-box {
-            border: 2px dashed rgba(13, 27, 42, 0.2);
+            border: 2px dashed var(--border-dashed);
             border-radius: var(--border-radius-large);
             padding: 40px;
             text-align: center;
@@ -287,24 +305,24 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            background: white;
+            background: var(--white);
         }
 
         .upload-box:hover {
             border-color: var(--accent-cyan);
-            background: rgba(0, 168, 232, 0.02);
+            background: var(--cyan-bg);
         }
 
         .upload-box.drag-over {
             border-color: var(--accent-cyan);
-            background: rgba(0, 168, 232, 0.05);
+            background: var(--cyan-bg-light);
             transform: scale(1.01);
             box-shadow: var(--shadow-medium);
         }
 
         .upload-box.has-files {
             border-color: var(--accent-success);
-            background: rgba(46, 204, 113, 0.03);
+            background: var(--success-bg-light);
             border-style: solid;
         }
 
@@ -341,10 +359,10 @@
             justify-content: space-between;
             align-items: center;
             padding: 12px 16px;
-            background: rgba(13, 27, 42, 0.02);
+            background: var(--bg-subtle);
             border-radius: var(--border-radius);
             margin-bottom: 8px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
         }
 
         .file-item .file-name {
@@ -356,7 +374,7 @@
 
         .file-item .remove-btn {
             background: var(--error);
-            color: white;
+            color: var(--white);
             border: none;
             padding: 6px 12px;
             border-radius: var(--border-radius);
@@ -377,7 +395,7 @@
 
         .process-btn {
             background: var(--accent-cyan);
-            color: white;
+            color: var(--white);
             border: none;
             padding: 18px 48px;
             font-size: 16px;
@@ -430,10 +448,10 @@
         }
 
         .processing-item {
-            background: white;
+            background: var(--white);
             border-radius: var(--border-radius-large);
             padding: 24px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
@@ -509,7 +527,7 @@
 
         .export-btn {
             background: var(--secondary);
-            color: white;
+            color: var(--white);
             border: none;
             padding: 12px 20px;
             border-radius: var(--border-radius);
@@ -526,11 +544,11 @@
         }
 
         .batch-summary {
-            background: linear-gradient(135deg, var(--neutral-light) 0%, rgba(27, 73, 101, 0.05) 100%);
+            background: linear-gradient(135deg, var(--neutral-light) 0%, var(--secondary-bg-light) 100%);
             border-radius: var(--border-radius-large);
             padding: 32px;
             margin-bottom: 32px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
         }
 
         .batch-summary h3 {
@@ -548,11 +566,11 @@
         }
 
         .stat-card {
-            background: white;
+            background: var(--white);
             padding: 24px;
             border-radius: var(--border-radius);
             text-align: center;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
@@ -579,10 +597,10 @@
         }
 
         .invoice-result-card {
-            background: white;
+            background: var(--white);
             border-radius: var(--border-radius-large);
             padding: 32px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
@@ -616,16 +634,16 @@
 
         .status-badge.passed {
             background: var(--accent-success);
-            color: white;
+            color: var(--white);
         }
 
         .status-badge.failed {
             background: var(--error);
-            color: white;
+            color: var(--white);
         }
 
         .discrepancy-item, .warning-item {
-            background: rgba(231, 76, 60, 0.05);
+            background: var(--error-bg);
             padding: 20px;
             border-radius: var(--border-radius);
             margin-bottom: 16px;
@@ -633,7 +651,7 @@
         }
 
         .warning-item {
-            background: rgba(241, 196, 15, 0.05);
+            background: var(--warning-bg);
             border-left-color: var(--warning);
         }
 
@@ -646,7 +664,7 @@
         .match-badge {
             display: inline-block;
             background: var(--accent-success);
-            color: white;
+            color: var(--white);
             padding: 8px 12px;
             border-radius: var(--border-radius);
             font-size: 12px;
@@ -656,11 +674,11 @@
         }
 
         .contract-details {
-            background: rgba(27, 73, 101, 0.03);
+            background: var(--secondary-bg);
             border-radius: var(--border-radius-large);
             padding: 32px;
             margin-bottom: 32px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
         }
 
         .contract-details h3 {
@@ -678,10 +696,10 @@
         }
 
         .detail-item {
-            background: white;
+            background: var(--white);
             padding: 16px;
             border-radius: var(--border-radius);
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             box-shadow: var(--shadow-soft);
         }
 
@@ -722,12 +740,12 @@
 
         .btn-primary {
             background: var(--accent-cyan);
-            color: white;
+            color: var(--white);
         }
 
         .btn-success {
             background: var(--accent-success);
-            color: white;
+            color: var(--white);
         }
 
         .btn:hover {
@@ -749,8 +767,8 @@
             right: -400px;
             width: 400px;
             height: 100vh;
-            background: white;
-            box-shadow: -5px 0 30px rgba(13, 27, 42, 0.15);
+            background: var(--white);
+            box-shadow: -5px 0 30px var(--border-strong);
             transition: right 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
@@ -763,7 +781,7 @@
         .history-header {
             padding: 24px;
             background: var(--primary);
-            color: white;
+            color: var(--white);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -780,12 +798,12 @@
 
         .history-item {
             padding: 20px;
-            border: 1px solid rgba(13, 27, 42, 0.08);
+            border: 1px solid var(--border-light);
             border-radius: var(--border-radius);
             margin-bottom: 16px;
             cursor: pointer;
             transition: all 0.2s ease;
-            background: white;
+            background: var(--white);
         }
 
         .history-item:hover {
@@ -795,7 +813,7 @@
         }
 
         .info-box {
-            background: rgba(0, 168, 232, 0.05);
+            background: var(--cyan-bg-light);
             border-left: 4px solid var(--accent-cyan);
             padding: 20px;
             margin-bottom: 20px;
@@ -849,8 +867,8 @@
         .tooltip:hover::after {
             content: attr(data-tooltip);
             position: absolute;
-            background: #333;
-            color: white;
+            background: var(--neutral-dark);
+            color: var(--white);
             padding: 8px 12px;
             border-radius: 5px;
             font-size: 0.8rem;
@@ -1034,7 +1052,7 @@
     <div class="history-panel" id="historyPanel">
         <div class="history-header">
             <h3>📚 Reconciliation History</h3>
-            <button onclick="toggleHistory()" style="background: none; border: none; color: white; font-size: 1.2rem; cursor: pointer;">✕</button>
+            <button onclick="toggleHistory()" style="background: none; border: none; color: var(--white); font-size: 1.2rem; cursor: pointer;">✕</button>
         </div>
         <div class="history-content" id="historyContent">
             <!-- Dynamic history items -->
@@ -1767,7 +1785,7 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
                                 <h3>❌ ${result.filename}</h3>
                                 <span class="status-badge failed">ERROR</span>
                             </div>
-                            <p style="color: #f44336;">Error: ${result.error}</p>
+                            <p style="color: var(--error);">Error: ${result.error}</p>
                         </div>
                     `;
                 }
@@ -1784,7 +1802,7 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
                         
                         ${comparison.discrepancies.length > 0 ? `
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: #f44336; margin-bottom: 10px;">🚨 Discrepancies Found</h4>
+                                <h4 style="color: var(--error); margin-bottom: 10px;">🚨 Discrepancies Found</h4>
                                 ${comparison.discrepancies.map(disc => `
                                     <div class="discrepancy-item">
                                         <strong>${disc.field}</strong><br>
@@ -1798,7 +1816,7 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
                         
                         ${comparison.warnings.length > 0 ? `
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: #ff9800; margin-bottom: 10px;">⚠️ Warnings</h4>
+                                <h4 style="color: var(--warning); margin-bottom: 10px;">⚠️ Warnings</h4>
                                 ${comparison.warnings.map(warning => `
                                     <div class="warning-item">
                                         <strong>${warning.field}</strong><br>
@@ -1810,7 +1828,7 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
                         
                         ${comparison.matches.length > 0 ? `
                             <div style="margin-bottom: 20px;">
-                                <h4 style="color: #4CAF50; margin-bottom: 10px;">✅ Matches</h4>
+                                <h4 style="color: var(--accent-success); margin-bottom: 10px;">✅ Matches</h4>
                                 ${comparison.matches.map(match => `<span class="match-badge">${match}</span>`).join('')}
                             </div>
                         ` : ''}
@@ -1910,17 +1928,17 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
             const container = document.getElementById('historyContent');
             
             if (history.length === 0) {
-                container.innerHTML = '<p style="color: #666; text-align: center;">No reconciliation history yet.</p>';
+                container.innerHTML = '<p style="color: var(--neutral-dark); text-align: center;">No reconciliation history yet.</p>';
                 return;
             }
             
             container.innerHTML = history.map(entry => `
                 <div class="history-item" onclick="loadHistoryItem(${entry.id})">
                     <div style="font-weight: bold;">${entry.contractFile}</div>
-                    <div style="font-size: 0.9rem; color: #666;">
+                    <div style="font-size: 0.9rem; color: var(--neutral-dark);">
                         ${entry.invoiceCount} invoices • ${entry.passRate}% pass rate
                     </div>
-                    <div style="font-size: 0.8rem; color: #888;">
+                    <div style="font-size: 0.8rem; color: var(--neutral-dark);">
                         ${new Date(entry.timestamp).toLocaleString()}
                     </div>
                 </div>
