@@ -10,13 +10,20 @@ class AIAnalyzer:
     def extract_contract_details(self, contract_text):
         """Extract key details from contract using GPT"""
         prompt = f"""
-        Analyze the following contract text and extract key information in JSON format:
+        Analyze the following contract text and extract key information in JSON format.
         
         Contract Text:
-        {contract_text[:3000]}
+        {contract_text[:4000]}
+        
+        IMPORTANT INSTRUCTIONS:
+        1. For vendor_name: Find the actual company/vendor name providing services (NOT the client). Look for company names with suffixes like Inc, LLC, Corp, Ltd, Company. The vendor is the party PROVIDING services.
+        2. For business_type: Determine what type of services the vendor provides based on the contract context.
+        3. For service_description: Provide a brief 1-2 sentence description of what services the vendor will provide.
         
         Extract the following information:
-        - vendor_name
+        - vendor_name (the service provider company name, e.g., "Acme Technologies Inc")
+        - business_type (e.g., "Technology Services", "Consulting Services", "Marketing Services")
+        - service_description (brief description of services being provided)
         - contract_number
         - start_date
         - end_date
@@ -26,17 +33,17 @@ class AIAnalyzer:
         - items (list of items/services with descriptions and prices)
         - special_conditions
         
-        Return ONLY valid JSON without any markdown formatting.
+        Return ONLY valid JSON without any markdown formatting or backticks.
         """
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4-turbo-preview",
                 messages=[
-                    {"role": "system", "content": "You are a contract analysis expert. Extract information accurately and return only JSON."},
+                    {"role": "system", "content": "You are a contract analysis expert specializing in vendor identification and service classification. Extract the vendor/supplier name (the party PROVIDING services), not the client name. Return only valid JSON without markdown."},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.3,
+                temperature=0.1,
                 max_tokens=1500
             )
             
@@ -71,12 +78,12 @@ class AIAnalyzer:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4-turbo-preview",
                 messages=[
                     {"role": "system", "content": "You are an invoice analysis expert. Extract information accurately and return only JSON."},
                     {"role": "user", "content": prompt}
                 ],
-                temperature=0.3,
+                temperature=0.1,
                 max_tokens=1500
             )
             
@@ -107,6 +114,8 @@ class AIAnalyzer:
         else:
             extracted = {
                 "vendor_name": "Unknown",
+                "business_type": "General Services",
+                "service_description": "Services as per contract",
                 "contract_number": re.search(r'Contract\s*#?\s*(\w+)', text, re.I),
                 "total_value": amounts[0] if amounts else "0",
                 "items": []
