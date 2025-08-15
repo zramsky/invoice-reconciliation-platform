@@ -26,10 +26,11 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 os.makedirs(app.config['PROCESSED_FOLDER'], exist_ok=True)
 
 ocr_processor = OCRProcessor()
-ai_analyzer = AIAnalyzer(os.getenv('OPENAI_API_KEY'))  # Legacy analyzer for fallback
+api_key = os.getenv('OPENAI_API_KEY')
+ai_analyzer = AIAnalyzer(api_key) if api_key else None  # Legacy analyzer for fallback
 llm_client = LLMClient()
-if os.getenv('OPENAI_API_KEY'):
-    llm_client.set_api_key(os.getenv('OPENAI_API_KEY'))
+if api_key:
+    llm_client.set_api_key(api_key)
 
 reconciliation_sessions = {}
 

@@ -5,7 +5,7 @@ from datetime import datetime
 
 class AIAnalyzer:
     def __init__(self, api_key):
-        self.client = openai.OpenAI(api_key=api_key)
+        self.client = openai.OpenAI(api_key=api_key) if api_key else None
     
     def extract_contract_details(self, contract_text):
         """Extract key details from contract using GPT"""
@@ -37,6 +37,8 @@ class AIAnalyzer:
         """
         
         try:
+            if not self.client:
+                return self._fallback_extraction(contract_text, "contract")
             response = self.client.chat.completions.create(
                 model="gpt-4-turbo-preview",
                 messages=[
@@ -77,6 +79,8 @@ class AIAnalyzer:
         """
         
         try:
+            if not self.client:
+                return self._fallback_extraction(invoice_text, "invoice")
             response = self.client.chat.completions.create(
                 model="gpt-4-turbo-preview",
                 messages=[
