@@ -3,8 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invoice Reconciliation Platform Pro - AI-Powered Batch Document Analysis</title>
+    <title>Invoice Reconciliation Platform Pro - Precision Contract Validation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
+        /* 
+        ==============================================
+        COHESIVE THEME SYSTEM
+        ==============================================
+        Brand: "Precision Meets Trust"
+        A platform that feels like a secure, high-end financial tool—uncluttered, authoritative, and always on your side.
+        */
+
+        :root {
+            /* COLOR PALETTE */
+            --primary: #0D1B2A;        /* Deep Navy - trust & brand anchor */
+            --secondary: #1B4965;      /* Teal Blue - intelligence & energy */
+            --accent-cyan: #00A8E8;    /* Bright Cyan - highlights & CTAs */
+            --accent-success: #2ECC71; /* Emerald Green - success/validation */
+            --neutral-dark: #3E4E50;   /* Charcoal Gray */
+            --neutral-light: #F5F7FA;  /* Soft Gray */
+            --warning: #F1C40F;        /* Amber */
+            --error: #E74C3C;          /* Crimson */
+            
+            /* TYPOGRAPHY */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'IBM Plex Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            
+            /* SHADOWS & BORDERS */
+            --shadow-soft: 0 4px 20px rgba(13, 27, 42, 0.06);
+            --shadow-medium: 0 8px 30px rgba(13, 27, 42, 0.12);
+            --border-radius: 6px;
+            --border-radius-large: 12px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,19 +45,22 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: var(--font-primary);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             min-height: 100vh;
             padding: 20px;
+            color: var(--neutral-dark);
+            font-size: 16px;
+            line-height: 1.6;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             background: white;
-            border-radius: 20px;
+            border-radius: var(--border-radius-large);
             padding: 40px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-medium);
         }
 
         header {
@@ -36,64 +72,72 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .header-controls button {
-            background: #667eea;
+            background: var(--secondary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            font-family: var(--font-primary);
         }
 
         .header-controls button:hover {
-            background: #5a67d8;
+            background: var(--accent-cyan);
+            transform: translateY(-1px);
         }
 
         h1 {
-            color: #333;
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.02em;
         }
 
         .subtitle {
-            color: #666;
-            font-size: 1.1rem;
-            margin-bottom: 20px;
+            color: var(--neutral-dark);
+            font-size: 18px;
+            margin-bottom: 24px;
+            font-weight: 400;
         }
 
         .feature-badges {
             display: flex;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             margin-bottom: 20px;
         }
 
         .badge {
-            background: linear-gradient(135deg, #4CAF50, #45a049);
+            background: var(--accent-success);
             color: white;
             padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85rem;
+            border-radius: var(--border-radius);
+            font-size: 13px;
             font-weight: 500;
+            font-family: var(--font-primary);
         }
 
         .section {
-            margin-bottom: 40px;
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 25px;
-            border: 2px solid #e1e8ff;
+            margin-bottom: 32px;
+            background: var(--neutral-light);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .section.collapsed {
-            background: #f5f5f5;
-            border-color: #ddd;
+            background: white;
+            border-color: rgba(13, 27, 42, 0.12);
         }
 
         .section-header {
@@ -101,15 +145,16 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .section-header h2 {
-            color: #444;
-            font-size: 1.4rem;
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .section-content {
@@ -129,73 +174,98 @@
 
         .setting-item {
             background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid #e1e8ff;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .setting-item label {
             display: block;
             font-weight: 500;
             margin-bottom: 8px;
-            color: #555;
+            color: var(--neutral-dark);
+            font-size: 14px;
         }
 
         .setting-item input, .setting-item select {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 0.9rem;
+            padding: 12px;
+            border: 1px solid rgba(13, 27, 42, 0.15);
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-family: var(--font-primary);
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+
+        .setting-item input:focus, .setting-item select:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
         }
 
         .api-key-input-group {
             display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
 
         .api-key-input {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
+            padding: 16px;
+            border: 2px solid rgba(13, 27, 42, 0.15);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-family: var(--font-mono);
+            background: white;
+            transition: border-color 0.2s ease;
+        }
+
+        .api-key-input:focus {
+            outline: none;
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(0, 168, 232, 0.1);
         }
 
         .save-key-btn {
-            background: #667eea;
+            background: var(--primary);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 8px;
+            padding: 16px 24px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--font-primary);
+            transition: all 0.2s ease;
         }
 
         .save-key-btn:hover {
-            background: #5a67d8;
+            background: var(--accent-cyan);
+            transform: translateY(-1px);
         }
 
         .api-status {
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            margin-top: 16px;
             text-align: center;
-            font-size: 0.95rem;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 4px solid;
         }
 
         .api-status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--accent-success);
+            border-left-color: var(--accent-success);
         }
 
         .api-status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--error);
+            border-left-color: var(--error);
         }
 
         .upload-area {
@@ -206,8 +276,8 @@
         }
 
         .upload-box {
-            border: 2px dashed #ddd;
-            border-radius: 15px;
+            border: 2px dashed rgba(13, 27, 42, 0.2);
+            border-radius: var(--border-radius-large);
             padding: 40px;
             text-align: center;
             transition: all 0.3s ease;
@@ -217,17 +287,25 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            background: white;
+        }
+
+        .upload-box:hover {
+            border-color: var(--accent-cyan);
+            background: rgba(0, 168, 232, 0.02);
         }
 
         .upload-box.drag-over {
-            border-color: #667eea;
-            background: #f8f9ff;
-            transform: scale(1.02);
+            border-color: var(--accent-cyan);
+            background: rgba(0, 168, 232, 0.05);
+            transform: scale(1.01);
+            box-shadow: var(--shadow-medium);
         }
 
         .upload-box.has-files {
-            border-color: #4CAF50;
-            background: #f0fff0;
+            border-color: var(--accent-success);
+            background: rgba(46, 204, 113, 0.03);
+            border-style: solid;
         }
 
         .multi-upload-box {
@@ -235,8 +313,22 @@
         }
 
         .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.7;
+        }
+
+        .upload-box h3 {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .upload-box p {
+            color: var(--neutral-dark);
+            font-size: 14px;
+            opacity: 0.8;
         }
 
         .file-list {
@@ -246,29 +338,37 @@
 
         .file-item {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
+            padding: 12px 16px;
+            background: rgba(13, 27, 42, 0.02);
+            border-radius: var(--border-radius);
             margin-bottom: 8px;
-            border: 1px solid #e1e8ff;
+            border: 1px solid rgba(13, 27, 42, 0.08);
         }
 
         .file-item .file-name {
             flex: 1;
-            color: #333;
-            font-size: 0.9rem;
+            color: var(--neutral-dark);
+            font-size: 14px;
+            font-family: var(--font-mono);
         }
 
         .file-item .remove-btn {
-            background: #ff4757;
+            background: var(--error);
             color: white;
             border: none;
-            padding: 5px 10px;
-            border-radius: 15px;
+            padding: 6px 12px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .file-item .remove-btn:hover {
+            background: var(--warning);
+            transform: translateY(-1px);
         }
 
         input[type="file"] {
@@ -276,27 +376,32 @@
         }
 
         .process-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--accent-cyan);
             color: white;
             border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            border-radius: 50px;
+            padding: 18px 48px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             display: block;
             margin: 0 auto;
             position: relative;
+            font-family: var(--font-primary);
+            letter-spacing: 0.01em;
         }
 
         .process-btn:hover:not(:disabled) {
+            background: var(--primary);
             transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: var(--shadow-medium);
         }
 
         .process-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .processing-section {
@@ -304,49 +409,66 @@
             padding: 60px 0;
         }
 
+        .processing-section h2 {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .processing-section p {
+            color: var(--neutral-dark);
+            font-size: 16px;
+            margin-bottom: 32px;
+        }
+
         .processing-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
+            gap: 24px;
+            margin-top: 32px;
         }
 
         .processing-item {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #e1e8ff;
+            border-radius: var(--border-radius-large);
+            padding: 24px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .processing-item h4 {
-            margin-bottom: 10px;
-            color: #333;
+            margin-bottom: 16px;
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+            font-family: var(--font-mono);
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
+            height: 6px;
+            background: var(--neutral-light);
+            border-radius: 3px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 16px 0;
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #4CAF50, #45a049);
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-success));
             transition: width 0.3s ease;
-            border-radius: 4px;
+            border-radius: 3px;
         }
 
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #667eea;
+            width: 48px;
+            height: 48px;
+            border: 3px solid var(--neutral-light);
+            border-top: 3px solid var(--accent-cyan);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 30px;
+            margin: 0 auto 24px;
         }
 
         @keyframes spin {
@@ -371,193 +493,254 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: 32px;
+        }
+
+        .results-header h2 {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 600;
         }
 
         .export-controls {
             display: flex;
-            gap: 10px;
+            gap: 12px;
         }
 
         .export-btn {
-            background: #4CAF50;
+            background: var(--secondary);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 0.9rem;
-            transition: background 0.3s;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: var(--font-primary);
+            transition: all 0.2s ease;
         }
 
         .export-btn:hover {
-            background: #45a049;
+            background: var(--accent-cyan);
+            transform: translateY(-1px);
         }
 
         .batch-summary {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
+            background: linear-gradient(135deg, var(--neutral-light) 0%, rgba(27, 73, 101, 0.05) 100%);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+        }
+
+        .batch-summary h3 {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
         .summary-stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
         .stat-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 24px;
+            border-radius: var(--border-radius);
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-family: var(--font-mono);
         }
 
-        .stat-value.passed { color: #4CAF50; }
-        .stat-value.failed { color: #f44336; }
-        .stat-value.warning { color: #ff9800; }
+        .stat-value.passed { color: var(--accent-success); }
+        .stat-value.failed { color: var(--error); }
+        .stat-value.warning { color: var(--warning); }
 
         .stat-label {
-            color: #666;
-            font-size: 0.9rem;
+            color: var(--neutral-dark);
+            font-size: 14px;
+            font-weight: 500;
         }
 
         .invoice-results {
             display: grid;
-            gap: 25px;
+            gap: 24px;
         }
 
         .invoice-result-card {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #e1e8ff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .invoice-result-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 24px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--neutral-light);
+        }
+
+        .invoice-result-header h3 {
+            color: var(--primary);
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .status-badge {
             padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
+            border-radius: var(--border-radius);
+            font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.8rem;
+            font-size: 12px;
+            letter-spacing: 0.05em;
+            font-family: var(--font-primary);
         }
 
         .status-badge.passed {
-            background: #4CAF50;
+            background: var(--accent-success);
             color: white;
         }
 
         .status-badge.failed {
-            background: #f44336;
+            background: var(--error);
             color: white;
         }
 
         .discrepancy-item, .warning-item {
-            background: #fff5f5;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #f44336;
+            background: rgba(231, 76, 60, 0.05);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
+            border-left: 4px solid var(--error);
         }
 
         .warning-item {
-            background: #fffbf0;
-            border-left-color: #ff9800;
+            background: rgba(241, 196, 15, 0.05);
+            border-left-color: var(--warning);
+        }
+
+        .discrepancy-item strong, .warning-item strong {
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 16px;
         }
 
         .match-badge {
             display: inline-block;
-            background: #4CAF50;
+            background: var(--accent-success);
             color: white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            margin: 3px;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            font-size: 12px;
+            font-weight: 500;
+            margin: 4px;
+            font-family: var(--font-primary);
         }
 
         .contract-details {
-            background: #f8f9ff;
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 20px;
-            border: 1px solid #e1e8ff;
+            background: rgba(27, 73, 101, 0.03);
+            border-radius: var(--border-radius-large);
+            padding: 32px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+        }
+
+        .contract-details h3 {
+            color: var(--primary);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
 
         .detail-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
         }
 
         .detail-item {
             background: white;
-            padding: 12px;
-            border-radius: 8px;
-            border: 1px solid #e1e8ff;
+            padding: 16px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            box-shadow: var(--shadow-soft);
         }
 
         .detail-label {
             font-weight: 600;
-            color: #555;
-            font-size: 0.85rem;
-            margin-bottom: 5px;
+            color: var(--secondary);
+            font-size: 12px;
+            margin-bottom: 8px;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .detail-value {
-            color: #333;
+            color: var(--neutral-dark);
             word-break: break-word;
+            font-size: 14px;
+            font-family: var(--font-mono);
         }
 
         .action-buttons {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
+            gap: 16px;
+            margin-top: 40px;
         }
 
         .btn {
-            padding: 12px 30px;
+            padding: 16px 32px;
             border: none;
-            border-radius: 25px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: var(--font-primary);
+            transition: all 0.2s ease;
+            letter-spacing: 0.01em;
         }
 
         .btn-primary {
-            background: #667eea;
+            background: var(--accent-cyan);
             color: white;
         }
 
         .btn-success {
-            background: #4CAF50;
+            background: var(--accent-success);
             color: white;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary);
+        }
+
+        .btn-success:hover {
+            background: var(--secondary);
         }
 
         .history-panel {
@@ -567,7 +750,7 @@
             width: 400px;
             height: 100vh;
             background: white;
-            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            box-shadow: -5px 0 30px rgba(13, 27, 42, 0.15);
             transition: right 0.3s ease;
             z-index: 1000;
             overflow-y: auto;
@@ -578,48 +761,56 @@
         }
 
         .history-header {
-            padding: 20px;
-            background: #667eea;
+            padding: 24px;
+            background: var(--primary);
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
+        .history-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
         .history-content {
-            padding: 20px;
+            padding: 24px;
         }
 
         .history-item {
-            padding: 15px;
-            border: 1px solid #e1e8ff;
-            border-radius: 10px;
-            margin-bottom: 15px;
+            padding: 20px;
+            border: 1px solid rgba(13, 27, 42, 0.08);
+            border-radius: var(--border-radius);
+            margin-bottom: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            background: white;
         }
 
         .history-item:hover {
-            background: #f8f9ff;
-            transform: translateX(5px);
+            background: var(--neutral-light);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-soft);
         }
 
         .info-box {
-            background: #e7f3ff;
-            border-left: 4px solid #2196F3;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
+            background: rgba(0, 168, 232, 0.05);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: var(--border-radius);
         }
 
         .info-box a {
-            color: #1976D2;
+            color: var(--accent-cyan);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .info-box a:hover {
             text-decoration: underline;
+            color: var(--primary);
         }
 
         @media (max-width: 768px) {
@@ -686,14 +877,14 @@
                 <button onclick="toggleHistory()">📚 History</button>
                 <button onclick="resetAll()">🔄 Reset</button>
             </div>
-            <h1>Invoice Reconciliation Platform Pro</h1>
-            <p class="subtitle">AI-powered batch contract and invoice reconciliation with advanced analytics</p>
+            <h1>Contract Reconciliation Platform</h1>
+            <p class="subtitle">Precision contract validation at a glance. Your contracts, your rules. Verified every time.</p>
             <div class="feature-badges">
-                <span class="badge">✨ Multiple Invoices</span>
-                <span class="badge">🧠 Advanced AI Analysis</span>
-                <span class="badge">📊 Export Results</span>
-                <span class="badge">📱 Mobile Friendly</span>
-                <span class="badge">🔒 100% Private</span>
+                <span class="badge">Batch Processing</span>
+                <span class="badge">AI-Powered Analysis</span>
+                <span class="badge">Real-time Validation</span>
+                <span class="badge">Export Ready</span>
+                <span class="badge">Audit Compliant</span>
             </div>
         </header>
 
@@ -705,9 +896,9 @@
             </div>
             <div class="section-content">
                 <div class="info-box">
-                    <strong>Need an API key?</strong> 
-                    <a href="https://platform.openai.com/api-keys" target="_blank">Get one here from OpenAI</a>
-                    (Create account + add $10-20 credits for best performance)
+                    <strong>Secure API Access Required:</strong> 
+                    <a href="https://platform.openai.com/api-keys" target="_blank">Obtain your OpenAI API key</a>
+                    — Add $10-20 in credits for optimal analysis performance and reliability.
                 </div>
                 
                 <div class="api-key-input-group">
@@ -767,8 +958,8 @@
                     <div class="upload-box" id="contractUpload">
                         <div class="upload-icon">📄</div>
                         <h3>Contract Document</h3>
-                        <p>Drag & drop or click to select contract PDF/image</p>
-                        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">Supports: PDF, PNG, JPG, JPEG</p>
+                        <p>Upload your master contract for validation</p>
+                        <p style="font-size: 13px; opacity: 0.7; margin-top: 8px;">Supported formats: PDF, PNG, JPG, JPEG</p>
                         <input type="file" id="contractFile" accept=".pdf,.png,.jpg,.jpeg" />
                         <div id="contractFileInfo" class="file-list"></div>
                     </div>
@@ -777,16 +968,16 @@
                     <div class="upload-box multi-upload-box" id="invoicesUpload">
                         <div class="upload-icon">🧾</div>
                         <h3>Invoice Documents</h3>
-                        <p>Drag & drop or click to select multiple invoices</p>
-                        <p style="font-size: 0.8rem; color: #888; margin-top: 5px;">You can select multiple files at once!</p>
-                        <p style="font-size: 0.8rem; color: #888;">Supports: PDF, PNG, JPG, JPEG</p>
+                        <p>Upload invoices for batch validation against contract</p>
+                        <p style="font-size: 13px; opacity: 0.7; margin-top: 4px;">Select multiple files for batch processing</p>
+                        <p style="font-size: 13px; opacity: 0.7;">Supported formats: PDF, PNG, JPG, JPEG</p>
                         <input type="file" id="invoiceFiles" accept=".pdf,.png,.jpg,.jpeg" multiple />
                         <div id="invoiceFilesList" class="file-list"></div>
                     </div>
                 </div>
 
                 <button id="processBtn" class="process-btn" disabled>
-                    <span id="processBtnText">🚀 Start Batch Reconciliation</span>
+                    <span id="processBtnText">Analyze Documents</span>
                 </button>
             </div>
         </div>
@@ -794,8 +985,8 @@
         <!-- Processing Section -->
         <div class="processing-section hidden" id="processingSection">
             <div class="spinner"></div>
-            <h2>Processing Documents...</h2>
-            <p id="processingStatus">Initializing batch processing...</p>
+            <h2>Analyzing Terms. Cross-checking Figures.</h2>
+            <p id="processingStatus">Initializing document analysis...</p>
             
             <div class="processing-grid" id="processingGrid">
                 <!-- Dynamic processing items will be added here -->
@@ -805,7 +996,7 @@
         <!-- Results Section -->
         <div class="results-section hidden" id="resultsSection">
             <div class="results-header">
-                <h2>📊 Reconciliation Results</h2>
+                <h2>Validation Results</h2>
                 <div class="export-controls">
                     <button class="export-btn" onclick="exportToPDF()">📄 Export PDF</button>
                     <button class="export-btn" onclick="exportToExcel()">📊 Export Excel</button>
@@ -815,7 +1006,7 @@
             
             <!-- Batch Summary -->
             <div class="batch-summary">
-                <h3>📈 Batch Summary</h3>
+                <h3>Analysis Summary</h3>
                 <div class="summary-stats" id="batchSummaryStats">
                     <!-- Dynamic summary stats -->
                 </div>
@@ -823,7 +1014,7 @@
 
             <!-- Contract Analysis -->
             <div class="contract-details" id="contractAnalysis">
-                <h3>📋 Contract Analysis</h3>
+                <h3>Contract Analysis</h3>
                 <div id="contractDetailsContent"></div>
             </div>
 
@@ -1000,7 +1191,7 @@
                 });
                 
                 if (response.ok) {
-                    showApiStatus('✅ API key saved and verified!', 'success');
+                    showApiStatus('✅ API key verified and secure', 'success');
                     checkFilesReady();
                 } else {
                     showApiStatus('❌ Invalid API key. Please check and try again.', 'error');
@@ -1020,7 +1211,7 @@
                     });
                     
                     if (response.ok) {
-                        showApiStatus('✅ API key verified and ready!', 'success');
+                        showApiStatus('✅ Secure connection established', 'success');
                         return true;
                     }
                 } catch (error) {
@@ -1105,9 +1296,9 @@
             processBtn.disabled = !ready;
             
             if (ready) {
-                btnText.textContent = `🚀 Process Contract + ${invoiceFiles.length} Invoice${invoiceFiles.length > 1 ? 's' : ''}`;
+                btnText.textContent = `Validate Contract + ${invoiceFiles.length} Invoice${invoiceFiles.length > 1 ? 's' : ''}`;
             } else {
-                btnText.textContent = '🚀 Start Batch Reconciliation';
+                btnText.textContent = 'Analyze Documents';
             }
         }
 
@@ -1121,7 +1312,7 @@
             
             try {
                 // Step 1: Analyze contract with advanced prompting
-                updateProcessingStatus('🔍 Analyzing contract with advanced AI...');
+                updateProcessingStatus('Analyzing contract terms and obligations...');
                 const contractText = await extractTextFromFile(contractFile);
                 contractAnalysis = await analyzeContractAdvanced(contractText);
                 
@@ -1130,7 +1321,7 @@
                 
                 for (let i = 0; i < invoiceFiles.length; i++) {
                     const file = invoiceFiles[i];
-                    updateProcessingStatus(`📄 Processing invoice ${i + 1}/${invoiceFiles.length}: ${file.name}`);
+                    updateProcessingStatus(`Validating invoice ${i + 1}/${invoiceFiles.length}: ${file.name}`);
                     updateProgressBar(`invoice-${i}`, 0);
                     
                     try {
@@ -1217,11 +1408,11 @@
             }
             
             if (statusDiv) {
-                const statusText = percentage === 0 ? 'Starting...' :
-                                percentage === 25 ? 'Extracting text...' :
-                                percentage === 50 ? 'AI analysis...' :
-                                percentage === 75 ? 'Comparing...' :
-                                percentage === 100 ? '✅ Complete' : 'Processing...';
+                const statusText = percentage === 0 ? 'Initializing...' :
+                                percentage === 25 ? 'Extracting document text...' :
+                                percentage === 50 ? 'AI validation in progress...' :
+                                percentage === 75 ? 'Cross-referencing contract...' :
+                                percentage === 100 ? 'Validation complete' : 'Processing...';
                 statusDiv.textContent = statusText;
             }
         }
