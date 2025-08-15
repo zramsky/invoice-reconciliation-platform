@@ -85,6 +85,30 @@
         </div>
     </div>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtw-vXQwTa8q0L5TteQeqZtyDYTn0YopY",
+            authDomain: "contractrecplatform.firebaseapp.com",
+            projectId: "contractrecplatform",
+            storageBucket: "contractrecplatform.firebasestorage.app",
+            messagingSenderId: "46355550845",
+            appId: "1:46355550845:web:b32d2c91683743d495714"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        
+        // Make Firebase app available globally
+        window.firebaseApp = app;
+    </script>
+    
     <script src="app.js"></script>
 </body>
 </html>
