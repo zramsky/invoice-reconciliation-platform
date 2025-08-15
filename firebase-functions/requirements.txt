@@ -1,0 +1,7 @@
+firebase-functions==0.1.2
+firebase-admin==6.4.0
+pytesseract==0.3.10
+Pillow==10.2.0
+pdf2image==1.17.0
+openai==1.12.0
+numpy==1.26.3

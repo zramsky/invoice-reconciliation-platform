@@ -1,0 +1,26 @@
+{
+  "name": "invoice-reconciliation-platform",
+  "version": "1.0.0",
+  "description": "AI-powered invoice reconciliation platform",
+  "scripts": {
+    "deploy": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions",
+    "serve": "firebase serve",
+    "emulators": "firebase emulators:start",
+    "backend": "cd backend && python app.py",
+    "install-python": "pip install -r requirements.txt"
+  },
+  "devDependencies": {
+    "firebase-tools": "^13.0.0"
+  },
+  "keywords": [
+    "invoice",
+    "reconciliation",
+    "ocr",
+    "ai",
+    "firebase"
+  ],
+  "author": "",
+  "license": "MIT"
+}
