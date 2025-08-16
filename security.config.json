@@ -1,0 +1,154 @@
+{
+  "security": {
+    "authentication": {
+      "session_timeout": 3600,
+      "max_login_attempts": 5,
+      "lockout_duration": 900,
+      "password_requirements": {
+        "min_length": 8,
+        "require_uppercase": true,
+        "require_lowercase": true,
+        "require_numbers": true,
+        "require_special_chars": true
+      },
+      "mfa_enabled": false,
+      "jwt_expiry": 3600,
+      "refresh_token_expiry": 2592000
+    },
+    "encryption": {
+      "algorithm": "AES-256-GCM",
+      "key_derivation": "PBKDF2",
+      "iterations": 100000,
+      "encrypt_pii": true,
+      "encrypt_documents": true,
+      "encrypt_database_fields": [
+        "users.full_name",
+        "users.email",
+        "users.company",
+        "contracts.vendor_name",
+        "contracts.amount",
+        "invoices.vendor_name",
+        "invoices.amount"
+      ]
+    },
+    "csrf": {
+      "enabled": true,
+      "token_lifetime": 14400,
+      "double_submit_cookie": true,
+      "same_site": "Lax"
+    },
+    "headers": {
+      "content_security_policy": {
+        "default_src": ["'self'"],
+        "script_src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        "style_src": ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        "font_src": ["'self'", "https://fonts.gstatic.com"],
+        "img_src": ["'self'", "data:", "https:"],
+        "connect_src": ["'self'", "https://api.openai.com"]
+      },
+      "strict_transport_security": {
+        "max_age": 31536000,
+        "include_subdomains": true,
+        "preload": true
+      },
+      "x_frame_options": "DENY",
+      "x_content_type_options": "nosniff",
+      "x_xss_protection": "1; mode=block",
+      "referrer_policy": "strict-origin-when-cross-origin"
+    },
+    "rate_limiting": {
+      "enabled": true,
+      "rules": {
+        "auth_endpoints": {
+          "requests_per_minute": 5,
+          "requests_per_hour": 30,
+          "requests_per_day": 100
+        },
+        "api_endpoints": {
+          "requests_per_minute": 30,
+          "requests_per_hour": 500,
+          "requests_per_day": 2000
+        },
+        "public_endpoints": {
+          "requests_per_minute": 60,
+          "requests_per_hour": 1000,
+          "requests_per_day": 5000
+        }
+      }
+    },
+    "cors": {
+      "allowed_origins": [
+        "https://unspend-91424.web.app",
+        "https://unspend-91424.firebaseapp.com",
+        "http://localhost:3000",
+        "http://localhost:5000"
+      ],
+      "allowed_methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+      "allowed_headers": ["Content-Type", "Authorization", "X-CSRF-Token"],
+      "expose_headers": ["X-CSRF-Token"],
+      "max_age": 86400,
+      "supports_credentials": true
+    },
+    "input_validation": {
+      "max_request_size": 10485760,
+      "max_file_size": 5242880,
+      "allowed_file_types": ["pdf", "jpg", "jpeg", "png"],
+      "sanitize_html": true,
+      "prevent_sql_injection": true,
+      "prevent_xss": true,
+      "prevent_xxe": true
+    },
+    "audit_logging": {
+      "enabled": true,
+      "log_level": "INFO",
+      "log_authentication": true,
+      "log_authorization": true,
+      "log_data_access": true,
+      "log_data_modification": true,
+      "log_security_events": true,
+      "retention_days": 90
+    },
+    "api_security": {
+      "require_https": true,
+      "api_key_required": false,
+      "api_key_header": "X-API-Key",
+      "ip_whitelist_enabled": false,
+      "ip_whitelist": [],
+      "request_signing": false
+    },
+    "session_management": {
+      "secure_cookies": true,
+      "http_only_cookies": true,
+      "same_site_cookies": "Lax",
+      "session_regeneration": true,
+      "concurrent_sessions": 3,
+      "idle_timeout": 1800
+    },
+    "data_protection": {
+      "gdpr_compliance": true,
+      "data_retention_days": 365,
+      "right_to_erasure": true,
+      "data_portability": true,
+      "breach_notification": true,
+      "privacy_by_design": true
+    }
+  },
+  "environments": {
+    "development": {
+      "security.headers.strict_transport_security.enabled": false,
+      "security.api_security.require_https": false,
+      "security.session_management.secure_cookies": false,
+      "security.audit_logging.log_level": "DEBUG"
+    },
+    "staging": {
+      "security.rate_limiting.rules.auth_endpoints.requests_per_minute": 10,
+      "security.audit_logging.log_level": "INFO"
+    },
+    "production": {
+      "security.mfa_enabled": true,
+      "security.api_security.require_https": true,
+      "security.session_management.secure_cookies": true,
+      "security.audit_logging.log_level": "WARNING"
+    }
+  }
+}

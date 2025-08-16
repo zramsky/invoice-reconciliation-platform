@@ -1039,29 +1039,337 @@
 
 
         /* KPI CARDS */
-        .kpi-container {
+        /* STREAMLINED DASHBOARD STYLES */
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* ACTION REQUIRED SECTION */
+        .action-required-section {
+            margin-bottom: 32px;
+            padding: 24px;
+            background: linear-gradient(135deg, rgba(255, 82, 82, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border: 1px solid rgba(255, 82, 82, 0.2);
+            border-radius: var(--radius-card);
+            backdrop-filter: var(--overlay-blur);
+        }
+
+        .action-cards-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .action-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 200ms ease;
+            cursor: pointer;
+        }
+
+        .action-card.high-priority {
+            border-color: var(--error);
+            background: linear-gradient(135deg, rgba(255, 82, 82, 0.05) 0%, var(--bg-elevated) 100%);
+        }
+
+        .action-card.pending-approval {
+            border-color: var(--warning);
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.05) 0%, var(--bg-elevated) 100%);
+        }
+
+        .action-card.overdue {
+            border-color: var(--orange-600);
+            background: linear-gradient(135deg, rgba(255, 122, 26, 0.05) 0%, var(--bg-elevated) 100%);
+        }
+
+        .action-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-orange);
+        }
+
+        .action-icon {
+            font-size: 24px;
+            width: 40px;
+            text-align: center;
+        }
+
+        .action-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange-500);
+            font-family: var(--font-mono);
+        }
+
+        .action-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .action-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* CORE METRICS SECTION */
+        .core-metrics-section {
             margin-bottom: 32px;
         }
 
-        .kpi-card {
+        .core-metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            text-align: center;
+            transition: all 200ms ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--glow-orange);
+            border-color: var(--orange-600);
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--orange-500);
+            margin-bottom: 8px;
+            font-family: var(--font-mono);
+            text-shadow: 0 0 10px rgba(255, 140, 58, 0.3);
+        }
+
+        .metric-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .metric-period {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* SPEND DISTRIBUTION SECTION */
+        .spend-distribution-section {
+            margin-bottom: 32px;
             background: var(--bg-elevated);
             border: 1px solid var(--border-medium);
             border-radius: var(--radius-card);
             padding: 24px;
-            backdrop-filter: var(--overlay-blur);
-            transition: all 200ms ease;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .kpi-card:hover {
+        .spend-chart-container {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .spend-chart {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .chart-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .total-spend {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--orange-500);
+            font-family: var(--font-mono);
+        }
+
+        .total-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .spend-breakdown {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 122, 26, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 122, 26, 0.1);
+        }
+
+        .category-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+        }
+
+        .category-indicator.professional { background: #FF7A1A; }
+        .category-indicator.software { background: #FF8C3A; }
+        .category-indicator.facilities { background: #FF9C66; }
+        .category-indicator.other { background: #FFB38A; }
+
+        .category-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .category-amount {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-family: var(--font-mono);
+        }
+
+        /* TOP VENDORS SECTION */
+        .top-vendors-section {
+            margin-bottom: 32px;
+        }
+
+        .vendor-actions-compact {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn-outline-small, .btn-primary-small {
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        .btn-outline-small {
+            background: transparent;
+            border: 1px solid var(--border-medium);
+            color: var(--text-primary);
+        }
+
+        .btn-primary-small {
+            background: var(--orange-600);
+            border: 1px solid var(--orange-600);
+            color: white;
+        }
+
+        .top-vendors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .vendor-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: var(--radius-card);
+            padding: 20px;
+            transition: all 200ms ease;
+        }
+
+        .vendor-card:hover {
             transform: translateY(-2px);
             box-shadow: var(--glow-orange);
             border-color: var(--orange-600);
+        }
+
+        .vendor-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .vendor-spend {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--orange-500);
+            font-family: var(--font-mono);
+            margin-bottom: 4px;
+        }
+
+        .vendor-description {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .vendors-summary {
+            display: flex;
+            gap: 24px;
+            padding: 16px;
+            background: rgba(255, 122, 26, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 122, 26, 0.1);
+        }
+
+        .summary-item {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .summary-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+        }
+
+        .summary-value.attention {
+            color: var(--warning);
+        }
+
+        .chart-controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .form-select.small {
+            padding: 6px 12px;
+            font-size: 14px;
+            border-radius: 6px;
         }
 
         .kpi-value {
@@ -1744,6 +2052,42 @@
 
         /* MOBILE RESPONSIVE */
         @media (max-width: 768px) {
+            .action-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .core-metrics-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .spend-chart-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .spend-chart svg {
+                width: 250px;
+                height: 250px;
+            }
+
+            .top-vendors-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .vendors-summary {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .vendor-actions-compact {
+                flex-direction: column;
+                gap: 8px;
+                align-items: stretch;
+            }
+
             .kpi-container {
                 grid-template-columns: 1fr;
                 gap: 16px;
@@ -3152,44 +3496,159 @@
             </header>
 
             <!-- Dashboard Content -->
-            <!-- KPI Cards -->
-            <div class="kpi-container">
-                <div class="kpi-card">
-                    <div class="kpi-value" id="totalDriftValue">$0.00</div>
-                    <div class="kpi-label">
-                        Total Invoice Drift
-                        <span class="kpi-tooltip" title="Total value of all mismatches found between contracts and invoices">ℹ️</span>
+            
+            <!-- Priority: Action Required Section -->
+            <div class="action-required-section">
+                <h3 class="section-title">⚠️ Requires Immediate Attention</h3>
+                <div class="action-cards-grid">
+                    <div class="action-card high-priority">
+                        <div class="action-icon">🚨</div>
+                        <div class="action-content">
+                            <div class="action-value" id="highRiskCount">0</div>
+                            <div class="action-label">High Risk Contracts</div>
+                            <div class="action-description">Requiring manual review</div>
+                        </div>
                     </div>
-                    <div class="kpi-description">Cumulative discrepancies detected</div>
-                </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-value" id="activeVendorsValue">0</div>
-                    <div class="kpi-label">
-                        Active Vendors
-                        <span class="kpi-tooltip" title="Vendors with active profiles and valid contracts">ℹ️</span>
+                    
+                    <div class="action-card pending-approval">
+                        <div class="action-icon">📋</div>
+                        <div class="action-content">
+                            <div class="action-value" id="pendingApprovalCount">0</div>
+                            <div class="action-label">Pending Approvals</div>
+                            <div class="action-description">Awaiting your sign-off</div>
+                        </div>
                     </div>
-                    <div class="kpi-description">Configured for reconciliation</div>
-                </div>
-                
-                <div class="kpi-card">
-                    <div class="kpi-value" id="reviewedInvoicesValue">0</div>
-                    <div class="kpi-label">
-                        AI-Reviewed Invoices
-                        <span class="kpi-tooltip" title="Total invoices screened by the AI engine">ℹ️</span>
+                    
+                    <div class="action-card overdue">
+                        <div class="action-icon">⏰</div>
+                        <div class="action-content">
+                            <div class="action-value" id="overdueCount">0</div>
+                            <div class="action-label">Overdue Items</div>
+                            <div class="action-description">Past due date</div>
+                        </div>
                     </div>
-                    <div class="kpi-description">Processed through AI analysis</div>
                 </div>
             </div>
 
-            <!-- Vendors Table -->
-            <div class="vendors-section">
+            <!-- Core Metrics -->
+            <div class="core-metrics-section">
+                <h3 class="section-title">📊 Key Metrics</h3>
+                <div class="core-metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalCommittedSpend">$0</div>
+                        <div class="metric-label">Total Committed Spend</div>
+                        <div class="metric-period">Current Month</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value" id="monthSavings">$0</div>
+                        <div class="metric-label">This Month Savings</div>
+                        <div class="metric-period">vs Budget</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value" id="activeVendorsValue">0</div>
+                        <div class="metric-label">Active Vendors</div>
+                        <div class="metric-period">With Contracts</div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-value" id="reviewedInvoicesValue">0</div>
+                        <div class="metric-label">Processed Invoices</div>
+                        <div class="metric-period">This Month</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spend Distribution (Primary Chart) -->
+            <div class="spend-distribution-section">
+                <div class="section-header-flex">
+                    <h3 class="section-title">💰 Spend Distribution</h3>
+                    <div class="chart-controls">
+                        <select class="form-select small" id="spendPeriodSelect">
+                            <option value="current">Current Month</option>
+                            <option value="quarter">This Quarter</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="spend-chart-container">
+                    <div class="spend-chart">
+                        <svg id="spendDonutChart" width="300" height="300" viewBox="0 0 300 300">
+                            <!-- Donut chart will be generated here -->
+                        </svg>
+                        <div class="chart-center">
+                            <div class="total-spend" id="totalSpendAmount">$593K</div>
+                            <div class="total-label">Total Spend</div>
+                        </div>
+                    </div>
+                    
+                    <div class="spend-breakdown">
+                        <div class="breakdown-item">
+                            <div class="category-indicator professional"></div>
+                            <div class="category-info">
+                                <div class="category-name">Professional Services</div>
+                                <div class="category-amount">$245K (41%)</div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="category-indicator software"></div>
+                            <div class="category-info">
+                                <div class="category-name">Software & Licenses</div>
+                                <div class="category-amount">$188K (32%)</div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="category-indicator facilities"></div>
+                            <div class="category-info">
+                                <div class="category-name">Facilities & Maintenance</div>
+                                <div class="category-amount">$95K (16%)</div>
+                            </div>
+                        </div>
+                        <div class="breakdown-item">
+                            <div class="category-indicator other"></div>
+                            <div class="category-info">
+                                <div class="category-name">Other</div>
+                                <div class="category-amount">$65K (11%)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Vendors (Streamlined) -->
+            <div class="top-vendors-section">
+                <div class="section-header-flex">
+                    <h3 class="section-title">🏢 Top Vendors by Spend</h3>
+                    <div class="vendor-actions-compact">
+                        <button class="btn btn-outline-small" onclick="viewAllVendors()">View All</button>
+                        <button class="btn btn-primary-small" onclick="showAnalysis()">+ Add Vendor</button>
+                    </div>
+                </div>
+                
+                <div class="top-vendors-grid" id="topVendorsGrid">
+                    <!-- Top 3 vendors will be populated by JavaScript -->
+                </div>
+                
+                <div class="vendors-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total Active Vendors:</span>
+                        <span class="summary-value" id="totalVendorsCount">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Requiring Attention:</span>
+                        <span class="summary-value attention" id="vendorsRequiringAttention">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Full Vendors Table (Hidden by default) -->
+            <div class="full-vendors-section" id="fullVendorsSection" style="display: none;">
                 <div class="vendors-header">
-                    <h3 class="vendors-title">Active Vendors</h3>
+                    <h3 class="vendors-title">All Active Vendors</h3>
                     <div class="vendors-actions">
-                        <button class="btn btn-primary add-vendor-btn" onclick="showAnalysis()">
-                            + Add Vendor
-                        </button>
+                        <button class="btn btn-secondary" onclick="hideAllVendors()">← Back to Summary</button>
                         <input type="text" 
                                class="form-input vendors-search" 
                                placeholder="Search vendors..." 
@@ -3837,8 +4296,149 @@
         let currentSort = { field: null, direction: 'asc' };
 
         function loadDashboard() {
-            updateKPIs();
+            updateStreamlinedDashboard();
+            loadTopVendors();
+        }
+
+        // STREAMLINED DASHBOARD FUNCTIONS
+        function updateStreamlinedDashboard() {
+            updateActionItems();
+            updateCoreMetrics();
+            updateSpendDistribution();
+        }
+
+        function updateActionItems() {
+            // Simulate action items data
+            const highRiskCount = Math.floor(Math.random() * 5) + 1;
+            const pendingApprovalCount = Math.floor(Math.random() * 8) + 2;
+            const overdueCount = Math.floor(Math.random() * 3);
+
+            document.getElementById('highRiskCount').textContent = highRiskCount;
+            document.getElementById('pendingApprovalCount').textContent = pendingApprovalCount;
+            document.getElementById('overdueCount').textContent = overdueCount;
+        }
+
+        function updateCoreMetrics() {
+            const vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            
+            // Calculate real values where possible
+            const activeVendors = vendors.filter(v => v.status === 'active').length;
+            const processedInvoices = history.length;
+            
+            // Simulate financial data
+            const totalCommittedSpend = Math.floor(Math.random() * 500000) + 100000;
+            const monthSavings = Math.floor(Math.random() * 25000) + 5000;
+
+            document.getElementById('totalCommittedSpend').textContent = `$${(totalCommittedSpend / 1000).toFixed(0)}K`;
+            document.getElementById('monthSavings').textContent = `$${(monthSavings / 1000).toFixed(0)}K`;
+            document.getElementById('activeVendorsValue').textContent = activeVendors;
+            document.getElementById('reviewedInvoicesValue').textContent = processedInvoices;
+        }
+
+        function updateSpendDistribution() {
+            const spendData = [
+                { category: 'Professional Services', amount: 245000, percentage: 41, color: '#FF7A1A' },
+                { category: 'Software & Licenses', amount: 188000, percentage: 32, color: '#FF8C3A' },
+                { category: 'Facilities & Maintenance', amount: 95000, percentage: 16, color: '#FF9C66' },
+                { category: 'Other', amount: 65000, percentage: 11, color: '#FFB38A' }
+            ];
+
+            // Update total spend
+            const totalSpend = spendData.reduce((sum, item) => sum + item.amount, 0);
+            document.getElementById('totalSpendAmount').textContent = `$${(totalSpend / 1000).toFixed(0)}K`;
+
+            // Generate donut chart
+            generateDonutChart('spendDonutChart', spendData);
+        }
+
+        function generateDonutChart(svgId, data) {
+            const svg = document.getElementById(svgId);
+            const centerX = 150;
+            const centerY = 150;
+            const radius = 100;
+            const thickness = 40;
+
+            // Clear existing content
+            svg.innerHTML = '';
+
+            let startAngle = 0;
+            data.forEach(segment => {
+                const angle = (segment.percentage / 100) * 2 * Math.PI;
+                const endAngle = startAngle + angle;
+
+                const largeArcFlag = angle > Math.PI ? 1 : 0;
+
+                const x1 = centerX + (radius - thickness) * Math.cos(startAngle);
+                const y1 = centerY + (radius - thickness) * Math.sin(startAngle);
+                const x2 = centerX + radius * Math.cos(startAngle);
+                const y2 = centerY + radius * Math.sin(startAngle);
+
+                const x3 = centerX + radius * Math.cos(endAngle);
+                const y3 = centerY + radius * Math.sin(endAngle);
+                const x4 = centerX + (radius - thickness) * Math.cos(endAngle);
+                const y4 = centerY + (radius - thickness) * Math.sin(endAngle);
+
+                const pathData = [
+                    `M ${x1} ${y1}`,
+                    `L ${x2} ${y2}`,
+                    `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${x3} ${y3}`,
+                    `L ${x4} ${y4}`,
+                    `A ${radius - thickness} ${radius - thickness} 0 ${largeArcFlag} 0 ${x1} ${y1}`,
+                    'Z'
+                ].join(' ');
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathData);
+                path.setAttribute('fill', segment.color);
+                path.setAttribute('stroke', 'none');
+                svg.appendChild(path);
+
+                startAngle = endAngle;
+            });
+        }
+
+        function loadTopVendors() {
+            const vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+            const activeVendors = vendors.filter(v => v.status === 'active');
+            
+            // Sort by spend and take top 3
+            const topVendors = activeVendors
+                .sort((a, b) => (b.totalSpend || 0) - (a.totalSpend || 0))
+                .slice(0, 3);
+
+            const topVendorsGrid = document.getElementById('topVendorsGrid');
+            
+            if (topVendors.length === 0) {
+                topVendorsGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                        <div style="font-size: 48px; margin-bottom: 16px;">🏢</div>
+                        <h3>No vendors yet</h3>
+                        <p>Add your first vendor to start tracking spend</p>
+                    </div>
+                `;
+            } else {
+                topVendorsGrid.innerHTML = topVendors.map(vendor => `
+                    <div class="vendor-card" onclick="viewVendorDetails('${vendor.id}')">
+                        <div class="vendor-name">${vendor.name}</div>
+                        <div class="vendor-spend">$${((vendor.totalSpend || Math.random() * 100000 + 50000) / 1000).toFixed(0)}K</div>
+                        <div class="vendor-description">${vendor.description || 'No description'}</div>
+                    </div>
+                `).join('');
+            }
+
+            // Update summary
+            document.getElementById('totalVendorsCount').textContent = activeVendors.length;
+            document.getElementById('vendorsRequiringAttention').textContent = Math.floor(activeVendors.length * 0.2);
+        }
+
+        function viewAllVendors() {
+            document.getElementById('fullVendorsSection').style.display = 'block';
             loadVendorsTable();
+        }
+
+        function hideAllVendors() {
+            document.getElementById('fullVendorsSection').style.display = 'none';
         }
 
         function updateKPIs() {

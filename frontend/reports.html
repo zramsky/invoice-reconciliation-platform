@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports & Export - Unspend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* UNSPEND ORANGE SYSTEM */
+            --orange-600: #FF7A1A;
+            --orange-500: #FF8C3A;
+            --orange-400: #FF9C66;
+            --orange-300: #FFB38A;
+            --orange-200: #FFD1B3;
+            --orange-100: #FFE8D9;
+            --ember-700: #E04D00;
+            
+            /* UNSPEND NEUTRAL SYSTEM */
+            --ink-900: #0B0B0C;
+            --ink-800: #111113;
+            --ink-600: #2A2A2E;
+            --cloud-200: #EDEEF0;
+            --cloud-100: #F7F7F8;
+            
+            /* SEMANTIC COLORS */
+            --primary: var(--orange-600);
+            --secondary: var(--orange-500);
+            --success: #00E676;
+            --warning: #FFC107;
+            --error: #FF5252;
+            
+            /* TEXT COLORS */
+            --text-primary: var(--cloud-100);
+            --text-secondary: var(--cloud-200);
+            --text-muted: rgba(237, 238, 240, 0.7);
+            
+            /* BACKGROUND SYSTEM */
+            --bg-main: var(--ink-900);
+            --bg-surface: var(--ink-800);
+            --bg-elevated: var(--ink-600);
+            
+            /* BORDER SYSTEM */
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-medium: rgba(255, 255, 255, 0.12);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --border-orange: var(--orange-600);
+            
+            /* TYPOGRAPHY */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            
+            /* SHADOWS */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.35);
+            --glow-orange: 0 0 12px rgba(255, 176, 107, 0.6);
+            
+            /* BORDER RADIUS */
+            --radius-card: 16px;
+            --radius-button: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 24px;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 24px;
+        }
+        
+        .report-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .report-card h3 {
+            color: var(--primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .report-card p {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        /* Form controls */
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .form-group label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            background: var(--bg-main);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+            font-size: 14px;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-button);
+            font-family: var(--font-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--orange-500);
+            box-shadow: var(--glow-orange);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--ink-600);
+            border-color: var(--border-strong);
+        }
+        
+        .btn-success {
+            background: var(--success);
+            color: var(--ink-900);
+        }
+        
+        .btn-small {
+            padding: 8px 14px;
+            font-size: 12px;
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        /* Status indicators */
+        .status-indicator {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-available {
+            background: rgba(0, 230, 118, 0.2);
+            color: var(--success);
+        }
+        
+        .status-processing {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-error {
+            background: rgba(255, 82, 82, 0.2);
+            color: var(--error);
+        }
+        
+        /* Loading state */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        
+        /* Summary stats */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 16px;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 4px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                grid-template-columns: 1fr;
+            }
+            
+            .export-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="icon">📊</span>
+                Reports & Export
+            </h1>
+            <div>
+                <a href="/dashboard" class="btn btn-secondary">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+        
+        <!-- Summary Statistics -->
+        <div class="card">
+            <h3 style="margin-bottom: 16px;">Available Reports Summary</h3>
+            <div class="summary-stats" id="summaryStats">
+                <div class="stat-item">
+                    <div class="stat-value" id="reconciliationCount">-</div>
+                    <div class="stat-label">Reconciliations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="vendorCount">-</div>
+                    <div class="stat-label">Vendors</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="renewalCount">-</div>
+                    <div class="stat-label">Renewals</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="auditCount">-</div>
+                    <div class="stat-label">Audit Records</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Reports Grid -->
+        <div class="reports-grid">
+            <!-- Reconciliation Reports -->
+            <div class="report-card">
+                <h3>📋 Reconciliation Reports</h3>
+                <p>Export detailed reconciliation data with vendor information, flags, and processing results.</p>
+                
+                <div class="filters">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="reconciliation-start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="reconciliation-end-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor</label>
+                        <select id="reconciliation-vendor-id">
+                            <option value="">All Vendors</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="export-actions">
+                    <button class="btn btn-primary btn-small" onclick="exportReport('reconciliations', 'csv')">
+                        📄 CSV Export
+                    </button>
+                    <button class="btn btn-secondary btn-small" onclick="exportReport('reconciliations', 'pdf')">
+                        📑 PDF Export
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Vendor Performance Reports -->
+            <div class="report-card">
+                <h3>👥 Vendor Performance</h3>
+                <p>Export vendor performance metrics, reconciliation success rates, and processing statistics.</p>
+                
+                <div class="filters">
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="vendor-start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="vendor-end-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Specific Vendor</label>
+                        <select id="vendor-vendor-id">
+                            <option value="">All Vendors</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="export-actions">
+                    <button class="btn btn-primary btn-small" onclick="exportReport('vendor-performance', 'csv')">
+                        📄 CSV Export
+                    </button>
+                    <button class="btn btn-secondary btn-small" onclick="exportReport('vendor-performance', 'pdf')">
+                        📑 PDF Export
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Contract Renewal Reports -->
+            <div class="report-card">
+                <h3>🔄 Contract Renewals</h3>
+                <p>Export upcoming contract renewals, renewal status, and vendor contact information.</p>
+                
+                <div class="filters">
+                    <div class="form-group">
+                        <label>Days Ahead</label>
+                        <select id="renewal-days-ahead">
+                            <option value="30">30 days</option>
+                            <option value="60">60 days</option>
+                            <option value="90" selected>90 days</option>
+                            <option value="180">6 months</option>
+                            <option value="365">1 year</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Vendor</label>
+                        <select id="renewal-vendor-id">
+                            <option value="">All Vendors</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="export-actions">
+                    <button class="btn btn-primary btn-small" onclick="exportReport('renewals', 'csv')">
+                        📄 CSV Export
+                    </button>
+                    <button class="btn btn-secondary btn-small" onclick="exportReport('renewals', 'pdf')">
+                        📑 PDF Export
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Audit Trail Reports -->
+            <div class="report-card">
+                <h3>🔍 Audit Trail</h3>
+                <p>Export compliance audit trails with user activities, data changes, and system operations.</p>
+                
+                <div class="filters">
+                    <div class="form-group">
+                        <label>Table</label>
+                        <select id="audit-table-name">
+                            <option value="">All Tables</option>
+                            <option value="contracts">Contracts</option>
+                            <option value="invoices">Invoices</option>
+                            <option value="vendors">Vendors</option>
+                            <option value="reconciliations">Reconciliations</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Operation</label>
+                        <select id="audit-operation">
+                            <option value="">All Operations</option>
+                            <option value="INSERT">Create</option>
+                            <option value="UPDATE">Update</option>
+                            <option value="DELETE">Delete</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" id="audit-start-date">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" id="audit-end-date">
+                    </div>
+                </div>
+                
+                <div class="export-actions">
+                    <button class="btn btn-primary btn-small" onclick="exportReport('audit-trail', 'csv')">
+                        📄 CSV Export
+                    </button>
+                    <button class="btn btn-secondary btn-small" onclick="exportReport('audit-trail', 'pdf')">
+                        📑 PDF Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class ReportsManager {
+            constructor() {
+                this.reportsApi = '/api/reports';
+                this.vendorsApi = '/api/vendors';
+                this.init();
+            }
+            
+            async init() {
+                await this.loadSummaryData();
+                await this.loadVendorOptions();
+                this.setDefaultDates();
+            }
+            
+            async loadSummaryData() {
+                try {
+                    const response = await fetch(`${this.reportsApi}/summary`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const reports = data.summary.available_reports;
+                        document.getElementById('reconciliationCount').textContent = reports.reconciliations.total_records;
+                        document.getElementById('vendorCount').textContent = reports.vendor_performance.total_records;
+                        document.getElementById('renewalCount').textContent = reports.contract_renewals.total_records;
+                        document.getElementById('auditCount').textContent = reports.audit_trail.total_records;
+                    }
+                } catch (error) {
+                    console.error('Failed to load summary data:', error);
+                }
+            }
+            
+            async loadVendorOptions() {
+                try {
+                    const response = await fetch(`${this.vendorsApi}/`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const vendors = data.vendors;
+                        const selects = [
+                            'reconciliation-vendor-id',
+                            'vendor-vendor-id', 
+                            'renewal-vendor-id'
+                        ];
+                        
+                        selects.forEach(selectId => {
+                            const select = document.getElementById(selectId);
+                            vendors.forEach(vendor => {
+                                const option = document.createElement('option');
+                                option.value = vendor.id;
+                                option.textContent = vendor.display_name;
+                                select.appendChild(option);
+                            });
+                        });
+                    }
+                } catch (error) {
+                    console.error('Failed to load vendor options:', error);
+                }
+            }
+            
+            setDefaultDates() {
+                const today = new Date();
+                const thirtyDaysAgo = new Date(today.getTime() - (30 * 24 * 60 * 60 * 1000));
+                
+                const formatDate = (date) => date.toISOString().split('T')[0];
+                
+                // Set default date ranges
+                document.getElementById('reconciliation-start-date').value = formatDate(thirtyDaysAgo);
+                document.getElementById('reconciliation-end-date').value = formatDate(today);
+                document.getElementById('vendor-start-date').value = formatDate(thirtyDaysAgo);
+                document.getElementById('vendor-end-date').value = formatDate(today);
+                document.getElementById('audit-start-date').value = formatDate(thirtyDaysAgo);
+                document.getElementById('audit-end-date').value = formatDate(today);
+            }
+            
+            async exportReport(reportType, format) {
+                try {
+                    const params = this.getReportParams(reportType);
+                    params.set('format', format);
+                    
+                    const endpoints = {
+                        'reconciliations': '/reconciliations/export',
+                        'vendor-performance': '/vendors/performance/export',
+                        'renewals': '/renewals/export',
+                        'audit-trail': '/audit-trail/export'
+                    };
+                    
+                    const endpoint = endpoints[reportType];
+                    if (!endpoint) {
+                        alert('Invalid report type');
+                        return;
+                    }
+                    
+                    const url = `${this.reportsApi}${endpoint}?${params.toString()}`;
+                    
+                    // Create invisible link to trigger download
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    
+                } catch (error) {
+                    alert('Export failed: ' + error.message);
+                }
+            }
+            
+            getReportParams(reportType) {
+                const params = new URLSearchParams();
+                
+                switch (reportType) {
+                    case 'reconciliations':
+                        const reconciliationStartDate = document.getElementById('reconciliation-start-date').value;
+                        const reconciliationEndDate = document.getElementById('reconciliation-end-date').value;
+                        const reconciliationVendorId = document.getElementById('reconciliation-vendor-id').value;
+                        
+                        if (reconciliationStartDate) params.set('start_date', reconciliationStartDate);
+                        if (reconciliationEndDate) params.set('end_date', reconciliationEndDate);
+                        if (reconciliationVendorId) params.set('vendor_id', reconciliationVendorId);
+                        break;
+                        
+                    case 'vendor-performance':
+                        const vendorStartDate = document.getElementById('vendor-start-date').value;
+                        const vendorEndDate = document.getElementById('vendor-end-date').value;
+                        const vendorVendorId = document.getElementById('vendor-vendor-id').value;
+                        
+                        if (vendorStartDate) params.set('start_date', vendorStartDate);
+                        if (vendorEndDate) params.set('end_date', vendorEndDate);
+                        if (vendorVendorId) params.set('vendor_id', vendorVendorId);
+                        break;
+                        
+                    case 'renewals':
+                        const renewalDaysAhead = document.getElementById('renewal-days-ahead').value;
+                        const renewalVendorId = document.getElementById('renewal-vendor-id').value;
+                        
+                        if (renewalDaysAhead) params.set('days_ahead', renewalDaysAhead);
+                        if (renewalVendorId) params.set('vendor_id', renewalVendorId);
+                        break;
+                        
+                    case 'audit-trail':
+                        const auditTableName = document.getElementById('audit-table-name').value;
+                        const auditOperation = document.getElementById('audit-operation').value;
+                        const auditStartDate = document.getElementById('audit-start-date').value;
+                        const auditEndDate = document.getElementById('audit-end-date').value;
+                        
+                        if (auditTableName) params.set('table_name', auditTableName);
+                        if (auditOperation) params.set('operation', auditOperation);
+                        if (auditStartDate) params.set('start_date', auditStartDate);
+                        if (auditEndDate) params.set('end_date', auditEndDate);
+                        break;
+                }
+                
+                return params;
+            }
+        }
+        
+        // Global functions
+        let reportsManager;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            reportsManager = new ReportsManager();
+        });
+        
+        function exportReport(reportType, format) {
+            reportsManager.exportReport(reportType, format);
+        }
+    </script>
+</body>
+</html>

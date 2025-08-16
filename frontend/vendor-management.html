@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Management - Unspend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* UNSPEND ORANGE SYSTEM */
+            --orange-600: #FF7A1A;
+            --orange-500: #FF8C3A;
+            --orange-400: #FF9C66;
+            --orange-300: #FFB38A;
+            --orange-200: #FFD1B3;
+            --orange-100: #FFE8D9;
+            --ember-700: #E04D00;
+            
+            /* UNSPEND NEUTRAL SYSTEM */
+            --ink-900: #0B0B0C;
+            --ink-800: #111113;
+            --ink-600: #2A2A2E;
+            --cloud-200: #EDEEF0;
+            --cloud-100: #F7F7F8;
+            
+            /* SEMANTIC COLORS */
+            --primary: var(--orange-600);
+            --secondary: var(--orange-500);
+            --success: #00E676;
+            --warning: #FFC107;
+            --error: #FF5252;
+            
+            /* TEXT COLORS */
+            --text-primary: var(--cloud-100);
+            --text-secondary: var(--cloud-200);
+            --text-muted: rgba(237, 238, 240, 0.7);
+            
+            /* BACKGROUND SYSTEM */
+            --bg-main: var(--ink-900);
+            --bg-surface: var(--ink-800);
+            --bg-elevated: var(--ink-600);
+            
+            /* BORDER SYSTEM */
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-medium: rgba(255, 255, 255, 0.12);
+            --border-strong: rgba(255, 255, 255, 0.16);
+            --border-orange: var(--orange-600);
+            
+            /* TYPOGRAPHY */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            
+            /* SHADOWS */
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --shadow-medium: 0 8px 20px rgba(0, 0, 0, 0.35);
+            --glow-orange: 0 0 12px rgba(255, 176, 107, 0.6);
+            
+            /* BORDER RADIUS */
+            --radius-card: 16px;
+            --radius-button: 16px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            background: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .header .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 32px;
+            background: var(--bg-surface);
+            padding: 4px;
+            border-radius: var(--radius-button);
+            border: 1px solid var(--border-light);
+        }
+        
+        .nav-tab {
+            padding: 12px 24px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: calc(var(--radius-button) - 4px);
+            font-family: var(--font-primary);
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        
+        .nav-tab.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: var(--glow-orange);
+        }
+        
+        .nav-tab:hover:not(.active) {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+        }
+        
+        /* Content sections */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Cards */
+        .card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            box-shadow: var(--shadow-soft);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 24px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Tables */
+        .table-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .table-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 16px 24px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-light);
+        }
+        
+        th {
+            background: var(--bg-elevated);
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        td {
+            color: var(--text-primary);
+        }
+        
+        tr:hover {
+            background: var(--bg-elevated);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-button);
+            font-family: var(--font-primary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--orange-500);
+            box-shadow: var(--glow-orange);
+        }
+        
+        .btn-secondary {
+            background: var(--bg-elevated);
+            color: var(--text-primary);
+            border: 1px solid var(--border-medium);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--ink-600);
+            border-color: var(--border-strong);
+        }
+        
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        
+        /* Forms */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            color: var(--text-secondary);
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
+        }
+        
+        /* Status badges */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-active {
+            background: rgba(0, 230, 118, 0.2);
+            color: var(--success);
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-inactive {
+            background: rgba(255, 82, 82, 0.2);
+            color: var(--error);
+        }
+        
+        /* Loading state */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        
+        /* Search */
+        .search-container {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-medium);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: var(--font-primary);
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(11, 11, 12, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-card);
+            padding: 32px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal h2 {
+            margin-bottom: 24px;
+            color: var(--text-primary);
+        }
+        
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 16px;
+                align-items: flex-start;
+            }
+            
+            .nav-tabs {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .search-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span class="icon">V</span>
+                Vendor Management
+            </h1>
+            <div>
+                <button class="btn btn-primary" onclick="showCreateVendorModal()">
+                    + Add Vendor
+                </button>
+                <button class="btn btn-secondary" onclick="exportVendorData()">
+                    📊 Export Data
+                </button>
+                <a href="/dashboard" class="btn btn-secondary">
+                    ← Back to Dashboard
+                </a>
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('overview')">Overview</button>
+            <button class="nav-tab" onclick="showTab('vendors')">Vendors</button>
+            <button class="nav-tab" onclick="showTab('aliases')">Aliases</button>
+            <button class="nav-tab" onclick="showTab('renewals')">Renewals</button>
+            <button class="nav-tab" onclick="showTab('performance')">Performance</button>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div id="overview" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalVendors">-</div>
+                    <div class="stat-label">Total Vendors</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="vendorsWithAliases">-</div>
+                    <div class="stat-label">Vendors with Aliases</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="upcomingRenewals">-</div>
+                    <div class="stat-label">Upcoming Renewals (30 days)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="criticalRenewals">-</div>
+                    <div class="stat-label">Critical Renewals</div>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Top Vendors by Activity</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vendor Name</th>
+                            <th>Status</th>
+                            <th>Aliases</th>
+                            <th>Renewals</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="topVendorsTable">
+                        <tr>
+                            <td colspan="5" class="loading">Loading vendor data...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Vendors Tab -->
+        <div id="vendors" class="tab-content">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search vendors..." id="vendorSearch">
+                <button class="btn btn-secondary" onclick="searchVendors()">Search</button>
+                <button class="btn btn-primary" onclick="showCreateVendorModal()">+ Add Vendor</button>
+            </div>
+            
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>All Vendors</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Display Name</th>
+                            <th>Canonical Name</th>
+                            <th>Industry</th>
+                            <th>Status</th>
+                            <th>Contact</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vendorsTable">
+                        <tr>
+                            <td colspan="6" class="loading">Loading vendors...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Aliases Tab -->
+        <div id="aliases" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Vendor Aliases Management</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Manage business name variations and aliases for better vendor matching.
+                </p>
+                
+                <div id="aliasesContent">
+                    <div class="loading">Select a vendor to view aliases...</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Renewals Tab -->
+        <div id="renewals" class="tab-content">
+            <div class="table-container">
+                <div class="table-header">
+                    <h3>Upcoming Contract Renewals</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Vendor</th>
+                            <th>Contract End Date</th>
+                            <th>Auto Renew</th>
+                            <th>Notice Days</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="renewalsTable">
+                        <tr>
+                            <td colspan="6" class="loading">Loading renewals...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Performance Tab -->
+        <div id="performance" class="tab-content">
+            <div class="card">
+                <h3 style="margin-bottom: 16px;">Vendor Performance Analytics</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 24px;">
+                    Analyze vendor performance metrics across contracts and reconciliations.
+                </p>
+                
+                <div id="performanceContent">
+                    <div class="loading">Performance analytics will be available soon...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create Vendor Modal -->
+    <div id="createVendorModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <h2>Add New Vendor</h2>
+            <form id="createVendorForm" onsubmit="createVendor(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="canonicalName">Canonical Name *</label>
+                        <input type="text" id="canonicalName" name="canonical_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="displayName">Display Name *</label>
+                        <input type="text" id="displayName" name="display_name" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="industry">Industry</label>
+                        <input type="text" id="industry" name="industry">
+                    </div>
+                    <div class="form-group">
+                        <label for="contactEmail">Contact Email</label>
+                        <input type="email" id="contactEmail" name="contact_email">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="contactPhone">Contact Phone</label>
+                        <input type="text" id="contactPhone" name="contact_phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="paymentTerms">Payment Terms</label>
+                        <input type="text" id="paymentTerms" name="payment_terms">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <textarea id="address" name="address" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" onclick="hideCreateVendorModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Vendor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        class VendorManager {
+            constructor() {
+                this.apiBase = '/api/vendors';
+                this.currentTab = 'overview';
+                this.init();
+            }
+            
+            async init() {
+                await this.loadOverviewData();
+                await this.loadVendorsList();
+                await this.loadRenewalsList();
+            }
+            
+            async loadOverviewData() {
+                try {
+                    const response = await fetch(`${this.apiBase}/analytics`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        const summary = data.vendor_summary;
+                        document.getElementById('totalVendors').textContent = summary.total_vendors;
+                        document.getElementById('vendorsWithAliases').textContent = summary.vendors_with_aliases;
+                        document.getElementById('upcomingRenewals').textContent = summary.upcoming_renewals_30_days;
+                        document.getElementById('criticalRenewals').textContent = summary.critical_renewals;
+                        
+                        this.renderTopVendors(data.top_vendors);
+                    }
+                } catch (error) {
+                    console.error('Failed to load overview data:', error);
+                }
+            }
+            
+            renderTopVendors(vendors) {
+                const tableBody = document.getElementById('topVendorsTable');
+                
+                if (vendors.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="5">No vendors found</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = vendors.map(vendor => `
+                    <tr>
+                        <td>${vendor.display_name}</td>
+                        <td><span class="status-badge status-${vendor.status}">${vendor.status}</span></td>
+                        <td>${vendor.alias_count}</td>
+                        <td>${vendor.renewal_count}</td>
+                        <td>
+                            <button class="btn btn-small btn-secondary" onclick="viewVendorDetails(${vendor.id})">
+                                View Details
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            async loadVendorsList() {
+                try {
+                    const response = await fetch(`${this.apiBase}/`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.renderVendorsList(data.vendors);
+                    }
+                } catch (error) {
+                    console.error('Failed to load vendors list:', error);
+                    document.getElementById('vendorsTable').innerHTML = 
+                        '<tr><td colspan="6">Failed to load vendors</td></tr>';
+                }
+            }
+            
+            renderVendorsList(vendors) {
+                const tableBody = document.getElementById('vendorsTable');
+                
+                if (vendors.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6">No vendors found</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = vendors.map(vendor => `
+                    <tr>
+                        <td>${vendor.display_name}</td>
+                        <td><code>${vendor.canonical_name}</code></td>
+                        <td>${vendor.industry || '-'}</td>
+                        <td><span class="status-badge status-${vendor.status}">${vendor.status}</span></td>
+                        <td>${vendor.contact_email || '-'}</td>
+                        <td>
+                            <button class="btn btn-small btn-secondary" onclick="viewVendorDetails(${vendor.id})">
+                                Details
+                            </button>
+                            <button class="btn btn-small btn-secondary" onclick="manageAliases(${vendor.id})">
+                                Aliases
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            async loadRenewalsList() {
+                try {
+                    const response = await fetch(`${this.apiBase}/renewals`);
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        this.renderRenewalsList(data.upcoming_renewals);
+                    }
+                } catch (error) {
+                    console.error('Failed to load renewals list:', error);
+                    document.getElementById('renewalsTable').innerHTML = 
+                        '<tr><td colspan="6">Failed to load renewals</td></tr>';
+                }
+            }
+            
+            renderRenewalsList(renewals) {
+                const tableBody = document.getElementById('renewalsTable');
+                
+                if (renewals.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="6">No upcoming renewals</td></tr>';
+                    return;
+                }
+                
+                tableBody.innerHTML = renewals.map(renewal => `
+                    <tr>
+                        <td>${renewal.vendor_name}</td>
+                        <td>${new Date(renewal.current_end_date).toLocaleDateString()}</td>
+                        <td>${renewal.auto_renew ? 'Yes' : 'No'}</td>
+                        <td>${renewal.renewal_notice_days} days</td>
+                        <td><span class="status-badge status-${renewal.renewal_status}">${renewal.renewal_status}</span></td>
+                        <td>
+                            <button class="btn btn-small btn-secondary" onclick="updateRenewalStatus(${renewal.id})">
+                                Update
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            async searchVendors() {
+                const query = document.getElementById('vendorSearch').value.trim();
+                
+                if (!query) {
+                    await this.loadVendorsList();
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`${this.apiBase}/search?q=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    
+                    if (data.success && data.found) {
+                        this.renderVendorsList([data.vendor]);
+                    } else {
+                        document.getElementById('vendorsTable').innerHTML = 
+                            '<tr><td colspan="6">No vendor found matching your search</td></tr>';
+                    }
+                } catch (error) {
+                    console.error('Search failed:', error);
+                }
+            }
+            
+            async createVendor(formData) {
+                try {
+                    const response = await fetch(`${this.apiBase}/`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(formData)
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        alert('Vendor created successfully!');
+                        hideCreateVendorModal();
+                        await this.loadOverviewData();
+                        await this.loadVendorsList();
+                    } else {
+                        alert('Failed to create vendor: ' + data.error);
+                    }
+                } catch (error) {
+                    alert('Failed to create vendor: ' + error.message);
+                }
+            }
+        }
+        
+        // Global functions
+        let vendorManager;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            vendorManager = new VendorManager();
+        });
+        
+        function showTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            
+            vendorManager.currentTab = tabName;
+        }
+        
+        function showCreateVendorModal() {
+            document.getElementById('createVendorModal').style.display = 'flex';
+        }
+        
+        function hideCreateVendorModal() {
+            document.getElementById('createVendorModal').style.display = 'none';
+            document.getElementById('createVendorForm').reset();
+        }
+        
+        function createVendor(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const vendorData = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (value.trim()) {
+                    vendorData[key] = value.trim();
+                }
+            }
+            
+            vendorManager.createVendor(vendorData);
+        }
+        
+        function searchVendors() {
+            vendorManager.searchVendors();
+        }
+        
+        function viewVendorDetails(vendorId) {
+            alert(`Vendor details for ID ${vendorId} will be implemented`);
+        }
+        
+        function manageAliases(vendorId) {
+            alert(`Alias management for vendor ID ${vendorId} will be implemented`);
+        }
+        
+        function updateRenewalStatus(renewalId) {
+            alert(`Renewal status update for ID ${renewalId} will be implemented`);
+        }
+        
+        function exportVendorData() {
+            const exportUrl = '/api/reports/vendors/performance/export?format=csv';
+            
+            // Create invisible link to trigger download
+            const link = document.createElement('a');
+            link.href = exportUrl;
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        
+        // Close modal when clicking outside
+        document.addEventListener('click', (event) => {
+            if (event.target.classList.contains('modal-overlay')) {
+                hideCreateVendorModal();
+            }
+        });
+        
+        // Search on Enter key
+        document.addEventListener('keydown', (event) => {
+            if (event.target.id === 'vendorSearch' && event.key === 'Enter') {
+                searchVendors();
+            }
+        });
+    </script>
+</body>
+</html>

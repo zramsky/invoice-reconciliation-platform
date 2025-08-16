@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill.com Integration - Unspend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Import Unspend brand system */
+        :root {
+            --orange-600: #FF7A1A;
+            --orange-500: #FF8C3A;
+            --orange-400: #FF9C66;
+            --orange-300: #FFB38A;
+            --orange-200: #FFD1B3;
+            --orange-100: #FFE8D9;
+            
+            --ink-900: #0A0A0B;
+            --ink-800: #141416;
+            --ink-700: #1C1C20;
+            --ink-600: #2A2A2E;
+            --ink-500: #38383D;
+            --cloud-50: #FAFAFA;
+            --cloud-100: #F5F5F6;
+            --cloud-200: #EDEEF0;
+            --cloud-300: #D1D3D7;
+            --cloud-400: #9CA0A8;
+            
+            --gradient-hero: linear-gradient(135deg, #FF7A1A 0%, #FF9C66 100%);
+            --gradient-card: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            --glow-orange: 0 0 32px rgba(255, 122, 26, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--ink-900);
+            color: var(--cloud-50);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-hero);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            color: var(--cloud-300);
+            font-size: 1.125rem;
+        }
+
+        .integration-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--gradient-card);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .card h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--cloud-50);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-connected {
+            background: #10B981;
+            box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .status-disconnected {
+            background: #EF4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .status-unknown {
+            background: var(--cloud-400);
+        }
+
+        .config-form {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--cloud-200);
+        }
+
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--cloud-50);
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--orange-500);
+        }
+
+        .form-group input[type="password"] {
+            font-family: monospace;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--orange-500);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-hero);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 25px rgba(255, 122, 26, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--cloud-50);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .sync-section {
+            margin-bottom: 3rem;
+        }
+
+        .sync-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--orange-500);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: var(--cloud-300);
+            font-size: 0.875rem;
+        }
+
+        .sync-history {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .sync-history h3 {
+            margin-bottom: 1rem;
+            color: var(--cloud-200);
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-item .name {
+            font-weight: 500;
+        }
+
+        .history-item .time {
+            color: var(--cloud-400);
+            font-size: 0.875rem;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid var(--orange-500);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            border: 1px solid;
+        }
+
+        .alert-success {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+            color: #10B981;
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            color: #EF4444;
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3B82F6;
+        }
+
+        @media (max-width: 768px) {
+            .integration-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .sync-controls {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Bill.com Integration</h1>
+            <p>Connect and sync vendor and invoice data from Bill.com</p>
+        </div>
+
+        <div id="alerts"></div>
+
+        <div class="integration-grid">
+            <!-- Configuration Card -->
+            <div class="card">
+                <h2>
+                    <span class="status-indicator" id="connectionStatus"></span>
+                    Configuration
+                </h2>
+                
+                <form id="configForm" class="config-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="organizationId">Organization ID</label>
+                        <input type="text" id="organizationId" name="organization_id" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="devKey">Developer Key</label>
+                        <input type="password" id="devKey" name="dev_key" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="isSandbox" name="is_sandbox" checked>
+                            <label for="isSandbox">Use Sandbox Environment</label>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" id="testConnectionBtn" class="btn btn-secondary">
+                            Test Connection
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Save Configuration
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Statistics Card -->
+            <div class="card">
+                <h2>Integration Statistics</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="value" id="totalVendors">-</div>
+                        <div class="label">Total Vendors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="billcomVendors">-</div>
+                        <div class="label">Bill.com Vendors</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="value" id="lastSync">-</div>
+                        <div class="label">Last Sync</div>
+                    </div>
+                </div>
+                
+                <button id="refreshStatsBtn" class="btn btn-secondary" style="width: 100%;">
+                    Refresh Statistics
+                </button>
+            </div>
+        </div>
+
+        <!-- Sync Operations -->
+        <div class="sync-section">
+            <div class="card">
+                <h2>Sync Operations</h2>
+                
+                <div class="sync-controls">
+                    <button id="syncVendorsBtn" class="btn btn-primary">
+                        Sync Vendors
+                    </button>
+                    <button id="syncBillsBtn" class="btn btn-primary">
+                        Sync Bills (Last 30 Days)
+                    </button>
+                    <button id="fetchVendorsBtn" class="btn btn-secondary">
+                        Preview Vendors
+                    </button>
+                    <button id="fetchBillsBtn" class="btn btn-secondary">
+                        Preview Bills
+                    </button>
+                </div>
+                
+                <div id="syncResults"></div>
+            </div>
+        </div>
+
+        <!-- Sync History -->
+        <div class="sync-history">
+            <h3>Recent Sync History</h3>
+            <div id="syncHistoryList">
+                <p style="color: var(--cloud-400); text-align: center; padding: 2rem;">
+                    No sync history available
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isConfigured = false;
+        let connectionStatus = 'unknown';
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            checkConfiguration();
+            loadStatistics();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('configForm').addEventListener('submit', saveConfiguration);
+            document.getElementById('testConnectionBtn').addEventListener('click', testConnection);
+            document.getElementById('refreshStatsBtn').addEventListener('click', loadStatistics);
+            document.getElementById('syncVendorsBtn').addEventListener('click', () => syncData('vendors'));
+            document.getElementById('syncBillsBtn').addEventListener('click', () => syncData('bills'));
+            document.getElementById('fetchVendorsBtn').addEventListener('click', () => previewData('vendors'));
+            document.getElementById('fetchBillsBtn').addEventListener('click', () => previewData('bills'));
+        }
+
+        async function checkConfiguration() {
+            try {
+                const response = await fetch('/api/billcom/config');
+                const data = await response.json();
+                
+                if (data.success) {
+                    isConfigured = data.config.configured;
+                    updateConnectionStatus(isConfigured ? 'connected' : 'disconnected');
+                    
+                    // Pre-fill username and org ID if available
+                    if (data.config.username) {
+                        document.getElementById('username').value = data.config.username;
+                    }
+                    if (data.config.organization_id) {
+                        document.getElementById('organizationId').value = data.config.organization_id;
+                    }
+                    
+                    document.getElementById('isSandbox').checked = data.config.is_sandbox;
+                }
+            } catch (error) {
+                console.error('Failed to check configuration:', error);
+                showAlert('Failed to check configuration status', 'error');
+            }
+        }
+
+        async function saveConfiguration(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const config = {
+                username: formData.get('username'),
+                password: formData.get('password'),
+                organization_id: formData.get('organization_id'),
+                dev_key: formData.get('dev_key'),
+                is_sandbox: formData.get('is_sandbox') === 'on'
+            };
+            
+            try {
+                setButtonLoading('configForm', true);
+                
+                const response = await fetch('/api/billcom/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('Configuration saved and validated successfully!', 'success');
+                    isConfigured = true;
+                    updateConnectionStatus('connected');
+                } else {
+                    showAlert(data.message || 'Configuration validation failed', 'error');
+                    updateConnectionStatus('disconnected');
+                }
+            } catch (error) {
+                console.error('Failed to save configuration:', error);
+                showAlert('Failed to save configuration', 'error');
+            } finally {
+                setButtonLoading('configForm', false);
+            }
+        }
+
+        async function testConnection() {
+            if (!isConfigured) {
+                showAlert('Please save configuration first', 'info');
+                return;
+            }
+            
+            try {
+                setButtonLoading('testConnectionBtn', true);
+                
+                const response = await fetch('/api/billcom/test-connection', {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(`Connection successful! Response time: ${data.response_time_ms}ms`, 'success');
+                    updateConnectionStatus('connected');
+                } else {
+                    showAlert(data.message || 'Connection test failed', 'error');
+                    updateConnectionStatus('disconnected');
+                }
+            } catch (error) {
+                console.error('Connection test failed:', error);
+                showAlert('Connection test failed', 'error');
+                updateConnectionStatus('disconnected');
+            } finally {
+                setButtonLoading('testConnectionBtn', false);
+            }
+        }
+
+        async function syncData(type) {
+            if (!isConfigured) {
+                showAlert('Please configure Bill.com integration first', 'info');
+                return;
+            }
+            
+            const endpoint = `/api/billcom/sync/${type}`;
+            const buttonId = `sync${type.charAt(0).toUpperCase() + type.slice(1)}Btn`;
+            
+            try {
+                setButtonLoading(buttonId, true);
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        days_back: type === 'bills' ? 30 : undefined
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(`${type} sync completed! Processed: ${data.processed_count}, Errors: ${data.error_count}`, 'success');
+                    displaySyncResults(data);
+                    loadStatistics(); // Refresh stats
+                } else {
+                    showAlert(data.error || `${type} sync failed`, 'error');
+                    if (data.errors && data.errors.length > 0) {
+                        console.error('Sync errors:', data.errors);
+                    }
+                }
+            } catch (error) {
+                console.error(`${type} sync failed:`, error);
+                showAlert(`${type} sync failed`, 'error');
+            } finally {
+                setButtonLoading(buttonId, false);
+            }
+        }
+
+        async function previewData(type) {
+            if (!isConfigured) {
+                showAlert('Please configure Bill.com integration first', 'info');
+                return;
+            }
+            
+            const endpoint = `/api/billcom/${type}?max_results=10`;
+            const buttonId = `fetch${type.charAt(0).toUpperCase() + type.slice(1)}Btn`;
+            
+            try {
+                setButtonLoading(buttonId, true);
+                
+                const response = await fetch(endpoint);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert(`Fetched ${data.count} ${type} from Bill.com`, 'info');
+                    displayPreviewResults(type, data);
+                } else {
+                    showAlert(data.error || `Failed to fetch ${type}`, 'error');
+                }
+            } catch (error) {
+                console.error(`Failed to fetch ${type}:`, error);
+                showAlert(`Failed to fetch ${type}`, 'error');
+            } finally {
+                setButtonLoading(buttonId, false);
+            }
+        }
+
+        async function loadStatistics() {
+            try {
+                const response = await fetch('/api/billcom/sync/status');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const stats = data.statistics;
+                    document.getElementById('totalVendors').textContent = stats.total_vendors || '0';
+                    document.getElementById('billcomVendors').textContent = stats.billcom_vendors || '0';
+                    
+                    const lastSync = stats.last_vendor_sync;
+                    if (lastSync) {
+                        const date = new Date(lastSync);
+                        document.getElementById('lastSync').textContent = date.toLocaleDateString();
+                    } else {
+                        document.getElementById('lastSync').textContent = 'Never';
+                    }
+                    
+                    displaySyncHistory(data.sync_history);
+                }
+            } catch (error) {
+                console.error('Failed to load statistics:', error);
+            }
+        }
+
+        function displaySyncResults(data) {
+            const resultsDiv = document.getElementById('syncResults');
+            resultsDiv.innerHTML = `
+                <div class="alert alert-info">
+                    <strong>Sync Complete:</strong><br>
+                    • Processed: ${data.processed_count} ${data.resource_type}s<br>
+                    • Errors: ${data.error_count}<br>
+                    • Duration: ${data.sync_duration_ms}ms<br>
+                    • Time: ${new Date(data.timestamp).toLocaleString()}
+                </div>
+            `;
+        }
+
+        function displayPreviewResults(type, data) {
+            const resultsDiv = document.getElementById('syncResults');
+            const items = data[type] || [];
+            
+            let preview = `<div class="alert alert-info"><strong>Preview ${type} from Bill.com (${data.count} items):</strong><br>`;
+            
+            items.slice(0, 5).forEach(item => {
+                if (type === 'vendors') {
+                    preview += `• ${item.name || 'Unnamed'} (ID: ${item.id})<br>`;
+                } else if (type === 'bills') {
+                    preview += `• Invoice ${item.invoiceNumber || 'N/A'} - $${item.amount || '0'} (${item.vendorName || 'Unknown'})<br>`;
+                }
+            });
+            
+            if (items.length > 5) {
+                preview += `• ... and ${items.length - 5} more<br>`;
+            }
+            
+            preview += '</div>';
+            resultsDiv.innerHTML = preview;
+        }
+
+        function displaySyncHistory(history) {
+            const historyDiv = document.getElementById('syncHistoryList');
+            
+            if (!history || history.length === 0) {
+                historyDiv.innerHTML = '<p style="color: var(--cloud-400); text-align: center; padding: 2rem;">No sync history available</p>';
+                return;
+            }
+            
+            historyDiv.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <div>
+                        <div class="name">${item.name}</div>
+                        <div style="color: var(--cloud-400); font-size: 0.8rem;">${item.type} • ID: ${item.external_id}</div>
+                    </div>
+                    <div class="time">${new Date(item.updated_at).toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        function updateConnectionStatus(status) {
+            connectionStatus = status;
+            const indicator = document.getElementById('connectionStatus');
+            indicator.className = 'status-indicator';
+            
+            if (status === 'connected') {
+                indicator.classList.add('status-connected');
+            } else if (status === 'disconnected') {
+                indicator.classList.add('status-disconnected');
+            } else {
+                indicator.classList.add('status-unknown');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertsDiv = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            alertsDiv.appendChild(alert);
+            
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.parentNode.removeChild(alert);
+                }
+            }, 5000);
+        }
+
+        function setButtonLoading(elementId, loading) {
+            const element = document.getElementById(elementId);
+            if (loading) {
+                element.classList.add('loading');
+                element.disabled = true;
+            } else {
+                element.classList.remove('loading');
+                element.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

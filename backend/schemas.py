@@ -8,7 +8,7 @@ from enum import Enum
 
 class ConfidenceField(BaseModel):
     """Base field with confidence scoring"""
-    value: Optional[Union[str, int, float, bool, Dict[str, Any]]] = None
+    value: Optional[Union[str, int, float, bool, Dict[str, Any], List[Any]]] = None
     confidence: float = Field(ge=0.0, le=1.0, description="Confidence score 0-1")
 
 class PriceEscalationType(str, Enum):

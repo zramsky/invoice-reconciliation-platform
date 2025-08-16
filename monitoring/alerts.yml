@@ -1,0 +1,39 @@
+groups:
+  - name: unspend_alerts
+    interval: 30s
+    rules:
+      - alert: HighErrorRate
+        expr: rate(http_requests_failed_total[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors per second"
+      
+      - alert: HighLatency
+        expr: http_request_duration_seconds{quantile="0.95"} > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High API latency"
+          description: "95th percentile latency is {{ $value }} seconds"
+      
+      - alert: LowCacheHitRate
+        expr: llm_cache_hit_rate < 0.3
+        for: 10m
+        labels:
+          severity: info
+        annotations:
+          summary: "Low cache hit rate"
+          description: "Cache hit rate is {{ $value }}"
+      
+      - alert: BatchProcessorBacklog
+        expr: batch_processor_pending_jobs > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Large batch processing backlog"
+          description: "{{ $value }} jobs pending in batch processor"
