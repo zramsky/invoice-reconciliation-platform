@@ -852,16 +852,23 @@
             const prompt = `Carefully analyze this ENTIRE contract image. Look at ALL sections, tables, and lists.
 
 CRITICAL DATE EXTRACTION INSTRUCTIONS:
-- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", "effective from", or dates mentioned after "This agreement")
-- BE CONSISTENT: The same date MUST appear in both effective_date field AND in the reconciliation_summary
-- If the contract says "effective from January 1, 2025", use "2025-01-01" everywhere
-- Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
-- If you find an effective date AND a term length, CALCULATE the end date precisely
-- Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
-- Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
-- Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
-- Look for automatic renewal clauses that might affect the end date
-- IMPORTANT: Double-check that the effective date you extract matches what you write in the summary
+- PRIORITY: Find the EXACT effective date by looking for these specific phrases:
+  * "effective date" followed by a date
+  * "effective as of" followed by a date  
+  * "commencing on" followed by a date
+  * "this agreement shall be effective" followed by a date
+  * "beginning" followed by a date
+  * "starts on" or "starting" followed by a date
+- SCAN THE ENTIRE FIRST PAGE for date information - effective dates are usually stated early
+- If you see "January 1, 2025" or "1/1/2025" or "01/01/2025" mentioned as an effective date, use "2025-01-01"
+- MANDATORY: Calculate renewal date if you find ANY term length:
+  * "three year" or "3 year" or "three-year" = add 3 years
+  * "five year" or "5 year" = add 5 years  
+  * "36 month" or "thirty-six month" = add 3 years
+  * "24 month" or "two year" = add 2 years
+- EXAMPLE CALCULATION: If effective_date is "2025-01-01" and you see "three year term", renewal_date MUST be "2028-01-01"
+- DO NOT leave renewal_date null if you find any term language
+- BE CONSISTENT: Same date in both fields, just different formats
 
 Extract:
 1. The vendor/supplier company name
@@ -870,15 +877,15 @@ Extract:
 4. The contract end/renewal date (either stated directly OR calculated from effective date + term length)
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
-DATE EXTRACTION RULES:
-- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
-- If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
-- NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
-- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01" (ALWAYS calculate this)
-- IMPORTANT: If summary mentions "three year" or "3 year" term and effective_date is "2025-01-01", renewal_date MUST be "2028-01-01"
-- If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
-- If it mentions "automatically renews for successive three-year terms" → include this in the summary
-- CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
+DATE EXTRACTION RULES - FOLLOW THESE EXACTLY:
+- Look for "effective" + date: "effective January 1, 2025" → effective_date: "2025-01-01"
+- Look for "commencing" + date: "commencing January 1, 2025" → effective_date: "2025-01-01"  
+- Look for "beginning" + date: "beginning January 1, 2025" → effective_date: "2025-01-01"
+- MANDATORY CALCULATION: If you find "three year" or "3 year" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2028-01-01"
+- MANDATORY CALCULATION: If you find "five year" or "5 year" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2030-01-01"
+- MANDATORY CALCULATION: If you find "36 month" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2028-01-01"
+- DO NOT leave renewal_date as null if you see ANY term length mentioned
+- Example: "This agreement is effective January 1, 2025 for an initial term of three years" → effective_date: "2025-01-01", renewal_date: "2028-01-01"
 
 Pay special attention to:
 - The FIRST section of the contract where dates are usually stated
@@ -1048,16 +1055,23 @@ Return ONLY this JSON:
             const prompt = `Read this ENTIRE contract carefully.
 
 CRITICAL DATE EXTRACTION INSTRUCTIONS:
-- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", "effective from", or dates mentioned after "This agreement")
-- BE CONSISTENT: The same date MUST appear in both effective_date field AND in the reconciliation_summary
-- If the contract says "effective from January 1, 2025", use "2025-01-01" everywhere
-- Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
-- If you find an effective date AND a term length, CALCULATE the end date precisely
-- Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
-- Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
-- Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
-- Look for automatic renewal clauses that might affect the end date
-- IMPORTANT: Double-check that the effective date you extract matches what you write in the summary
+- PRIORITY: Find the EXACT effective date by looking for these specific phrases:
+  * "effective date" followed by a date
+  * "effective as of" followed by a date  
+  * "commencing on" followed by a date
+  * "this agreement shall be effective" followed by a date
+  * "beginning" followed by a date
+  * "starts on" or "starting" followed by a date
+- SCAN THE ENTIRE FIRST PAGE for date information - effective dates are usually stated early
+- If you see "January 1, 2025" or "1/1/2025" or "01/01/2025" mentioned as an effective date, use "2025-01-01"
+- MANDATORY: Calculate renewal date if you find ANY term length:
+  * "three year" or "3 year" or "three-year" = add 3 years
+  * "five year" or "5 year" = add 5 years  
+  * "36 month" or "thirty-six month" = add 3 years
+  * "24 month" or "two year" = add 2 years
+- EXAMPLE CALCULATION: If effective_date is "2025-01-01" and you see "three year term", renewal_date MUST be "2028-01-01"
+- DO NOT leave renewal_date null if you find any term language
+- BE CONSISTENT: Same date in both fields, just different formats
 
 Extract:
 1. The vendor/supplier company name
@@ -1066,15 +1080,15 @@ Extract:
 4. The contract end/renewal date (either stated directly OR calculated from effective date + term length)
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
-DATE EXTRACTION RULES:
-- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
-- If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
-- NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
-- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01" (ALWAYS calculate this)
-- IMPORTANT: If summary mentions "three year" or "3 year" term and effective_date is "2025-01-01", renewal_date MUST be "2028-01-01"
-- If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
-- If it mentions "automatically renews for successive three-year terms" → include this in the summary
-- CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
+DATE EXTRACTION RULES - FOLLOW THESE EXACTLY:
+- Look for "effective" + date: "effective January 1, 2025" → effective_date: "2025-01-01"
+- Look for "commencing" + date: "commencing January 1, 2025" → effective_date: "2025-01-01"  
+- Look for "beginning" + date: "beginning January 1, 2025" → effective_date: "2025-01-01"
+- MANDATORY CALCULATION: If you find "three year" or "3 year" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2028-01-01"
+- MANDATORY CALCULATION: If you find "five year" or "5 year" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2030-01-01"
+- MANDATORY CALCULATION: If you find "36 month" anywhere in contract + effective_date "2025-01-01" → renewal_date: "2028-01-01"
+- DO NOT leave renewal_date as null if you see ANY term length mentioned
+- Example: "This agreement is effective January 1, 2025 for an initial term of three years" → effective_date: "2025-01-01", renewal_date: "2028-01-01"
 
 IMPORTANT: Include ALL of these if present:
 - The EXACT dates mentioned in the contract
@@ -1213,82 +1227,70 @@ Return ONLY this JSON:
         
         function calculateRenewalDate(effectiveDate, summary) {
             // Extract term information from the summary and calculate renewal date
-            if (!effectiveDate || !summary) return null;
+            if (!effectiveDate || !summary) {
+                console.log('Cannot calculate renewal date - missing effective date or summary');
+                return null;
+            }
+            
+            console.log('Calculating renewal date from:', { effectiveDate, summary: summary.substring(0, 200) });
             
             const summaryLower = summary.toLowerCase();
             let years = 0;
             let months = 0;
             
-            // Look for year-based terms
-            const yearPatterns = [
-                /(\d+)[\s-]*year/g,
-                /(\d+)[\s-]*yr/g,
-                /three[\s-]*year/g,
-                /five[\s-]*year/g,
-                /one[\s-]*year/g,
-                /two[\s-]*year/g,
-                /four[\s-]*year/g
+            // Enhanced patterns to catch more variations
+            const termPatterns = [
+                // Word-based year patterns
+                { pattern: /\bthree[\s-]*year/gi, years: 3 },
+                { pattern: /\bfive[\s-]*year/gi, years: 5 },
+                { pattern: /\bone[\s-]*year/gi, years: 1 },
+                { pattern: /\btwo[\s-]*year/gi, years: 2 },
+                { pattern: /\bfour[\s-]*year/gi, years: 4 },
+                { pattern: /\bsix[\s-]*year/gi, years: 6 },
+                
+                // Numeric year patterns
+                { pattern: /\b(\d+)[\s-]*year/gi, numeric: true },
+                { pattern: /\b(\d+)[\s-]*yr/gi, numeric: true },
+                
+                // Month patterns that equal years
+                { pattern: /\bthirty[\s-]*six[\s-]*month/gi, years: 3 },
+                { pattern: /\b36[\s-]*month/gi, years: 3 },
+                { pattern: /\btwenty[\s-]*four[\s-]*month/gi, years: 2 },
+                { pattern: /\b24[\s-]*month/gi, years: 2 },
+                { pattern: /\btwelve[\s-]*month/gi, years: 1 },
+                { pattern: /\b12[\s-]*month/gi, years: 1 },
+                
+                // Term language
+                { pattern: /\binitial[\s]+term[\s]+of[\s]+(\d+)[\s]*year/gi, numeric: true },
+                { pattern: /\bterm[\s]+of[\s]+(\d+)[\s]*year/gi, numeric: true },
+                { pattern: /\b(\d+)[\s]*year[\s]*initial[\s]*term/gi, numeric: true }
             ];
             
-            // Look for month-based terms
-            const monthPatterns = [
-                /(\d+)[\s-]*month/g,
-                /(\d+)[\s-]*mo/g,
-                /twelve[\s-]*month/g,
-                /twenty[\s-]*four[\s-]*month/g,
-                /thirty[\s-]*six[\s-]*month/g
-            ];
-            
-            // Check for year patterns
-            for (const pattern of yearPatterns) {
+            // Check each pattern
+            for (const { pattern, years: fixedYears, numeric } of termPatterns) {
                 const matches = [...summaryLower.matchAll(pattern)];
                 if (matches.length > 0) {
-                    if (pattern.source.includes('three')) {
-                        years = 3;
-                    } else if (pattern.source.includes('five')) {
-                        years = 5;
-                    } else if (pattern.source.includes('one')) {
-                        years = 1;
-                    } else if (pattern.source.includes('two')) {
-                        years = 2;
-                    } else if (pattern.source.includes('four')) {
-                        years = 4;
-                    } else if (matches[0][1]) {
+                    if (numeric && matches[0][1]) {
                         years = parseInt(matches[0][1]);
+                        console.log(`Found numeric term: ${matches[0][0]} = ${years} years`);
+                    } else if (fixedYears) {
+                        years = fixedYears;
+                        console.log(`Found term: ${matches[0][0]} = ${years} years`);
                     }
                     break;
                 }
             }
             
-            // Check for month patterns if no years found
-            if (years === 0) {
-                for (const pattern of monthPatterns) {
-                    const matches = [...summaryLower.matchAll(pattern)];
-                    if (matches.length > 0) {
-                        if (pattern.source.includes('twelve')) {
-                            months = 12;
-                        } else if (pattern.source.includes('twenty')) {
-                            months = 24;
-                        } else if (pattern.source.includes('thirty')) {
-                            months = 36;
-                        } else if (matches[0][1]) {
-                            months = parseInt(matches[0][1]);
-                        }
-                        break;
-                    }
-                }
-            }
-            
             // Calculate renewal date
             if (years > 0) {
+                console.log(`Calculating ${years} years from ${effectiveDate}`);
                 const endDate = calculateEndDate(effectiveDate, years);
-                return formatDateForInput(endDate); // Ensure correct format for HTML input
-            } else if (months > 0) {
-                const endDate = calculateEndDateMonths(effectiveDate, months);
-                return formatDateForInput(endDate); // Ensure correct format for HTML input
+                const formattedDate = formatDateForInput(endDate);
+                console.log(`Calculated renewal date: ${formattedDate}`);
+                return formattedDate;
             }
             
-            console.log('No recognizable term found in summary:', summary);
+            console.log('No recognizable term found in summary. Searched for patterns like "three year", "3 year", "36 month", etc.');
             return null;
         }
         
