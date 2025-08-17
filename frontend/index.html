@@ -4364,6 +4364,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Centralized Date Utilities -->
+    <script src="js/date-utils.js"></script>
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
@@ -5606,7 +5608,7 @@
                 const vendorName = vendor.vendor_name || vendor.name || 'Unknown Vendor';
                 const businessType = vendor.business_type || vendor.description || '';
                 const invoiceCount = vendorInvoiceCounts[vendorName] || 0;
-                const lastUpdated = new Date(vendor.last_updated || vendor.lastUpdated || vendor.created_at || vendor.createdAt).toLocaleDateString();
+                const lastUpdated = formatDateForDisplay(vendor.last_updated || vendor.lastUpdated || vendor.created_at || vendor.createdAt);
                 
                 const row = document.createElement('tr');
                 
@@ -5662,7 +5664,7 @@
                 disabledTableBody.innerHTML = '';
                 disabledVendors.forEach(vendor => {
                     const invoiceCount = vendorInvoiceCounts[vendor.name] || 0;
-                    const disabledDate = vendor.disabledDate ? new Date(vendor.disabledDate).toLocaleDateString() : 'Unknown';
+                    const disabledDate = vendor.disabledDate ? formatDateForDisplay(vendor.disabledDate) : 'Unknown';
                     
                     const row = document.createElement('tr');
                     row.innerHTML = `
@@ -5973,7 +5975,7 @@
                                 ${vendor.contractFile || 'Contract File'} 📥
                             </div>
                             <div class="contract-file-date">
-                                Uploaded: ${vendor.contractUploadDate ? new Date(vendor.contractUploadDate).toLocaleDateString() : 'Unknown date'}
+                                Uploaded: ${vendor.contractUploadDate ? formatDateForDisplay(vendor.contractUploadDate) : 'Unknown date'}
                             </div>
                         </div>
                     </div>
@@ -6115,7 +6117,7 @@
                                 <div class="invoice-files-section">
                                     ${invoicesDisplay}
                                 </div>
-                                <div class="invoice-date">${new Date(invoice.timestamp).toLocaleDateString()}</div>
+                                <div class="invoice-date">${formatDateForDisplay(invoice.timestamp)}</div>
                             </div>
                             <div class="invoice-status ${status}">${statusText}</div>
                         </div>
@@ -7596,7 +7598,7 @@ Return ONLY this JSON structure:
                     },
                     key_dates: contractDetails.dates,
                     ai_summary: {
-                        overview: `Contract analysis for ${vendorName} completed on ${new Date().toLocaleDateString()}. This vendor profile represents the contracting entity with ${invoiceResults.length} processed invoice(s).`,
+                        overview: `Contract analysis for ${vendorName} completed on ${getTodayFormatted()}. This vendor profile represents the contracting entity with ${invoiceResults.length} processed invoice(s).`,
                         financial_highlights: [
                             `Contract amounts: ${contractDetails.amounts.length > 0 ? contractDetails.amounts.join(', ') : 'To be determined'}`,
                             `Payment terms: ${contractDetails.paymentTerms}`,
@@ -7700,7 +7702,7 @@ Return ONLY this JSON structure:
                 const fallbackVendor = {
                     id: Date.now().toString(),
                     name: vendorName,
-                    description: `Vendor created from analysis on ${new Date().toLocaleDateString()}`,
+                    description: `Vendor created from analysis on ${getTodayFormatted()}`,
                     status: 'active',
                     createdAt: new Date().toISOString(),
                     lastUpdated: new Date().toISOString()

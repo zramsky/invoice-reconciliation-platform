@@ -359,6 +359,8 @@
     <script>
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
+    <!-- Centralized Date Utilities -->
+    <script src="js/date-utils.js"></script>
 </head>
 <body>
     <!-- Toast Container -->
@@ -731,7 +733,7 @@
                     businessDescription: formData.get('businessDescription') || '',
                     effectiveDate: formData.get('effectiveDate') || '',
                     renewalDate: formData.get('renewalDate') || '',
-                    uploadDate: formData.get('uploadDate') || new Date().toISOString().split('T')[0],
+                    uploadDate: formData.get('uploadDate') || getTodayForInput(),
                     notes: formData.get('notes') || '',
                     timestamp: Date.now()
                 };
@@ -757,7 +759,7 @@
                     document.getElementById('businessDescription').value = draftData.businessDescription || '';
                     document.getElementById('effectiveDate').value = draftData.effectiveDate || draftData.contractDate || '';
                     document.getElementById('renewalDate').value = draftData.renewalDate || '';
-                    document.getElementById('uploadDate').value = draftData.uploadDate || new Date().toISOString().split('T')[0];
+                    document.getElementById('uploadDate').value = draftData.uploadDate || getTodayForInput();
                     document.getElementById('notes').value = draftData.notes || '';
                     
                     if (draftData.vendorName || draftData.businessDescription) {
@@ -1146,16 +1148,8 @@ Return ONLY this JSON:
         }
 
         function formatDateForSummary(dateStr) {
-            // Convert YYYY-MM-DD to "Month Day, Year" format for summary
-            if (!dateStr || dateStr === 'null') return null;
-            try {
-                const date = new Date(dateStr + 'T00:00:00');
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
-                               'July', 'August', 'September', 'October', 'November', 'December'];
-                return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
-            } catch (e) {
-                return dateStr;
-            }
+            // Use centralized date formatting for summary (MM/DD/YYYY format)
+            return formatDateForDisplay(dateStr);
         }
         
         function fixDateInSummary(summary, correctDate) {
@@ -1202,56 +1196,17 @@ Return ONLY this JSON:
             return fixedSummary;
         }
         
-        function formatDate(dateStr) {
+        // Note: formatDate is now provided by date-utils.js
+        // Legacy wrapper for compatibility
+        function formatDateLegacy(dateStr) {
             if (!dateStr || dateStr === 'null') return 'Not specified';
-            try {
-                const date = new Date(dateStr);
-                if (isNaN(date.getTime())) return dateStr;
-                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-            } catch (e) {
-                return dateStr;
-            }
+            const formatted = formatDateForDisplay(dateStr);
+            return formatted || 'Not specified';
         }
         
         function parseContractDate(dateStr) {
-            if (!dateStr || dateStr === 'null') return null;
-            
-            try {
-                // Handle various date formats
-                let date;
-                
-                // Already in YYYY-MM-DD format
-                if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-                    return dateStr;
-                }
-                
-                // MM/DD/YYYY or MM-DD-YYYY
-                if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateStr)) {
-                    const parts = dateStr.split(/[\/\-]/);
-                    date = new Date(parts[2], parts[0] - 1, parts[1]);
-                }
-                // DD/MM/YYYY or DD-MM-YYYY (European format)
-                else if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateStr) && parseInt(dateStr.split(/[\/\-]/)[0]) > 12) {
-                    const parts = dateStr.split(/[\/\-]/);
-                    date = new Date(parts[2], parts[1] - 1, parts[0]);
-                }
-                // Text format like "January 1, 2024"
-                else {
-                    date = new Date(dateStr);
-                }
-                
-                if (date && !isNaN(date.getTime())) {
-                    // Return in YYYY-MM-DD format
-                    const year = date.getFullYear();
-                    const month = String(date.getMonth() + 1).padStart(2, '0');
-                    const day = String(date.getDate()).padStart(2, '0');
-                    return `${year}-${month}-${day}`;
-                }
-            } catch (e) {
-                console.error('Error parsing date:', e);
-            }
-            
-            return null;
+            // Use centralized date parsing and return in YYYY-MM-DD format for HTML inputs
+            return formatDateForInput(dateStr);
         }
         
         function cleanServiceCategory(description) {
@@ -1415,18 +1370,18 @@ Return ONLY this JSON:
                     ${analysis.effective_date ? `
                         <div class="insight-item">
                             <div class="insight-label">Contract Effective Date</div>
-                            <div class="insight-value">${formatDate(analysis.effective_date)}</div>
+                            <div class="insight-value">${formatDateForDisplay(analysis.effective_date)}</div>
                         </div>
                     ` : ''}
                     ${analysis.renewal_date ? `
                         <div class="insight-item">
                             <div class="insight-label">Contract End/Renewal Date</div>
-                            <div class="insight-value">${formatDate(analysis.renewal_date)}</div>
+                            <div class="insight-value">${formatDateForDisplay(analysis.renewal_date)}</div>
                         </div>
                     ` : ''}
                     <div class="insight-item">
                         <div class="insight-label">Date Added to System</div>
-                        <div class="insight-value">${formatDate(new Date().toISOString().split('T')[0])}</div>
+                        <div class="insight-value">${getTodayFormatted()}</div>
                     </div>
                     ${analysis.reconciliation_summary ? `
                         <div class="insight-item">
@@ -1471,7 +1426,7 @@ Return ONLY this JSON:
                 }
             } else {
                 // Set today's date as default if not found
-                document.getElementById('effectiveDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('effectiveDate').value = getTodayForInput();
             }
             
             if (analysis.renewal_date) {
@@ -1483,7 +1438,7 @@ Return ONLY this JSON:
             }
             
             // Always set upload date to today
-            document.getElementById('uploadDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('uploadDate').value = getTodayForInput();
             
             // Setup real-time validation and load any draft
             setupFormValidation();
@@ -1561,7 +1516,7 @@ Return ONLY this JSON:
             const reconciliationTerms = formData.get('notes').trim();
             const effectiveDate = formData.get('effectiveDate');
             const renewalDate = formData.get('renewalDate');
-            const uploadDate = formData.get('uploadDate') || new Date().toISOString().split('T')[0];
+            const uploadDate = formData.get('uploadDate') || getTodayForInput();
             
             if (!name || !businessDescription || !reconciliationTerms || !effectiveDate) {
                 showToast('Please fill in all required fields', 'error');

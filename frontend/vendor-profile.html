@@ -611,7 +611,7 @@
             // TODO: Process invoice with AI
             // For now, just save it
             invoice.number = `INV-${Date.now().toString().slice(-6)}`;
-            invoice.date = new Date().toLocaleDateString();
+            invoice.date = getTodayFormatted();
             invoice.amount = '$0.00'; // Will be extracted by AI
             invoice.status = 'pending';
 
@@ -663,5 +663,7 @@
             window.location.href = 'index.html';
         }
     </script>
+    <!-- Centralized Date Utilities -->
+    <script src="js/date-utils.js"></script>
 </body>
 </html>
