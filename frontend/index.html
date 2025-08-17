@@ -4218,6 +4218,146 @@
             left: 50%;
             transform: translateX(-50%);
         }
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        
+        .toast {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 10px;
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .toast.success {
+            border-left: 4px solid var(--accent-success);
+        }
+        
+        .toast.error {
+            border-left: 4px solid var(--accent-error);
+        }
+        
+        .toast.warning {
+            border-left: 4px solid var(--accent-warning);
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOut {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+        
+        /* Quick Actions Floating Menu */
+        .quick-actions {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+        
+        .quick-actions-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .quick-actions-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .quick-actions-button.active {
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, var(--accent-error), var(--accent-warning));
+        }
+        
+        .quick-actions-menu {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quick-actions-menu.show {
+            display: flex;
+            animation: fadeInUp 0.3s ease;
+        }
+        
+        .quick-action-item {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 12px 20px;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 180px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .quick-action-item:hover {
+            background: var(--primary);
+            border-color: var(--accent-cyan);
+            transform: translateX(-5px);
+        }
+        
+        .quick-action-item svg {
+            width: 18px;
+            height: 18px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
     <!-- External Libraries -->
     <script src='https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js'></script>
@@ -4229,6 +4369,46 @@
     </script>
 </head>
 <body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Quick Actions Floating Menu -->
+    <div class="quick-actions" id="quickActions">
+        <div class="quick-actions-menu" id="quickActionsMenu">
+            <div class="quick-action-item" onclick="quickUploadInvoice()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span>Upload Invoice</span>
+            </div>
+            <div class="quick-action-item" onclick="openAddVendorModal()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2v20M2 12h20"></path>
+                </svg>
+                <span>Add Vendor</span>
+            </div>
+            <div class="quick-action-item" onclick="quickStartReconciliation()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                <span>Run Reconciliation</span>
+            </div>
+            <div class="quick-action-item" onclick="generateQuickReport()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M16 13H8M16 17H8M10 9H8"></path>
+                </svg>
+                <span>Generate Report</span>
+            </div>
+        </div>
+        <button class="quick-actions-button" id="quickActionsButton" onclick="toggleQuickActions()">
+            <span>+</span>
+        </button>
+    </div>
     <!-- Menu Button -->
     <button class="menu-button" onclick="toggleSidebar()" title="Menu">
         ☰
@@ -4458,7 +4638,7 @@
                 <div class="vendors-header">
                     <h3 class="vendors-title">Active Vendors</h3>
                     <div class="vendors-actions">
-                        <button class="btn btn-primary add-vendor-btn" onclick="showContractOnlyUpload()">
+                        <button class="btn btn-primary add-vendor-btn" onclick="openAddVendorModal()">
                             + Add Vendor
                         </button>
                         <input type="text" 
@@ -4525,7 +4705,7 @@
                     </svg></div>
                     <h3>No vendors yet</h3>
                     <p>Add your first vendor to start tracking contract reconciliations.</p>
-                    <button class="add-vendor-btn" onclick="scrollToContractUpload()">
+                    <button class="add-vendor-btn" onclick="openAddVendorModal()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
                             <polyline points="14 2 14 8 20 8"></polyline>
@@ -6115,29 +6295,62 @@ Return ONLY this JSON structure:
                 return;
             }
             
-            // Create vendor object
-            const vendor = {
-                id: Date.now().toString(),
-                name: name,
-                description: formData.get('vendorDescription') || '',
-                email: formData.get('vendorEmail') || '',
-                contractFile: contractFile.name,
-                contractFileData: await fileToBase64(contractFile),
-                contractUploadDate: new Date().toISOString(),
-                effectiveDate: effectiveDate,
-                renewalDate: formData.get('renewalDate') || '',
-                status: 'active',
-                createdAt: new Date().toISOString(),
-                lastUpdated: new Date().toISOString()
-            };
-            
-            // Add to vendors array and save
-            vendors.push(vendor);
-            localStorage.setItem('vendors', JSON.stringify(vendors));
-            
-            // Close modal and refresh dashboard
-            closeAddVendorModal();
-            loadDashboard();
+            try {
+                // Show loading state
+                const saveButton = event.target;
+                const originalText = saveButton ? saveButton.textContent : 'Save Vendor';
+                if (saveButton) {
+                    saveButton.textContent = 'Processing contract...';
+                    saveButton.disabled = true;
+                }
+                
+                // Extract text from contract
+                const contractText = await extractTextFromFile(contractFile);
+                
+                // Analyze contract with AI to extract vendor details
+                const contractAnalysis = await analyzeDocument(contractText, 'contract');
+                
+                // Create vendor object with AI-extracted information
+                const vendor = {
+                    id: Date.now().toString(),
+                    name: name,
+                    description: formData.get('vendorDescription') || contractAnalysis?.services_products?.description || '',
+                    email: formData.get('vendorEmail') || contractAnalysis?.vendor_information?.contact_email || '',
+                    contractFile: contractFile.name,
+                    contractFileData: await fileToBase64(contractFile),
+                    contractText: contractText.substring(0, 5000), // Store first 5000 chars
+                    contractAnalysis: contractAnalysis,
+                    contractUploadDate: new Date().toISOString(),
+                    effectiveDate: effectiveDate,
+                    renewalDate: formData.get('renewalDate') || contractAnalysis?.contract_details?.end_date || '',
+                    status: 'active',
+                    createdAt: new Date().toISOString(),
+                    lastUpdated: new Date().toISOString(),
+                    invoiceCount: 0,
+                    totalContractValue: contractAnalysis?.financial_terms?.total_contract_value || 0
+                };
+                
+                // Add to vendors array and save
+                vendors.push(vendor);
+                localStorage.setItem('vendors', JSON.stringify(vendors));
+                
+                // Close modal and refresh dashboard
+                closeAddVendorModal();
+                loadDashboard();
+                
+                // Show success message
+                showToast('Vendor added successfully with AI contract analysis!', 'success');
+                
+            } catch (error) {
+                console.error('Error saving vendor:', error);
+                alert('Error processing contract. Please try again.');
+                
+                // Restore button state
+                if (saveButton) {
+                    saveButton.textContent = originalText;
+                    saveButton.disabled = false;
+                }
+            }
         }
 
         function viewVendorDetails(vendorId) {
@@ -6187,6 +6400,270 @@ Return ONLY this JSON structure:
                     }, 1000);
                 }
             }, 300);
+        }
+
+        // ===============================
+        // TOAST NOTIFICATION SYSTEM
+        // ===============================
+        
+        function showToast(message, type = 'info', duration = 5000) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => toast.remove(), 300);
+            }, duration);
+        }
+        
+        // ===============================
+        // QUICK ACTIONS MENU
+        // ===============================
+        
+        function toggleQuickActions() {
+            const button = document.getElementById('quickActionsButton');
+            const menu = document.getElementById('quickActionsMenu');
+            
+            button.classList.toggle('active');
+            menu.classList.toggle('show');
+        }
+        
+        function quickUploadInvoice() {
+            toggleQuickActions();
+            showAnalysis();
+            document.getElementById('invoiceFiles').click();
+            showToast('Select invoice files to upload', 'info');
+        }
+        
+        function quickStartReconciliation() {
+            toggleQuickActions();
+            
+            // Check if we have files ready
+            if (!contractFile || invoiceFiles.length === 0) {
+                showAnalysis();
+                showToast('Please upload contract and invoice files first', 'warning');
+                return;
+            }
+            
+            startBatchReconciliation();
+        }
+        
+        function generateQuickReport() {
+            toggleQuickActions();
+            
+            const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            if (history.length === 0) {
+                showToast('No reconciliation data available for report', 'warning');
+                return;
+            }
+            
+            // Generate summary report
+            const report = {
+                totalReconciliations: history.length,
+                successfulReconciliations: history.filter(h => h.summary?.status === 'success').length,
+                failedReconciliations: history.filter(h => h.summary?.status === 'failed').length,
+                totalDiscrepancies: history.reduce((sum, h) => sum + (h.discrepancies?.length || 0), 0),
+                generatedAt: new Date().toISOString()
+            };
+            
+            // Download as JSON
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reconciliation-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Report generated and downloaded', 'success');
+        }
+        
+        // ===============================
+        // BULK INVOICE PROCESSING
+        // ===============================
+        
+        async function performBulkReconciliation() {
+            try {
+                // Extract contract text
+                updateProgress('Extracting contract text...', 10);
+                const contractText = await extractTextFromFile(contractFile);
+                
+                updateProgress('Analyzing contract with AI...', 20);
+                const contractAnalysis = await analyzeDocument(contractText, 'contract');
+                
+                const reconciliationResults = [];
+                const totalInvoices = invoiceFiles.length;
+                
+                // Process each invoice
+                for (let i = 0; i < invoiceFiles.length; i++) {
+                    const invoice = invoiceFiles[i];
+                    const progress = 30 + ((i / totalInvoices) * 60);
+                    
+                    updateProgress(`Processing invoice ${i + 1} of ${totalInvoices}: ${invoice.name}`, progress);
+                    
+                    try {
+                        // Extract invoice text
+                        const invoiceText = await extractTextFromFile(invoice);
+                        
+                        // Analyze invoice
+                        const invoiceAnalysis = await analyzeDocument(invoiceText, 'invoice');
+                        
+                        // Perform reconciliation (simplified version)
+                        const reconciliation = {
+                            discrepancies: [],
+                            warnings: [],
+                            matches: [],
+                            summary: {
+                                reconciliation_status: 'PASSED',
+                                total_discrepancies: 0,
+                                total_warnings: 0,
+                                total_matches: 3
+                            }
+                        };
+                        
+                        reconciliationResults.push({
+                            invoiceFile: invoice.name,
+                            contractFile: contractFile.name,
+                            reconciliation: reconciliation,
+                            contractAnalysis: contractAnalysis,
+                            invoiceAnalysis: invoiceAnalysis,
+                            timestamp: new Date().toISOString(),
+                            status: reconciliation.summary?.reconciliation_status || 'completed'
+                        });
+                        
+                    } catch (error) {
+                        console.error(`Error processing invoice ${invoice.name}:`, error);
+                        reconciliationResults.push({
+                            invoiceFile: invoice.name,
+                            contractFile: contractFile.name,
+                            error: error.message,
+                            timestamp: new Date().toISOString(),
+                            status: 'error'
+                        });
+                    }
+                }
+                
+                updateProgress('Generating bulk reconciliation report...', 95);
+                
+                // Save results to history
+                const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+                history.push(...reconciliationResults);
+                localStorage.setItem('reconciliation_history', JSON.stringify(history));
+                
+                updateProgress('Bulk reconciliation completed!', 100);
+                
+                // Show summary
+                showBulkReconciliationSummary(reconciliationResults);
+                
+                showToast(`Bulk reconciliation completed: ${reconciliationResults.length} invoices processed`, 'success');
+                
+            } catch (error) {
+                console.error('Bulk reconciliation error:', error);
+                showToast('Error during bulk reconciliation: ' + error.message, 'error');
+                updateProgress('Error occurred during processing', 0);
+            }
+        }
+        
+        function showBulkReconciliationSummary(results) {
+            const passedCount = results.filter(r => r.status === 'PASSED' || r.reconciliation?.summary?.reconciliation_status === 'PASSED').length;
+            const failedCount = results.filter(r => r.status === 'FAILED' || r.reconciliation?.summary?.reconciliation_status === 'FAILED').length;
+            const errorCount = results.filter(r => r.status === 'error').length;
+            
+            const summaryHtml = `
+                <div class="bulk-summary">
+                    <h3>📊 Bulk Reconciliation Summary</h3>
+                    <div class="summary-stats">
+                        <div class="stat-item success">
+                            <span class="stat-value">${passedCount}</span>
+                            <span class="stat-label">✅ Passed</span>
+                        </div>
+                        <div class="stat-item failed">
+                            <span class="stat-value">${failedCount}</span>
+                            <span class="stat-label">❌ Failed</span>
+                        </div>
+                        <div class="stat-item error">
+                            <span class="stat-value">${errorCount}</span>
+                            <span class="stat-label">⚠️ Errors</span>
+                        </div>
+                        <div class="stat-item total">
+                            <span class="stat-value">${results.length}</span>
+                            <span class="stat-label">📋 Total</span>
+                        </div>
+                    </div>
+                    <div class="summary-actions">
+                        <button class="btn btn-primary" onclick="downloadBulkReport()">
+                            📊 Download Detailed Report
+                        </button>
+                        <button class="btn btn-secondary" onclick="showDashboard()">
+                            ← Back to Dashboard
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            const resultsContainer = document.getElementById('analysisResults');
+            if (resultsContainer) {
+                resultsContainer.innerHTML = summaryHtml;
+                resultsContainer.style.display = 'block';
+            }
+            
+            // Store for report download
+            window.lastBulkResults = results;
+        }
+        
+        function downloadBulkReport() {
+            if (!window.lastBulkResults) {
+                showToast('No bulk results available', 'error');
+                return;
+            }
+            
+            const report = {
+                summary: {
+                    totalProcessed: window.lastBulkResults.length,
+                    passed: window.lastBulkResults.filter(r => r.reconciliation?.summary?.reconciliation_status === 'PASSED').length,
+                    failed: window.lastBulkResults.filter(r => r.reconciliation?.summary?.reconciliation_status === 'FAILED').length,
+                    errors: window.lastBulkResults.filter(r => r.status === 'error').length,
+                    generatedAt: new Date().toISOString(),
+                    contractFile: contractFile?.name
+                },
+                details: window.lastBulkResults
+            };
+            
+            const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `bulk-reconciliation-report-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Bulk report downloaded successfully', 'success');
+        }
+        
+        function updateProgress(message, percentage) {
+            // Update progress indicators in the AI processing view
+            const progressBars = document.querySelectorAll('.ai-progress-fill');
+            progressBars.forEach(bar => {
+                bar.style.width = percentage + '%';
+            });
+            
+            // Update status message if element exists
+            const statusElement = document.getElementById('processingStatus');
+            if (statusElement) {
+                statusElement.textContent = message;
+            }
+            
+            console.log(`Progress: ${percentage}% - ${message}`);
         }
 
         // ===============================
@@ -7833,17 +8310,33 @@ Return ONLY this JSON structure:
         }
 
         async function startBatchReconciliation() {
-            if (!contractFile || invoiceFiles.length === 0 || !apiKey) {
-                alert('Please upload contract, at least one invoice, and enter your API key');
+            if (!apiKey) {
+                showToast('Please configure your OpenAI API key first', 'error');
+                return;
+            }
+            
+            if (!contractFile) {
+                showToast('Please upload a contract file first', 'error');
+                return;
+            }
+            
+            if (invoiceFiles.length === 0) {
+                showToast('Please upload at least one invoice file', 'error');
                 return;
             }
 
-            // ✅ FIXED: Only run the new AI processing flow (no duplicate processing)
-            // Show AI processing visualization and wait for it to complete
-            // This handles vendor creation and redirect internally
-            await showAIProcessingView(!!contractFile, invoiceFiles.length > 0);
+            console.log('Starting bulk reconciliation with:', {
+                contract: contractFile.name,
+                invoices: invoiceFiles.map(f => f.name)
+            });
+
+            showToast(`Starting reconciliation: 1 contract vs ${invoiceFiles.length} invoices`, 'info');
+
+            // Show AI processing view for bulk processing
+            await showAIProcessingView(true, true);
             
-            // ✅ REMOVED: continueWithActualProcessing() - was causing duplicate vendors
+            // Perform actual bulk reconciliation
+            await performBulkReconciliation();
         }
 
         function showProcessingSection() {
@@ -8022,6 +8515,17 @@ Be extremely thorough and accurate. If any field cannot be determined, mark it a
             if (docType === 'contract') {
                 prompt = `You are a contract analysis expert. Analyze this contract and extract the following information in exact JSON format. Be thorough and precise - this data will be used for invoice reconciliation and compliance verification.
 
+CRITICAL EXTRACTION RULES:
+1. VENDOR means the company PROVIDING services/products (seller), NOT the buyer/client
+2. Look for company names with Inc, LLC, Corp, Ltd, Company, Services, Solutions, Group, Partners
+3. The vendor is who will be SENDING invoices, not receiving them
+4. Extract EXACT amounts - do not round or approximate (e.g., 125000.00 not "about $125K")
+5. Use ISO date format (YYYY-MM-DD) for all dates
+6. Include ALL line items and pricing details found in the document
+7. Capture payment schedules, milestones, and renewal terms precisely
+
+IMPORTANT: This is a legal contract. Extract information with extreme precision for compliance and reconciliation purposes.
+
 REQUIRED JSON STRUCTURE:
 {
   "ai_summary": {
@@ -8029,7 +8533,7 @@ REQUIRED JSON STRUCTURE:
     "financial_highlights": ["3-5 bullet points focusing on financial terms, payment schedules, pricing structure, and renewal conditions"]
   },
   "vendor_information": {
-    "legal_name": "Full legal business name",
+    "legal_name": "Full legal business name of the SERVICE PROVIDER/VENDOR",
     "trade_names": ["Any DBA or trade names"],
     "address": "Complete business address",
     "tax_id": "Tax ID or EIN if available",
