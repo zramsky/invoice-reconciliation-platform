@@ -874,7 +874,8 @@ DATE EXTRACTION RULES:
 - If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
 - If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
 - NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
-- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
+- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01" (ALWAYS calculate this)
+- IMPORTANT: If summary mentions "three year" or "3 year" term and effective_date is "2025-01-01", renewal_date MUST be "2028-01-01"
 - If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
 - If it mentions "automatically renews for successive three-year terms" → include this in the summary
 - CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
@@ -910,7 +911,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract - be precise. 2) The effective_date field and the date in reconciliation_summary MUST be identical (same date, just different formats). 3) If term length is mentioned, CALCULATE the end date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. 4) NEVER confuse or mix dates - if effective date is Dec 31, 2024, don't write Jan 1, 2025 in summary. 5) For business_description, use 2-3 word category. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
+                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract. 2) If you find a term length (e.g., 'three-year term'), YOU MUST calculate the renewal_date by adding the term to the effective date. Example: Effective 2025-01-01 + three years = renewal_date: 2028-01-01. 3) The effective_date field and the date in reconciliation_summary MUST match. 4) ALWAYS fill in renewal_date if term length is mentioned. 5) Use 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with calculated dates."
                             },
                             {
                                 role: "user",
@@ -1069,7 +1070,8 @@ DATE EXTRACTION RULES:
 - If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
 - If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
 - NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
-- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
+- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01" (ALWAYS calculate this)
+- IMPORTANT: If summary mentions "three year" or "3 year" term and effective_date is "2025-01-01", renewal_date MUST be "2028-01-01"
 - If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
 - If it mentions "automatically renews for successive three-year terms" → include this in the summary
 - CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
@@ -1107,7 +1109,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract - be precise. 2) The effective_date field and the date in reconciliation_summary MUST be identical (same date, just different formats). 3) If term length is mentioned, CALCULATE the end date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. 4) NEVER confuse or mix dates - if effective date is Dec 31, 2024, don't write Jan 1, 2025 in summary. 5) For business_description, use 2-3 word category. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
+                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract. 2) If you find a term length (e.g., 'three-year term'), YOU MUST calculate the renewal_date by adding the term to the effective date. Example: Effective 2025-01-01 + three years = renewal_date: 2028-01-01. 3) The effective_date field and the date in reconciliation_summary MUST match. 4) ALWAYS fill in renewal_date if term length is mentioned. 5) Use 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with calculated dates."
                             },
                             {
                                 role: "user", 
@@ -1209,6 +1211,87 @@ Return ONLY this JSON:
             return formatDateForInput(dateStr);
         }
         
+        function calculateRenewalDate(effectiveDate, summary) {
+            // Extract term information from the summary and calculate renewal date
+            if (!effectiveDate || !summary) return null;
+            
+            const summaryLower = summary.toLowerCase();
+            let years = 0;
+            let months = 0;
+            
+            // Look for year-based terms
+            const yearPatterns = [
+                /(\d+)[\s-]*year/g,
+                /(\d+)[\s-]*yr/g,
+                /three[\s-]*year/g,
+                /five[\s-]*year/g,
+                /one[\s-]*year/g,
+                /two[\s-]*year/g,
+                /four[\s-]*year/g
+            ];
+            
+            // Look for month-based terms
+            const monthPatterns = [
+                /(\d+)[\s-]*month/g,
+                /(\d+)[\s-]*mo/g,
+                /twelve[\s-]*month/g,
+                /twenty[\s-]*four[\s-]*month/g,
+                /thirty[\s-]*six[\s-]*month/g
+            ];
+            
+            // Check for year patterns
+            for (const pattern of yearPatterns) {
+                const matches = [...summaryLower.matchAll(pattern)];
+                if (matches.length > 0) {
+                    if (pattern.source.includes('three')) {
+                        years = 3;
+                    } else if (pattern.source.includes('five')) {
+                        years = 5;
+                    } else if (pattern.source.includes('one')) {
+                        years = 1;
+                    } else if (pattern.source.includes('two')) {
+                        years = 2;
+                    } else if (pattern.source.includes('four')) {
+                        years = 4;
+                    } else if (matches[0][1]) {
+                        years = parseInt(matches[0][1]);
+                    }
+                    break;
+                }
+            }
+            
+            // Check for month patterns if no years found
+            if (years === 0) {
+                for (const pattern of monthPatterns) {
+                    const matches = [...summaryLower.matchAll(pattern)];
+                    if (matches.length > 0) {
+                        if (pattern.source.includes('twelve')) {
+                            months = 12;
+                        } else if (pattern.source.includes('twenty')) {
+                            months = 24;
+                        } else if (pattern.source.includes('thirty')) {
+                            months = 36;
+                        } else if (matches[0][1]) {
+                            months = parseInt(matches[0][1]);
+                        }
+                        break;
+                    }
+                }
+            }
+            
+            // Calculate renewal date
+            if (years > 0) {
+                const endDate = calculateEndDate(effectiveDate, years);
+                return formatDateForInput(endDate); // Ensure correct format for HTML input
+            } else if (months > 0) {
+                const endDate = calculateEndDateMonths(effectiveDate, months);
+                return formatDateForInput(endDate); // Ensure correct format for HTML input
+            }
+            
+            console.log('No recognizable term found in summary:', summary);
+            return null;
+        }
+        
         function cleanServiceCategory(description) {
             // If it's already short (2-4 words), return as is
             if (!description || description.split(' ').length <= 4) {
@@ -1289,6 +1372,14 @@ Return ONLY this JSON:
                     }
                 }
                 
+                // Calculate renewal date if not provided but term is mentioned
+                if (parsed.effective_date && !parsed.renewal_date && parsed.reconciliation_summary) {
+                    parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
+                    if (parsed.renewal_date) {
+                        console.log('Calculated renewal date from term:', parsed.renewal_date);
+                    }
+                }
+                
                 return parsed;
             } catch (e) {
                 console.log('Direct parse failed, attempting extraction...');
@@ -1324,6 +1415,14 @@ Return ONLY this JSON:
                             // Clean up business_description if it's a sentence
                             if (parsed.business_description) {
                                 parsed.business_description = cleanServiceCategory(parsed.business_description);
+                            }
+                            
+                            // Calculate renewal date if not provided but term is mentioned
+                            if (parsed.effective_date && !parsed.renewal_date && parsed.reconciliation_summary) {
+                                parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
+                                if (parsed.renewal_date) {
+                                    console.log('Calculated renewal date from cleaned response:', parsed.renewal_date);
+                                }
                             }
                             
                             return parsed;
