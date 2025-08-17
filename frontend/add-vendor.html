@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Vendor - Contract Reconciliation Platform</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <style>
         :root {
             --primary: #0f0f0f;
@@ -849,8 +852,8 @@
 Extract:
 1. The vendor/supplier company name
 2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. The contract effective date (when the contract starts/began)
-4. The contract renewal date or expiration date (if mentioned)
+3. The contract effective date (look for "effective date", "commencement date", "start date", "beginning", or similar terms)
+4. The contract renewal/expiration date (look for "renewal date", "expiration date", "end date", "termination date", "expires on", or similar terms)
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 Pay special attention to:
@@ -887,7 +890,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. Return ONLY valid JSON."
+                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. For dates, extract the effective date (when contract starts) and renewal/end date if mentioned. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
                             },
                             {
                                 role: "user",
@@ -928,7 +931,9 @@ Return ONLY this JSON:
                 const content = data.choices[0].message.content;
                 console.log('API content:', content);
                 
-                return parseAIResponse(content);
+                const parsedResponse = parseAIResponse(content);
+                console.log('Parsed AI response with dates:', parsedResponse);
+                return parsedResponse;
                 
             } catch (error) {
                 console.error('AI Vision analysis error:', error);
@@ -1023,8 +1028,8 @@ Return ONLY this JSON:
 
 1. The vendor/supplier company name
 2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. The contract effective date (when the contract starts/began)
-4. The contract renewal date or expiration date (if mentioned)
+3. The contract effective date (look for "effective date", "commencement date", "start date", "beginning", or similar terms)
+4. The contract renewal/expiration date (look for "renewal date", "expiration date", "end date", "termination date", "expires on", or similar terms)
 5. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
 
 IMPORTANT: Include ALL of these if present in the contract:
@@ -1060,7 +1065,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. Return ONLY valid JSON."
+                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. For dates, extract the effective date (when contract starts) and renewal/end date if mentioned. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
                             },
                             {
                                 role: "user", 
@@ -1089,7 +1094,9 @@ Return ONLY this JSON:
                 const content = data.choices[0].message.content;
                 console.log('API content:', content);
                 
-                return parseAIResponse(content);
+                const parsedResponse = parseAIResponse(content);
+                console.log('Parsed AI response with dates:', parsedResponse);
+                return parsedResponse;
                 
             } catch (error) {
                 console.error('AI text analysis error:', error);
@@ -1273,6 +1280,8 @@ Return ONLY this JSON:
                 return {
                     vendor_name: vendorMatch ? vendorMatch[1] : "Unknown Vendor",
                     business_description: descMatch ? cleanServiceCategory(descMatch[1]) : "General Services",
+                    effective_date: null,
+                    renewal_date: null,
                     reconciliation_summary: summaryMatch ? summaryMatch[1] : "Unable to extract contract terms. Please review the contract manually."
                 };
             }
