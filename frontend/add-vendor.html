@@ -432,8 +432,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="businessDescription">Business Description <span class="required">*</span></label>
-                    <input type="text" id="businessDescription" name="businessDescription" placeholder="e.g., IT support services, Waste management, Medical supplies" required>
+                    <label for="businessDescription">Service Category <span class="required">*</span></label>
+                    <input type="text" id="businessDescription" name="businessDescription" placeholder="e.g., Waste Management, Housekeeping Supplies, Nursing Supplies, Dietary Services" required>
                 </div>
                 
                 <div class="form-group">
@@ -834,7 +834,7 @@
 
 Extract:
 1. The vendor/supplier company name
-2. A brief description of what services/products they provide (1-2 sentences)
+2. The specific services they provide - categorize as one of: Waste Management, Housekeeping Supplies, Nursing Supplies, Dietary Services, IT Support, Maintenance Services, Medical Equipment, Laboratory Services, Pharmacy Services, Security Services, Transportation, Consulting, Legal Services, Financial Services, or describe the specific service category
 3. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 Pay special attention to:
@@ -849,7 +849,7 @@ Pay special attention to:
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[what products/services they provide]",
+  "business_description": "[specific service category - e.g., Waste Management, IT Support Services, Medical Supply Distribution]",
   "reconciliation_summary": "[comprehensive summary including ALL payment amounts, fees, and billing terms found in tables and text]"
 }`;
 
@@ -1003,7 +1003,7 @@ Return ONLY this JSON:
             const prompt = `Read this ENTIRE contract carefully and extract:
 
 1. The vendor/supplier company name
-2. A brief description of what services/products they provide (1-2 sentences)
+2. The specific services they provide - categorize as one of: Waste Management, Housekeeping Supplies, Nursing Supplies, Dietary Services, IT Support, Maintenance Services, Medical Equipment, Laboratory Services, Pharmacy Services, Security Services, Transportation, Consulting, Legal Services, Financial Services, or describe the specific service category
 3. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
 
 IMPORTANT: Include ALL of these if present in the contract:
@@ -1020,7 +1020,7 @@ ${text.substring(0, 15000)}
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[what products/services they provide]",
+  "business_description": "[specific service category - e.g., Waste Management, IT Support Services, Medical Supply Distribution]",
   "reconciliation_summary": "[comprehensive summary of ALL billing/payment terms found]"
 }`;
 
@@ -1147,7 +1147,7 @@ Return ONLY this JSON:
                     ` : ''}
                     ${analysis.business_description ? `
                         <div class="insight-item">
-                            <div class="insight-label">Business Description</div>
+                            <div class="insight-label">Service Category</div>
                             <div class="insight-value">${analysis.business_description}</div>
                         </div>
                     ` : ''}
