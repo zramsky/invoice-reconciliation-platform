@@ -437,8 +437,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="contractDate">Contract Date <span class="required">*</span></label>
-                    <input type="date" id="contractDate" name="contractDate" required>
+                    <label for="effectiveDate">Contract Effective Date <span class="required">*</span></label>
+                    <input type="date" id="effectiveDate" name="effectiveDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="renewalDate">Contract Renewal Date</label>
+                    <input type="date" id="renewalDate" name="renewalDate" placeholder="Leave blank if no renewal date">
                 </div>
                 
                 <div class="form-group">
@@ -716,7 +721,8 @@
                 const draft = {
                     vendorName: formData.get('vendorName') || '',
                     businessDescription: formData.get('businessDescription') || '',
-                    contractDate: formData.get('contractDate') || '',
+                    effectiveDate: formData.get('effectiveDate') || '',
+                    renewalDate: formData.get('renewalDate') || '',
                     notes: formData.get('notes') || '',
                     timestamp: Date.now()
                 };
@@ -740,7 +746,8 @@
                 if (age < 24 * 60 * 60 * 1000) {
                     document.getElementById('vendorName').value = draftData.vendorName || '';
                     document.getElementById('businessDescription').value = draftData.businessDescription || '';
-                    document.getElementById('contractDate').value = draftData.contractDate || '';
+                    document.getElementById('effectiveDate').value = draftData.effectiveDate || draftData.contractDate || '';
+                    document.getElementById('renewalDate').value = draftData.renewalDate || '';
                     document.getElementById('notes').value = draftData.notes || '';
                     
                     if (draftData.vendorName || draftData.businessDescription) {
@@ -835,9 +842,12 @@
 Extract:
 1. The vendor/supplier company name
 2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
+3. The contract effective date (when the contract starts/began)
+4. The contract renewal date or expiration date (if mentioned)
+5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 Pay special attention to:
+- Contract dates (effective date, start date, renewal date, expiration date)
 - Tables showing pricing or fees
 - Lists of services and costs
 - Payment schedules
@@ -850,6 +860,8 @@ Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
   "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
+  "effective_date": "[YYYY-MM-DD format if found, or null]",
+  "renewal_date": "[YYYY-MM-DD format if found, or null]",
   "reconciliation_summary": "[comprehensive summary including ALL payment amounts, fees, and billing terms found in tables and text]"
 }`;
 
@@ -1004,9 +1016,12 @@ Return ONLY this JSON:
 
 1. The vendor/supplier company name
 2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
+3. The contract effective date (when the contract starts/began)
+4. The contract renewal date or expiration date (if mentioned)
+5. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
 
 IMPORTANT: Include ALL of these if present in the contract:
+- Contract dates (effective date, start date, renewal date, expiration date)
 - All payment amounts and fees (from tables, lists, or text)
 - Billing frequency and invoice schedule
 - Payment terms (Net 30, etc.)
@@ -1021,6 +1036,8 @@ Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
   "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
+  "effective_date": "[YYYY-MM-DD format if found, or null]",
+  "renewal_date": "[YYYY-MM-DD format if found, or null]",
   "reconciliation_summary": "[comprehensive summary of ALL billing/payment terms found]"
 }`;
 
@@ -1074,6 +1091,58 @@ Return ONLY this JSON:
             }
         }
 
+        function formatDate(dateStr) {
+            if (!dateStr || dateStr === 'null') return 'Not specified';
+            try {
+                const date = new Date(dateStr);
+                if (isNaN(date.getTime())) return dateStr;
+                return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+            } catch (e) {
+                return dateStr;
+            }
+        }
+        
+        function parseContractDate(dateStr) {
+            if (!dateStr || dateStr === 'null') return null;
+            
+            try {
+                // Handle various date formats
+                let date;
+                
+                // Already in YYYY-MM-DD format
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                    return dateStr;
+                }
+                
+                // MM/DD/YYYY or MM-DD-YYYY
+                if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateStr)) {
+                    const parts = dateStr.split(/[\/\-]/);
+                    date = new Date(parts[2], parts[0] - 1, parts[1]);
+                }
+                // DD/MM/YYYY or DD-MM-YYYY (European format)
+                else if (/^\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}$/.test(dateStr) && parseInt(dateStr.split(/[\/\-]/)[0]) > 12) {
+                    const parts = dateStr.split(/[\/\-]/);
+                    date = new Date(parts[2], parts[1] - 1, parts[0]);
+                }
+                // Text format like "January 1, 2024"
+                else {
+                    date = new Date(dateStr);
+                }
+                
+                if (date && !isNaN(date.getTime())) {
+                    // Return in YYYY-MM-DD format
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}-${month}-${day}`;
+                }
+            } catch (e) {
+                console.error('Error parsing date:', e);
+            }
+            
+            return null;
+        }
+        
         function cleanServiceCategory(description) {
             // If it's already short (2-4 words), return as is
             if (!description || description.split(' ').length <= 4) {
@@ -1220,6 +1289,18 @@ Return ONLY this JSON:
                             <div class="insight-value">${analysis.business_description}</div>
                         </div>
                     ` : ''}
+                    ${analysis.effective_date ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Effective Date</div>
+                            <div class="insight-value">${formatDate(analysis.effective_date)}</div>
+                        </div>
+                    ` : ''}
+                    ${analysis.renewal_date ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Renewal Date</div>
+                            <div class="insight-value">${formatDate(analysis.renewal_date)}</div>
+                        </div>
+                    ` : ''}
                     ${analysis.reconciliation_summary ? `
                         <div class="insight-item">
                             <div class="insight-label">Invoice Reconciliation Terms</div>
@@ -1253,8 +1334,26 @@ Return ONLY this JSON:
                 console.log('Set notes to reconciliation summary');
             }
             
-            // Set today's date as default contract date
-            document.getElementById('contractDate').value = new Date().toISOString().split('T')[0];
+            // Pre-fill dates if found in contract
+            if (analysis.effective_date) {
+                // Try to parse and format the date
+                const effectiveDate = parseContractDate(analysis.effective_date);
+                if (effectiveDate) {
+                    document.getElementById('effectiveDate').value = effectiveDate;
+                    console.log('Set effective date to:', effectiveDate);
+                }
+            } else {
+                // Set today's date as default if not found
+                document.getElementById('effectiveDate').value = new Date().toISOString().split('T')[0];
+            }
+            
+            if (analysis.renewal_date) {
+                const renewalDate = parseContractDate(analysis.renewal_date);
+                if (renewalDate) {
+                    document.getElementById('renewalDate').value = renewalDate;
+                    console.log('Set renewal date to:', renewalDate);
+                }
+            }
             
             // Setup real-time validation and load any draft
             setupFormValidation();
@@ -1330,9 +1429,10 @@ Return ONLY this JSON:
             const name = formData.get('vendorName').trim();
             const businessDescription = formData.get('businessDescription').trim();
             const reconciliationTerms = formData.get('notes').trim();
-            const contractDate = formData.get('contractDate');
+            const effectiveDate = formData.get('effectiveDate');
+            const renewalDate = formData.get('renewalDate');
             
-            if (!name || !businessDescription || !reconciliationTerms || !contractDate) {
+            if (!name || !businessDescription || !reconciliationTerms || !effectiveDate) {
                 showToast('Please fill in all required fields', 'error');
                 return;
             }
@@ -1353,7 +1453,10 @@ Return ONLY this JSON:
                     business_description: businessDescription,
                     business_type: businessDescription, // For dashboard compatibility
                     description: businessDescription, // For backward compatibility
-                    contract_date: contractDate,
+                    effective_date: effectiveDate,
+                    renewal_date: renewalDate || null,
+                    upload_date: new Date().toISOString().split('T')[0], // Today's date
+                    contract_date: effectiveDate, // For backward compatibility
                     reconciliation_summary: reconciliationTerms,
                     
                     // AI Analysis results (simplified)
