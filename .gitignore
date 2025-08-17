@@ -1,7 +1,47 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
 # Environment variables
 .env
 .env.local
-.env.production
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# nyc test coverage
+.nyc_output
 
 # Python
 __pycache__/
@@ -9,9 +49,6 @@ __pycache__/
 *$py.class
 *.so
 .Python
-env/
-venv/
-ENV/
 build/
 develop-eggs/
 dist/
@@ -28,49 +65,22 @@ wheels/
 .installed.cfg
 *.egg
 
-# Virtual environments
-bin/
-include/
-pip-selfcheck.json
-pyvenv.cfg
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Uploads and processed files
-uploads/
-processed/
-*.pdf
-*.jpg
-*.jpeg
-*.png
-*.tiff
-*.bmp
-
-# Logs
-*.log
-logs/
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-
 # Firebase
 .firebase/
 firebase-debug.log
-.firebaserc
+firebase-debug.*.log
 
-# Node modules (for Firebase tools)
-node_modules/
-package-lock.json
-
-# Temporary files
-*.tmp
+# Local uploads and processed files
+uploads/
+processed/
 temp/
-tmp/
+
+# Backup files
+*.backup
+*.bak
+*.old
+
+# API keys and secrets (should never be committed)
+api-keys.txt
+secrets.json
+config/secrets/

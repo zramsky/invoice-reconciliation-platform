@@ -1,135 +1,210 @@
-# Invoice Reconciliation Platform
+# 🏢 Invoice Reconciliation Platform
 
-AI-powered web platform for automated contract and invoice reconciliation using OCR and GPT.
+> **AI-powered contract and invoice reconciliation platform with advanced OCR and GPT-4 Vision analysis**
 
-## Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Firebase Deployment](https://img.shields.io/badge/Deployed%20on-Firebase-orange.svg)](https://contractrecplatform.web.app)
+[![AI Powered](https://img.shields.io/badge/AI-GPT--4%20Vision-blue.svg)](https://openai.com)
 
-- **OCR Processing**: Extracts text from PDF and image files using Tesseract
-- **AI Analysis**: Uses GPT to understand and extract key terms from documents
-- **Automated Reconciliation**: Compares contracts against invoices to find discrepancies
-- **User-Friendly Dashboard**: Simple interface for uploading files and viewing results
-- **Detailed Reporting**: Highlights mismatches, warnings, and matching fields
+## 🌟 Overview
 
-## Prerequisites
+The Invoice Reconciliation Platform is a modern, AI-powered web application that automates the complex process of contract and invoice reconciliation. By leveraging OCR technology and GPT-4 Vision AI, it extracts, analyzes, and compares contract terms with invoices to identify discrepancies and ensure billing accuracy.
 
-- Python 3.8+
-- Tesseract OCR installed on your system
-- OpenAI API key
+### ✨ Key Features
 
-### Installing Tesseract
+- **🔍 AI-Powered Analysis**: GPT-4 Vision for comprehensive document analysis including tables and structured data
+- **📄 Smart OCR Processing**: Advanced text extraction from PDFs, images, and Word documents
+- **⚡ Real-time Validation**: Live form validation and file processing with immediate feedback
+- **💾 Auto-save Drafts**: Automatic draft saving with 24-hour retention for data loss prevention
+- **🔄 Duplicate Detection**: Smart vendor duplicate prevention with user confirmation
+- **📊 Professional Dashboard**: Comprehensive vendor management with KPI tracking
+- **🎯 Progress Control**: Cancellable operations with detailed progress indicators
+- **🛡️ Enhanced Security**: Client-side processing with secure API key management
 
-**macOS:**
-```bash
-brew install tesseract
-```
+## 🚀 Quick Start
 
-**Ubuntu/Debian:**
-```bash
-sudo apt-get install tesseract-ocr
-```
+### Live Demo
+**🔗 [Try it now: https://contractrecplatform.web.app](https://contractrecplatform.web.app)**
 
-**Windows:**
-Download installer from: https://github.com/UB-Mannheim/tesseract/wiki
+### Prerequisites
+- Web browser (Chrome, Firefox, Safari, Edge)
+- OpenAI API key ([Get one here](https://platform.openai.com/api-keys))
 
-## Installation
+### Setup Instructions
 
-1. Clone the repository and navigate to the project directory:
-```bash
-cd invoice-reconciliation-platform
-```
+1. **Access the Platform**
+   ```
+   https://contractrecplatform.web.app
+   ```
 
-2. Install Python dependencies:
-```bash
-pip install -r requirements.txt
-```
+2. **Configure API Key**
+   - Click the Settings gear icon
+   - Enter your OpenAI API key
+   - Key is stored securely in your browser
 
-3. Create a `.env` file based on `.env.example`:
-```bash
-cp .env.example .env
-```
+3. **Start Using**
+   - Upload contract documents (PDF, Word, Images)
+   - AI automatically extracts vendor information
+   - Review and confirm vendor details
+   - Track all vendors in the dashboard
 
-4. Add your OpenAI API key to the `.env` file:
-```
-OPENAI_API_KEY=your_actual_api_key_here
-```
-
-## Running the Application
-
-1. Start the Flask backend server:
-```bash
-cd backend
-python app.py
-```
-
-2. Open your browser and navigate to:
-```
-http://localhost:5000
-```
-
-## Usage
-
-1. **Upload Documents**: Select both a contract PDF/image and an invoice PDF/image
-2. **Start Reconciliation**: Click the "Start Reconciliation" button
-3. **View Results**: The system will:
-   - Extract text using OCR
-   - Analyze documents with AI
-   - Compare and highlight discrepancies
-   - Display a comprehensive reconciliation report
-
-## Project Structure
+## 📁 Project Structure
 
 ```
 invoice-reconciliation-platform/
-├── backend/
-│   ├── app.py              # Flask API server
-│   ├── ocr_processor.py    # OCR text extraction
-│   └── ai_analyzer.py      # AI-powered analysis
-├── frontend/
-│   ├── index.html          # Main dashboard
-│   ├── styles.css          # Styling
-│   └── app.js              # Frontend logic
-├── uploads/                # Temporary file storage
-├── processed/              # Processed documents
-├── requirements.txt        # Python dependencies
-├── .env.example           # Environment variables template
-└── README.md              # Documentation
+├── 📂 frontend/                 # Main web application
+│   ├── index.html              # Dashboard and main interface
+│   ├── add-vendor.html         # Vendor creation workflow
+│   └── vendor-profile.html     # Individual vendor management
+├── 📂 backend/                 # Python backend services (optional)
+│   ├── app.py                  # Flask application
+│   ├── models.py               # Data models
+│   ├── services.py             # Business logic
+│   └── api.py                  # API endpoints
+├── 📂 docs/                    # Documentation
+│   ├── DEPLOYMENT.md           # Deployment guide
+│   ├── FIREBASE_SETUP.md       # Firebase configuration
+│   └── HOW_TO_USE.md          # User guide
+├── 📂 firebase-functions/      # Firebase cloud functions
+├── deploy.sh                   # Deployment script
+├── firebase.json              # Firebase configuration
+└── README.md                  # This file
 ```
 
-## API Endpoints
+## 🔧 Technology Stack
 
-- `POST /api/upload` - Upload contract and invoice files
-- `POST /api/process/<session_id>` - Process uploaded documents
-- `GET /api/results/<session_id>` - Get reconciliation results
-- `GET /api/sessions` - List all reconciliation sessions
-- `GET /api/health` - Health check endpoint
+### Frontend
+- **HTML5 + CSS3**: Modern responsive design
+- **Vanilla JavaScript**: No framework dependencies
+- **PDF.js**: Client-side PDF processing
+- **Tesseract.js**: OCR processing capabilities
 
-## Technologies Used
+### AI & Processing
+- **OpenAI GPT-4**: Text analysis and extraction
+- **GPT-4 Vision**: Image and document analysis
+- **Custom Prompts**: Specialized for contract analysis
 
-- **Backend**: Python, Flask, Flask-CORS
-- **OCR**: Tesseract, PyTesseract, pdf2image
-- **AI**: OpenAI GPT-3.5-turbo
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Libraries**: Pillow, NumPy, Pandas
+### Deployment
+- **Firebase Hosting**: Global CDN deployment
+- **GitHub Pages**: Alternative hosting option
+- **Docker**: Containerized deployment support
 
-## Troubleshooting
+## 📖 Usage Guide
 
-### Tesseract not found
-Ensure Tesseract is installed and in your system PATH. You may need to specify the path:
-```python
-pytesseract.pytesseract.tesseract_cmd = r'/usr/local/bin/tesseract'
-```
+### Adding Vendors
 
-### PDF processing issues
-Install poppler-utils for PDF to image conversion:
-- macOS: `brew install poppler`
-- Ubuntu: `sudo apt-get install poppler-utils`
+1. **Upload Contract**
+   - Drag & drop or click to select files
+   - Supports: PDF, Word docs, Images (up to 50MB)
+   - Real-time file validation and preview
 
-### CORS errors
-Ensure the Flask backend is running on port 5000 and CORS is properly configured.
+2. **AI Analysis**
+   - Automatic text extraction via OCR
+   - GPT-4 Vision analyzes tables and structured data
+   - Progress indicator with cancellation option
 
-## Security Notes
+3. **Review & Save**
+   - AI pre-fills vendor information
+   - Real-time form validation
+   - Auto-save drafts prevent data loss
+   - Duplicate detection prevents conflicts
 
-- Never commit your `.env` file with actual API keys
-- Use environment variables for sensitive configuration
-- Implement proper authentication for production use
-- Add file size and type validation for production
+### Managing Vendors
+
+- **Dashboard Overview**: View all active vendors and KPIs
+- **Search & Filter**: Find vendors quickly
+- **Vendor Profiles**: Detailed view with contract terms
+- **Invoice Upload**: Add invoices for reconciliation
+
+## 🛠️ Development
+
+### Local Development Setup
+
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/zramsky/invoice-reconciliation-platform.git
+   cd invoice-reconciliation-platform
+   ```
+
+2. **Serve Frontend**
+   ```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx serve frontend
+   
+   # Using live-server
+   npx live-server frontend
+   ```
+
+3. **Access Application**
+   ```
+   http://localhost:8000
+   ```
+
+### Firebase Deployment
+
+1. **Install Firebase CLI**
+   ```bash
+   npm install -g firebase-tools
+   ```
+
+2. **Deploy**
+   ```bash
+   ./deploy.sh
+   ```
+
+See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) for detailed deployment instructions.
+
+## 📊 Features in Detail
+
+### AI-Powered Document Analysis
+- **Multi-format Support**: PDF, Word, JPEG, PNG, TIFF
+- **Table Recognition**: Extracts data from structured tables
+- **Vision Processing**: Analyzes charts, layouts, and visual elements
+- **Smart Fallbacks**: Text analysis when vision processing unavailable
+
+### User Experience Enhancements
+- **Real-time Validation**: Immediate feedback on form inputs
+- **Progress Cancellation**: Stop long-running operations
+- **Auto-save Drafts**: Preserve work automatically
+- **File Preview**: Confirm uploads before processing
+- **Professional Loading States**: Clear feedback during operations
+
+### Data Management
+- **Local Storage**: Client-side data persistence
+- **Duplicate Prevention**: Smart vendor conflict detection
+- **Export Capabilities**: Download vendor data
+- **Backup Support**: Manual data export/import
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+- **Documentation**: [docs/](docs/)
+- **Issues**: [GitHub Issues](https://github.com/zramsky/invoice-reconciliation-platform/issues)
+- **Live Demo**: [contractrecplatform.web.app](https://contractrecplatform.web.app)
+
+## 🔮 Roadmap
+
+- [ ] **Mobile App**: Native iOS/Android applications
+- [ ] **API Integration**: RESTful API for third-party integrations
+- [ ] **Advanced Analytics**: Detailed reconciliation reporting
+- [ ] **Multi-tenant Support**: Organization and team management
+- [ ] **Automated Workflows**: Scheduled reconciliation processes
+- [ ] **Advanced Security**: SSO, role-based access control
+
+---
+
+**Made with ❤️ for modern businesses seeking automated invoice reconciliation**
