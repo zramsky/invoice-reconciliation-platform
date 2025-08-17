@@ -505,9 +505,10 @@
 
         function updateVendorDisplay() {
             // Update header
-            document.getElementById('vendorName').textContent = currentVendor.name;
+            const vendorName = currentVendor.vendor_name || currentVendor.name || 'Unknown Vendor';
+            document.getElementById('vendorName').textContent = vendorName;
             document.getElementById('contractDate').textContent = 
-                `Contract from ${currentVendor.effectiveDate || 'N/A'}`;
+                `Contract from ${currentVendor.contract_date || currentVendor.effectiveDate || 'N/A'}`;
             document.getElementById('invoiceCount').textContent = 
                 `${vendorInvoices.length} Invoice${vendorInvoices.length !== 1 ? 's' : ''}`;
             
@@ -526,23 +527,26 @@
 
         function populateAPTerms() {
             const apTermsGrid = document.getElementById('apTermsGrid');
-            const contractAnalysis = currentVendor.contractAnalysis || {};
             
-            const terms = [
-                { label: 'Payment Terms', value: contractAnalysis.financial_terms?.payment_terms || 'Net 30' },
-                { label: 'Billing Frequency', value: contractAnalysis.billing_frequency || 'Monthly' },
-                { label: 'Contract Value', value: contractAnalysis.financial_terms?.amounts?.[0] || 'TBD' },
-                { label: 'Effective Date', value: currentVendor.effectiveDate || 'N/A' },
-                { label: 'Renewal Date', value: currentVendor.renewalDate || 'N/A' },
-                { label: 'Service Type', value: currentVendor.description || 'General Services' }
-            ];
-
-            apTermsGrid.innerHTML = terms.map(term => `
+            // Display the reconciliation summary and business info
+            apTermsGrid.innerHTML = `
                 <div class="term-card">
-                    <div class="term-label">${term.label}</div>
-                    <div class="term-value">${term.value}</div>
+                    <div class="term-label">Business Description</div>
+                    <div class="term-value">${currentVendor.business_description || currentVendor.ai_extracted_description || 'General Services'}</div>
                 </div>
-            `).join('');
+                <div class="term-card">
+                    <div class="term-label">Contract Date</div>
+                    <div class="term-value">${currentVendor.contract_date || 'N/A'}</div>
+                </div>
+                <div class="term-card">
+                    <div class="term-label">Status</div>
+                    <div class="term-value">${currentVendor.status || 'Active'}</div>
+                </div>
+                <div style="grid-column: 1 / -1; background: rgba(15, 23, 42, 0.5); border: 1px solid var(--border); border-radius: 8px; padding: 20px; margin-top: 20px;">
+                    <div class="term-label" style="margin-bottom: 10px;">Invoice Reconciliation Terms</div>
+                    <div class="term-value" style="line-height: 1.6; white-space: pre-wrap;">${currentVendor.reconciliation_summary || currentVendor.ai_extracted_summary || 'No reconciliation terms available'}</div>
+                </div>
+            `;
         }
 
         function populateInvoicesList() {

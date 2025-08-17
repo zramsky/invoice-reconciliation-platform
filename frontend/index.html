@@ -4638,8 +4638,8 @@
                 <div class="vendors-header">
                     <h3 class="vendors-title">Active Vendors</h3>
                     <div class="vendors-actions">
-                        <button class="btn btn-primary add-vendor-btn" onclick="window.location.href='add-vendor.html'">
-                            + Add Vendor
+                        <button class="btn btn-primary add-vendor-btn" onclick="navigateToAddVendor(this)">
+                            <span>+ Add Vendor</span>
                         </button>
                         <input type="text" 
                                class="form-input vendors-search" 
@@ -5484,11 +5484,16 @@
         }
 
         function updateKPIs() {
+            // Always reload vendors from localStorage to get latest data
+            vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+            
             // Clean up any duplicate vendors before calculating KPIs
             removeDuplicateVendors();
             
             // Calculate KPI values from reconciliation history and vendors
             const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
+            
+            console.log('Updating KPIs with', vendors.length, 'total vendors');
             
             // Total Invoice Drift - sum of all discrepancy values
             let totalDrift = 0;
@@ -5530,12 +5535,17 @@
         }
 
         function loadVendorsTable() {
+            // Always reload vendors from localStorage to get latest data
+            vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+            console.log('Loading vendors table, found', vendors.length, 'vendors:', vendors);
+            
             const tableBody = document.getElementById('vendorsTableBody');
             const emptyState = document.getElementById('emptyVendors');
             const tableContainer = document.getElementById('vendorsTableContainer');
             
             // Filter to show only active vendors (treat vendors without status as active for backward compatibility)
             const activeVendors = vendors.filter(vendor => !vendor.status || vendor.status !== 'disabled');
+            console.log('Active vendors:', activeVendors.length);
             
             if (activeVendors.length === 0) {
                 tableContainer.style.display = 'none';
@@ -6693,6 +6703,21 @@ Return ONLY this JSON structure:
             // Load dashboard data on startup
             loadDashboard();
         });
+        
+        // Reload dashboard when page gains focus (user returns from add vendor page)
+        window.addEventListener('focus', function() {
+            loadDashboard();
+        });
+        
+        function navigateToAddVendor(button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '<span>Loading...</span>';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                window.location.href = 'add-vendor.html';
+            }, 100);
+        }
 
         function loadSettings() {
             const savedSettings = localStorage.getItem('reconciliation_settings');
