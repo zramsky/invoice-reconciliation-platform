@@ -834,7 +834,7 @@
 
 Extract:
 1. The vendor/supplier company name
-2. A clear, concise service category description (preferably 2-3 words) that describes what services they provide. Examples: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental", etc. Be specific and descriptive.
+2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
 3. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 Pay special attention to:
@@ -849,7 +849,7 @@ Pay special attention to:
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[clear 2-3 word service description like 'Waste Management' or 'Medical Supplies']",
+  "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
   "reconciliation_summary": "[comprehensive summary including ALL payment amounts, fees, and billing terms found in tables and text]"
 }`;
 
@@ -868,7 +868,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract the vendor name and a brief summary of invoice-relevant terms. Return ONLY valid JSON."
+                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. Return ONLY valid JSON."
                             },
                             {
                                 role: "user",
@@ -1003,7 +1003,7 @@ Return ONLY this JSON:
             const prompt = `Read this ENTIRE contract carefully and extract:
 
 1. The vendor/supplier company name
-2. A clear, concise service category description (preferably 2-3 words) that describes what services they provide. Examples: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental", etc. Be specific and descriptive.
+2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
 3. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
 
 IMPORTANT: Include ALL of these if present in the contract:
@@ -1020,7 +1020,7 @@ ${text.substring(0, 15000)}
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[clear 2-3 word service description like 'Waste Management' or 'Medical Supplies']",
+  "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
   "reconciliation_summary": "[comprehensive summary of ALL billing/payment terms found]"
 }`;
 
@@ -1036,7 +1036,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract the vendor name and a brief summary of invoice-relevant terms. Return ONLY valid JSON."
+                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. Return ONLY valid JSON."
                             },
                             {
                                 role: "user", 
@@ -1074,6 +1074,63 @@ Return ONLY this JSON:
             }
         }
 
+        function cleanServiceCategory(description) {
+            // If it's already short (2-4 words), return as is
+            if (!description || description.split(' ').length <= 4) {
+                // Check if it looks like a sentence (contains "provides", "offers", etc.)
+                if (description && (description.includes('provides') || description.includes('offers') || description.includes('services'))) {
+                    // Try to extract the key service type
+                    if (description.toLowerCase().includes('waste') && description.toLowerCase().includes('recycl')) {
+                        return 'Waste Management';
+                    } else if (description.toLowerCase().includes('medical') || description.toLowerCase().includes('healthcare')) {
+                        return 'Medical Supplies';
+                    } else if (description.toLowerCase().includes('food') || description.toLowerCase().includes('dietary')) {
+                        return 'Food Services';
+                    } else if (description.toLowerCase().includes('clean')) {
+                        return 'Cleaning Services';
+                    } else if (description.toLowerCase().includes('it ') || description.toLowerCase().includes('technology')) {
+                        return 'IT Services';
+                    } else if (description.toLowerCase().includes('security')) {
+                        return 'Security Services';
+                    } else if (description.toLowerCase().includes('maintenance') || description.toLowerCase().includes('repair')) {
+                        return 'Building Maintenance';
+                    } else if (description.toLowerCase().includes('transport')) {
+                        return 'Transportation Services';
+                    } else if (description.toLowerCase().includes('lab')) {
+                        return 'Laboratory Services';
+                    } else if (description.toLowerCase().includes('equipment')) {
+                        return 'Equipment Services';
+                    } else {
+                        // Try to extract the first 2-3 meaningful words
+                        const words = description.replace(/provides|offers|services|including|and|the|for/gi, '').trim().split(' ');
+                        return words.slice(0, 2).join(' ') + (words[1] ? '' : ' Services');
+                    }
+                }
+                return description;
+            }
+            
+            // If it's a long sentence, try to extract the service type
+            const lowerDesc = description.toLowerCase();
+            
+            // Look for common patterns
+            if (lowerDesc.includes('waste') && (lowerDesc.includes('management') || lowerDesc.includes('recycling'))) {
+                return 'Waste Management';
+            } else if (lowerDesc.includes('medical') || lowerDesc.includes('healthcare')) {
+                return 'Medical Supplies';
+            } else if (lowerDesc.includes('food') || lowerDesc.includes('dietary')) {
+                return 'Food Services';
+            } else if (lowerDesc.includes('cleaning') || lowerDesc.includes('janitorial')) {
+                return 'Cleaning Services';
+            } else if (lowerDesc.includes('information technology') || lowerDesc.includes('it ')) {
+                return 'IT Services';
+            } else {
+                // Extract the first 2-3 meaningful words
+                const words = description.replace(/provides|offers|services|including|and|the|for|company|vendor/gi, '').trim().split(' ');
+                const serviceWords = words.filter(w => w.length > 2).slice(0, 2);
+                return serviceWords.join(' ') + (serviceWords.length === 1 ? ' Services' : '');
+            }
+        }
+
         function parseAIResponse(content) {
             console.log('Raw AI response:', content);
             
@@ -1081,6 +1138,12 @@ Return ONLY this JSON:
                 // Try to parse JSON directly
                 const parsed = JSON.parse(content);
                 console.log('Successfully parsed JSON:', parsed);
+                
+                // Clean up business_description if it's a sentence
+                if (parsed.business_description) {
+                    parsed.business_description = cleanServiceCategory(parsed.business_description);
+                }
+                
                 return parsed;
             } catch (e) {
                 console.log('Direct parse failed, attempting extraction...');
@@ -1112,6 +1175,12 @@ Return ONLY this JSON:
                             console.log('Attempting to parse cleaned JSON:', cleaned.substring(0, 200));
                             const parsed = JSON.parse(cleaned);
                             console.log('Successfully parsed after cleaning:', parsed);
+                            
+                            // Clean up business_description if it's a sentence
+                            if (parsed.business_description) {
+                                parsed.business_description = cleanServiceCategory(parsed.business_description);
+                            }
+                            
                             return parsed;
                         } catch (parseError) {
                             console.log('Parse attempt failed:', parseError.message);
@@ -1127,7 +1196,7 @@ Return ONLY this JSON:
                 
                 return {
                     vendor_name: vendorMatch ? vendorMatch[1] : "Unknown Vendor",
-                    business_description: descMatch ? descMatch[1] : "General Services",
+                    business_description: descMatch ? cleanServiceCategory(descMatch[1]) : "General Services",
                     reconciliation_summary: summaryMatch ? summaryMatch[1] : "Unable to extract contract terms. Please review the contract manually."
                 };
             }
