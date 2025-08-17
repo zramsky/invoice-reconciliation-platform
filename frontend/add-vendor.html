@@ -442,8 +442,13 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="renewalDate">Contract Renewal Date</label>
-                    <input type="date" id="renewalDate" name="renewalDate" placeholder="Leave blank if no renewal date">
+                    <label for="renewalDate">Contract End/Renewal Date</label>
+                    <input type="date" id="renewalDate" name="renewalDate">
+                </div>
+                
+                <div class="form-group">
+                    <label for="uploadDate">Date Added to System</label>
+                    <input type="date" id="uploadDate" name="uploadDate" readonly style="background-color: rgba(255, 255, 255, 0.05); cursor: not-allowed;">
                 </div>
                 
                 <div class="form-group">
@@ -723,6 +728,7 @@
                     businessDescription: formData.get('businessDescription') || '',
                     effectiveDate: formData.get('effectiveDate') || '',
                     renewalDate: formData.get('renewalDate') || '',
+                    uploadDate: formData.get('uploadDate') || new Date().toISOString().split('T')[0],
                     notes: formData.get('notes') || '',
                     timestamp: Date.now()
                 };
@@ -748,6 +754,7 @@
                     document.getElementById('businessDescription').value = draftData.businessDescription || '';
                     document.getElementById('effectiveDate').value = draftData.effectiveDate || draftData.contractDate || '';
                     document.getElementById('renewalDate').value = draftData.renewalDate || '';
+                    document.getElementById('uploadDate').value = draftData.uploadDate || new Date().toISOString().split('T')[0];
                     document.getElementById('notes').value = draftData.notes || '';
                     
                     if (draftData.vendorName || draftData.businessDescription) {
@@ -1291,16 +1298,20 @@ Return ONLY this JSON:
                     ` : ''}
                     ${analysis.effective_date ? `
                         <div class="insight-item">
-                            <div class="insight-label">Effective Date</div>
+                            <div class="insight-label">Contract Effective Date</div>
                             <div class="insight-value">${formatDate(analysis.effective_date)}</div>
                         </div>
                     ` : ''}
                     ${analysis.renewal_date ? `
                         <div class="insight-item">
-                            <div class="insight-label">Renewal Date</div>
+                            <div class="insight-label">Contract End/Renewal Date</div>
                             <div class="insight-value">${formatDate(analysis.renewal_date)}</div>
                         </div>
                     ` : ''}
+                    <div class="insight-item">
+                        <div class="insight-label">Date Added to System</div>
+                        <div class="insight-value">${formatDate(new Date().toISOString().split('T')[0])}</div>
+                    </div>
                     ${analysis.reconciliation_summary ? `
                         <div class="insight-item">
                             <div class="insight-label">Invoice Reconciliation Terms</div>
@@ -1354,6 +1365,9 @@ Return ONLY this JSON:
                     console.log('Set renewal date to:', renewalDate);
                 }
             }
+            
+            // Always set upload date to today
+            document.getElementById('uploadDate').value = new Date().toISOString().split('T')[0];
             
             // Setup real-time validation and load any draft
             setupFormValidation();
@@ -1431,6 +1445,7 @@ Return ONLY this JSON:
             const reconciliationTerms = formData.get('notes').trim();
             const effectiveDate = formData.get('effectiveDate');
             const renewalDate = formData.get('renewalDate');
+            const uploadDate = formData.get('uploadDate') || new Date().toISOString().split('T')[0];
             
             if (!name || !businessDescription || !reconciliationTerms || !effectiveDate) {
                 showToast('Please fill in all required fields', 'error');
@@ -1455,7 +1470,7 @@ Return ONLY this JSON:
                     description: businessDescription, // For backward compatibility
                     effective_date: effectiveDate,
                     renewal_date: renewalDate || null,
-                    upload_date: new Date().toISOString().split('T')[0], // Today's date
+                    upload_date: uploadDate,
                     contract_date: effectiveDate, // For backward compatibility
                     reconciliation_summary: reconciliationTerms,
                     
