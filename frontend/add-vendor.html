@@ -849,30 +849,42 @@
         async function analyzeContractWithVision(imageFile) {
             const prompt = `Carefully analyze this ENTIRE contract image. Look at ALL sections, tables, and lists.
 
+CRITICAL DATE EXTRACTION INSTRUCTIONS:
+- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", or dates mentioned after "This agreement")
+- Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
+- If you find an effective date AND a term length, CALCULATE the end date
+- Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
+- Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
+- Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
+- Look for automatic renewal clauses that might affect the end date
+
 Extract:
 1. The vendor/supplier company name
-2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. The contract effective date (look for "effective date", "commencement date", "start date", "beginning", or similar terms)
-4. The contract renewal/expiration date (look for "renewal date", "expiration date", "end date", "termination date", "expires on", or similar terms)
+2. Service category in 2-3 words (e.g., "Waste Management", "Medical Supplies", "IT Services")
+3. The EXACT contract effective date from the document
+4. The contract end/renewal date (either stated directly OR calculated from effective date + term length)
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
+DATE EXTRACTION RULES:
+- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01"
+- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
+- If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
+- If it mentions "automatically renews for successive three-year terms" → include this in the summary
+
 Pay special attention to:
-- Contract dates (effective date, start date, renewal date, expiration date)
+- The FIRST section of the contract where dates are usually stated
+- Term/duration language (years, months, "initial term", "renewal term")
+- Automatic renewal clauses
 - Tables showing pricing or fees
-- Lists of services and costs
-- Payment schedules
-- ALL recurring charges
-- Setup fees or one-time costs
-- Payment terms and deadlines
-- Special billing requirements
+- Payment schedules and billing terms
 
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
-  "effective_date": "[YYYY-MM-DD format if found, or null]",
-  "renewal_date": "[YYYY-MM-DD format if found, or null]",
-  "reconciliation_summary": "[comprehensive summary including ALL payment amounts, fees, and billing terms found in tables and text]"
+  "business_description": "[2-3 word service category]",
+  "effective_date": "[YYYY-MM-DD format - the exact date found in contract]",
+  "renewal_date": "[YYYY-MM-DD format - either stated OR calculated from effective date + term]",
+  "reconciliation_summary": "[comprehensive summary including term length, renewal provisions, and ALL payment terms]"
 }`;
 
             try {
@@ -890,7 +902,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. For dates, extract the effective date (when contract starts) and renewal/end date if mentioned. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
+                                content: "You are an expert contract analyst. CRITICAL: Extract the EXACT effective date from the contract. If the contract mentions a term length (e.g., 'three-year term'), CALCULATE the end date by adding the term to the effective date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. For business_description, provide ONLY a 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with accurate dates."
                             },
                             {
                                 role: "user",
@@ -1024,22 +1036,38 @@ Return ONLY this JSON:
         }
 
         async function analyzeContractWithText(text) {
-            const prompt = `Read this ENTIRE contract carefully and extract:
+            const prompt = `Read this ENTIRE contract carefully.
 
+CRITICAL DATE EXTRACTION INSTRUCTIONS:
+- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", or dates mentioned after "This agreement")
+- Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
+- If you find an effective date AND a term length, CALCULATE the end date
+- Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
+- Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
+- Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
+- Look for automatic renewal clauses that might affect the end date
+
+Extract:
 1. The vendor/supplier company name
-2. IMPORTANT: Only provide a 2-3 word service category NAME (NOT a sentence). For example, if it's a waste/recycling company, just write "Waste Management". If it's a medical supply company, just write "Medical Supplies". Do NOT write full sentences like "provides waste and recycling services". Examples of correct format: "Waste Management", "Medical Supplies", "IT Services", "Building Maintenance", "Food Services", "Laboratory Testing", "Security Services", "Office Supplies", "Cleaning Services", "Equipment Rental"
-3. The contract effective date (look for "effective date", "commencement date", "start date", "beginning", or similar terms)
-4. The contract renewal/expiration date (look for "renewal date", "expiration date", "end date", "termination date", "expires on", or similar terms)
-5. A comprehensive 3-5 sentence summary of ALL key terms for invoice reconciliation
+2. Service category in 2-3 words (e.g., "Waste Management", "Medical Supplies", "IT Services")
+3. The EXACT contract effective date from the document
+4. The contract end/renewal date (either stated directly OR calculated from effective date + term length)
+5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
-IMPORTANT: Include ALL of these if present in the contract:
-- Contract dates (effective date, start date, renewal date, expiration date)
-- All payment amounts and fees (from tables, lists, or text)
+DATE EXTRACTION RULES:
+- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01"
+- If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
+- If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
+- If it mentions "automatically renews for successive three-year terms" → include this in the summary
+
+IMPORTANT: Include ALL of these if present:
+- The EXACT dates mentioned in the contract
+- Term/duration (convert to end date)
+- Automatic renewal provisions
+- All payment amounts and fees
 - Billing frequency and invoice schedule
 - Payment terms (Net 30, etc.)
 - All services provided
-- Any special billing rules or requirements
-- Discounts, credits, or penalties
 
 Contract text:
 ${text.substring(0, 15000)}
@@ -1047,10 +1075,10 @@ ${text.substring(0, 15000)}
 Return ONLY this JSON:
 {
   "vendor_name": "[exact vendor name]",
-  "business_description": "[ONLY 2-3 word category like 'Waste Management' - NOT a sentence]",
-  "effective_date": "[YYYY-MM-DD format if found, or null]",
-  "renewal_date": "[YYYY-MM-DD format if found, or null]",
-  "reconciliation_summary": "[comprehensive summary of ALL billing/payment terms found]"
+  "business_description": "[2-3 word service category]",
+  "effective_date": "[YYYY-MM-DD format - the exact date found in contract]",
+  "renewal_date": "[YYYY-MM-DD format - either stated OR calculated from effective date + term]",
+  "reconciliation_summary": "[comprehensive summary including term length, renewal provisions, and ALL payment terms]"
 }`;
 
             try {
@@ -1065,7 +1093,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are a contract analyst. Extract vendor information EXACTLY as requested. For business_description, provide ONLY a 2-3 word service category (like 'Waste Management' or 'Medical Supplies'), NOT a full sentence. For dates, extract the effective date (when contract starts) and renewal/end date if mentioned. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
+                                content: "You are an expert contract analyst. CRITICAL: Extract the EXACT effective date from the contract. If the contract mentions a term length (e.g., 'three-year term'), CALCULATE the end date by adding the term to the effective date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. For business_description, provide ONLY a 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with accurate dates."
                             },
                             {
                                 role: "user", 
