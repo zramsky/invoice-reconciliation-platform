@@ -417,7 +417,10 @@
 
         <!-- Vendor Form -->
         <div class="vendor-form" id="vendorForm">
-            <h2 style="margin-bottom: 30px; text-align: center;">Complete Vendor Profile</h2>
+            <h2 style="margin-bottom: 30px; text-align: center;">Confirm Vendor Information</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
+                Review the AI-extracted information and add any missing details
+            </p>
             
             <form id="addVendorForm">
                 <div class="form-group">
@@ -426,48 +429,18 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="legalName">Legal Business Name</label>
-                    <input type="text" id="legalName" name="legalName">
+                    <label for="businessType">Business Type <span class="required">*</span></label>
+                    <input type="text" id="businessType" name="businessType" placeholder="e.g., Medical Supplies, Waste Management" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="businessType">Business Type</label>
-                    <input type="text" id="businessType" name="businessType" placeholder="e.g., Technology Services, Consulting">
+                    <label for="contractDate">Contract Date <span class="required">*</span></label>
+                    <input type="date" id="contractDate" name="contractDate" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="contactEmail">Contact Email</label>
-                    <input type="email" id="contactEmail" name="contactEmail">
-                </div>
-                
-                <div class="form-group">
-                    <label for="contactPhone">Contact Phone</label>
-                    <input type="tel" id="contactPhone" name="contactPhone">
-                </div>
-                
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <textarea id="address" name="address" placeholder="Complete business address"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <label for="effectiveDate">Contract Effective Date <span class="required">*</span></label>
-                    <input type="date" id="effectiveDate" name="effectiveDate" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="expirationDate">Contract Expiration Date</label>
-                    <input type="date" id="expirationDate" name="expirationDate">
-                </div>
-                
-                <div class="form-group">
-                    <label for="contractValue">Total Contract Value</label>
-                    <input type="number" id="contractValue" name="contractValue" step="0.01" placeholder="0.00">
-                </div>
-                
-                <div class="form-group">
-                    <label for="description">Description</label>
-                    <textarea id="description" name="description" placeholder="Brief description of services or products"></textarea>
+                    <label for="notes">Additional Notes (Optional)</label>
+                    <textarea id="notes" name="notes" placeholder="Any additional notes for AP reference" rows="3"></textarea>
                 </div>
             </form>
             
@@ -477,7 +450,7 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
-                    Create Vendor
+                    Create Vendor Profile
                 </button>
             </div>
         </div>
@@ -656,42 +629,47 @@
         }
 
         async function analyzeContract(text) {
-            const prompt = `You are a contract analysis expert. Analyze this contract and extract vendor information in exact JSON format.
+            const prompt = `You are an expert AP contracts analyst. Read the following vendor contract and produce two outputs:
 
-CRITICAL EXTRACTION RULES:
-1. VENDOR means the company PROVIDING services/products (seller), NOT the buyer/client
-2. Look for company names with Inc, LLC, Corp, Ltd, Company, Services, Solutions, Group, Partners
-3. The vendor is who will be SENDING invoices, not receiving them
-4. Extract EXACT amounts - do not round or approximate
-5. Use ISO date format (YYYY-MM-DD) for all dates
+1. "vendor_profile": A concise vendor profile with:
+   - vendor_name (as written in the contract)
+   - business_type (short label, 1–5 words, e.g., "Medical Supplies", "Waste Management")
+   - key_details: top 3–5 short bullets with important vendor context (e.g., renewal type, termination terms, or other high-level items relevant for AP tracking).
 
-Contract text:
-${text.substring(0, 6000)}
+2. "ap_terms_summary": A short, structured summary of the billing and payment terms that AP must use to reconcile invoices. Include:
+   - invoice_frequency (e.g., monthly, quarterly, milestone)
+   - payment_terms (e.g., Net 30, Due upon receipt)
+   - recurring_charges (describe items, unit prices, units of measure, included quantities, overage rates if any)
+   - one_time_fees (setup, implementation, training, etc.)
+   - discounts_or_credits (early payment discounts, volume discounts, service credits, etc.)
+   - any other rules that directly affect invoice validation (e.g., required PO number, proration rules, caps, dispute window).
 
-Return ONLY this JSON structure:
+CONTRACT TEXT:
+${text.substring(0, 8000)}
+
+OUTPUT REQUIREMENTS:
+- Return valid JSON only in this schema:
+
 {
-  "vendor_information": {
-    "legal_name": "Full legal business name of the SERVICE PROVIDER/VENDOR",
-    "trade_names": ["Any DBA or trade names"],
-    "address": "Complete business address",
-    "tax_id": "Tax ID or EIN if available",
-    "contact_email": "Primary contact email",
-    "contact_phone": "Primary phone number"
+  "vendor_profile": {
+    "vendor_name": null,
+    "business_type": null,
+    "key_details": []
   },
-  "contract_details": {
-    "contract_number": "Contract ID or reference number",
-    "contract_type": "Service/Product/Subscription/etc",
-    "effective_date": "Start date (YYYY-MM-DD format)",
-    "expiration_date": "End date (YYYY-MM-DD format)",
-    "total_value": "Total contract amount as number",
-    "currency": "USD or other currency",
-    "payment_terms": "Net 30, Net 60, etc.",
-    "billing_frequency": "Monthly/Quarterly/Annual/One-time"
-  },
-  "services_description": "Brief description of services or products provided"
+  "ap_terms_summary": {
+    "invoice_frequency": null,
+    "payment_terms": null,
+    "recurring_charges": [],
+    "one_time_fees": [],
+    "discounts_or_credits": [],
+    "other_invoice_rules": []
+  }
 }
 
-Return ONLY the JSON object - no additional text.`;
+- Be concise and practical. 
+- Do not include legal boilerplate, only the terms relevant to AP and reconciliation.
+- If something is missing, set the value to null.
+- Do not include any prose outside the JSON.`;
 
             try {
                 const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -743,40 +721,107 @@ Return ONLY the JSON object - no additional text.`;
 
         function showAIInsights(analysis) {
             const container = document.getElementById('insightsContainer');
-            const vendor = analysis.vendor_information || {};
-            const contract = analysis.contract_details || {};
+            const vendorProfile = analysis.vendor_profile || {};
+            const apTerms = analysis.ap_terms_summary || {};
             
-            const insights = [
-                { label: 'Vendor Name', value: vendor.legal_name || 'Not specified' },
-                { label: 'Business Type', value: contract.contract_type || 'Not specified' },
-                { label: 'Contract Value', value: contract.total_value ? `$${parseFloat(contract.total_value).toLocaleString()}` : 'Not specified' },
-                { label: 'Contract Period', value: contract.effective_date && contract.expiration_date ? `${contract.effective_date} to ${contract.expiration_date}` : 'Not specified' },
-                { label: 'Payment Terms', value: contract.payment_terms || 'Not specified' }
-            ];
+            let insightsHtml = '';
             
-            container.innerHTML = insights.map(insight => `
-                <div class="insight-item">
-                    <div class="insight-label">${insight.label}</div>
-                    <div class="insight-value">${insight.value}</div>
+            // Vendor Profile Section
+            insightsHtml += `
+                <div class="insight-section">
+                    <h4 style="color: var(--accent-cyan); margin-bottom: 15px;">📋 Vendor Profile</h4>
+                    <div class="insight-item">
+                        <div class="insight-label">Vendor Name</div>
+                        <div class="insight-value">${vendorProfile.vendor_name || 'Not specified'}</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-label">Business Type</div>
+                        <div class="insight-value">${vendorProfile.business_type || 'Not specified'}</div>
+                    </div>
+                    ${vendorProfile.key_details && vendorProfile.key_details.length > 0 ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Key Details</div>
+                            <div class="insight-value">
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    ${vendorProfile.key_details.map(detail => `<li>${detail}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
-            `).join('');
+            `;
+            
+            // AP Terms Section
+            insightsHtml += `
+                <div class="insight-section" style="margin-top: 25px;">
+                    <h4 style="color: var(--accent-purple); margin-bottom: 15px;">💰 AP Terms Summary</h4>
+                    <div class="insight-item">
+                        <div class="insight-label">Invoice Frequency</div>
+                        <div class="insight-value">${apTerms.invoice_frequency || 'Not specified'}</div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-label">Payment Terms</div>
+                        <div class="insight-value">${apTerms.payment_terms || 'Not specified'}</div>
+                    </div>
+                    ${apTerms.recurring_charges && apTerms.recurring_charges.length > 0 ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Recurring Charges</div>
+                            <div class="insight-value">
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    ${apTerms.recurring_charges.map(charge => `<li>${charge}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${apTerms.one_time_fees && apTerms.one_time_fees.length > 0 ? `
+                        <div class="insight-item">
+                            <div class="insight-label">One-Time Fees</div>
+                            <div class="insight-value">
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    ${apTerms.one_time_fees.map(fee => `<li>${fee}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${apTerms.discounts_or_credits && apTerms.discounts_or_credits.length > 0 ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Discounts & Credits</div>
+                            <div class="insight-value">
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    ${apTerms.discounts_or_credits.map(discount => `<li>${discount}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${apTerms.other_invoice_rules && apTerms.other_invoice_rules.length > 0 ? `
+                        <div class="insight-item">
+                            <div class="insight-label">Other Invoice Rules</div>
+                            <div class="insight-value">
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    ${apTerms.other_invoice_rules.map(rule => `<li>${rule}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            container.innerHTML = insightsHtml;
         }
 
         function prefillVendorForm(analysis) {
-            const vendor = analysis.vendor_information || {};
-            const contract = analysis.contract_details || {};
+            const vendorProfile = analysis.vendor_profile || {};
             
-            // Pre-fill form fields
-            if (vendor.legal_name) document.getElementById('vendorName').value = vendor.legal_name;
-            if (vendor.legal_name) document.getElementById('legalName').value = vendor.legal_name;
-            if (contract.contract_type) document.getElementById('businessType').value = contract.contract_type;
-            if (vendor.contact_email) document.getElementById('contactEmail').value = vendor.contact_email;
-            if (vendor.contact_phone) document.getElementById('contactPhone').value = vendor.contact_phone;
-            if (vendor.address) document.getElementById('address').value = vendor.address;
-            if (contract.effective_date) document.getElementById('effectiveDate').value = contract.effective_date;
-            if (contract.expiration_date) document.getElementById('expirationDate').value = contract.expiration_date;
-            if (contract.total_value) document.getElementById('contractValue').value = contract.total_value;
-            if (analysis.services_description) document.getElementById('description').value = analysis.services_description;
+            // Pre-fill form fields with AI-extracted data
+            if (vendorProfile.vendor_name) {
+                document.getElementById('vendorName').value = vendorProfile.vendor_name;
+            }
+            if (vendorProfile.business_type) {
+                document.getElementById('businessType').value = vendorProfile.business_type;
+            }
+            
+            // Set today's date as default contract date
+            document.getElementById('contractDate').value = new Date().toISOString().split('T')[0];
         }
 
         async function saveVendor() {
@@ -785,40 +830,46 @@ Return ONLY the JSON object - no additional text.`;
             
             // Validate required fields
             const name = formData.get('vendorName').trim();
-            const effectiveDate = formData.get('effectiveDate');
+            const businessType = formData.get('businessType').trim();
+            const contractDate = formData.get('contractDate');
             
-            if (!name || !effectiveDate) {
-                showToast('Please fill in all required fields (Vendor Name and Effective Date)', 'error');
+            if (!name || !businessType || !contractDate) {
+                showToast('Please fill in all required fields', 'error');
                 return;
             }
             
-            if (!uploadedFile) {
-                showToast('No contract file uploaded', 'error');
+            if (!uploadedFile || !contractAnalysis) {
+                showToast('Contract analysis not completed', 'error');
                 return;
             }
             
             try {
-                // Create vendor object
+                // Create streamlined vendor object with only essential AP data
                 const vendor = {
                     id: Date.now().toString(),
-                    name: name,
-                    legalName: formData.get('legalName') || '',
-                    businessType: formData.get('businessType') || '',
-                    description: formData.get('description') || '',
-                    contactEmail: formData.get('contactEmail') || '',
-                    contactPhone: formData.get('contactPhone') || '',
-                    address: formData.get('address') || '',
-                    contractFile: uploadedFile.name,
-                    contractFileData: await fileToBase64(uploadedFile),
-                    contractAnalysis: contractAnalysis,
-                    contractUploadDate: new Date().toISOString(),
-                    effectiveDate: effectiveDate,
-                    expirationDate: formData.get('expirationDate') || '',
-                    contractValue: parseFloat(formData.get('contractValue')) || 0,
+                    
+                    // Basic vendor info
+                    vendor_name: name,
+                    business_type: businessType,
+                    contract_date: contractDate,
+                    notes: formData.get('notes') || '',
+                    
+                    // AI Analysis results
+                    vendor_profile: contractAnalysis.vendor_profile || {},
+                    ap_terms_summary: contractAnalysis.ap_terms_summary || {},
+                    
+                    // Contract file reference
+                    contract_file: {
+                        name: uploadedFile.name,
+                        upload_date: new Date().toISOString(),
+                        data: await fileToBase64(uploadedFile)
+                    },
+                    
+                    // System metadata
                     status: 'active',
-                    createdAt: new Date().toISOString(),
-                    lastUpdated: new Date().toISOString(),
-                    invoiceCount: 0
+                    created_at: new Date().toISOString(),
+                    last_updated: new Date().toISOString(),
+                    invoice_count: 0
                 };
                 
                 // Save to localStorage
@@ -826,7 +877,7 @@ Return ONLY the JSON object - no additional text.`;
                 vendors.push(vendor);
                 localStorage.setItem('vendors', JSON.stringify(vendors));
                 
-                showToast('Vendor created successfully!', 'success');
+                showToast('Vendor profile created successfully!', 'success');
                 
                 // Redirect to dashboard after short delay
                 setTimeout(() => {

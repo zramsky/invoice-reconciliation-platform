@@ -5593,13 +5593,16 @@
             // Generate table rows
             tableBody.innerHTML = '';
             sortedVendors.forEach(vendor => {
-                const invoiceCount = vendorInvoiceCounts[vendor.name] || 0;
-                const lastUpdated = new Date(vendor.lastUpdated || vendor.createdAt).toLocaleDateString();
+                const vendorName = vendor.vendor_name || vendor.name || 'Unknown Vendor';
+                const businessType = vendor.business_type || vendor.description || '';
+                const invoiceCount = vendorInvoiceCounts[vendorName] || 0;
+                const lastUpdated = new Date(vendor.last_updated || vendor.lastUpdated || vendor.created_at || vendor.createdAt).toLocaleDateString();
                 
                 const row = document.createElement('tr');
+                
                 row.innerHTML = `
-                    <td><a href="#" class="vendor-name" onclick="viewVendorDetails('${vendor.id}')">${vendor.name}</a></td>
-                    <td>${vendor.description || ''}</td>
+                    <td><a href="#" class="vendor-name" onclick="viewVendorDetails('${vendor.id}')">${vendorName}</a></td>
+                    <td>${businessType}</td>
                     <td>${invoiceCount}</td>
                     <td>${lastUpdated}</td>
                     <td>
