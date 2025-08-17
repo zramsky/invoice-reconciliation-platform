@@ -1225,6 +1225,36 @@ Return ONLY this JSON:
             return formatDateForInput(dateStr);
         }
         
+        function extractDatesFromSummary(summary) {
+            // Extract effective date from summary text
+            if (!summary) return {};
+            
+            const effectiveDatePatterns = [
+                /effective\s+from\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /effective\s+as\s+of\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /effective\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /commencing\s+on\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /beginning\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /starts\s+on\s+([a-zA-Z]+ \d{1,2}, \d{4})/gi,
+                /effective\s+from\s+(\d{1,2}\/\d{1,2}\/\d{4})/gi,
+                /effective\s+(\d{1,2}\/\d{1,2}\/\d{4})/gi
+            ];
+            
+            let effectiveDate = null;
+            
+            for (const pattern of effectiveDatePatterns) {
+                const matches = [...summary.matchAll(pattern)];
+                if (matches.length > 0) {
+                    const dateStr = matches[0][1];
+                    effectiveDate = formatDateForInput(dateStr);
+                    console.log(`Found effective date in summary: "${dateStr}" → ${effectiveDate}`);
+                    break;
+                }
+            }
+            
+            return { effectiveDate };
+        }
+        
         function calculateRenewalDate(effectiveDate, summary) {
             // Extract term information from the summary and calculate renewal date
             if (!effectiveDate || !summary) {
@@ -1374,11 +1404,23 @@ Return ONLY this JSON:
                     }
                 }
                 
-                // Calculate renewal date if not provided but term is mentioned
-                if (parsed.effective_date && !parsed.renewal_date && parsed.reconciliation_summary) {
-                    parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
-                    if (parsed.renewal_date) {
-                        console.log('Calculated renewal date from term:', parsed.renewal_date);
+                // Extract dates from summary if AI didn't extract them properly
+                if (parsed.reconciliation_summary) {
+                    const extractedDates = extractDatesFromSummary(parsed.reconciliation_summary);
+                    
+                    // Fix effective date if it's wrong (like today's date instead of contract date)
+                    if (extractedDates.effectiveDate && 
+                        (!parsed.effective_date || parsed.effective_date === getTodayForInput())) {
+                        parsed.effective_date = extractedDates.effectiveDate;
+                        console.log('Corrected effective date from summary:', parsed.effective_date);
+                    }
+                    
+                    // Calculate renewal date if not provided but term is mentioned
+                    if (parsed.effective_date && !parsed.renewal_date) {
+                        parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
+                        if (parsed.renewal_date) {
+                            console.log('Calculated renewal date from term:', parsed.renewal_date);
+                        }
                     }
                 }
                 
@@ -1419,11 +1461,23 @@ Return ONLY this JSON:
                                 parsed.business_description = cleanServiceCategory(parsed.business_description);
                             }
                             
-                            // Calculate renewal date if not provided but term is mentioned
-                            if (parsed.effective_date && !parsed.renewal_date && parsed.reconciliation_summary) {
-                                parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
-                                if (parsed.renewal_date) {
-                                    console.log('Calculated renewal date from cleaned response:', parsed.renewal_date);
+                            // Extract dates from summary if AI didn't extract them properly
+                            if (parsed.reconciliation_summary) {
+                                const extractedDates = extractDatesFromSummary(parsed.reconciliation_summary);
+                                
+                                // Fix effective date if it's wrong
+                                if (extractedDates.effectiveDate && 
+                                    (!parsed.effective_date || parsed.effective_date === getTodayForInput())) {
+                                    parsed.effective_date = extractedDates.effectiveDate;
+                                    console.log('Corrected effective date from cleaned summary:', parsed.effective_date);
+                                }
+                                
+                                // Calculate renewal date if not provided but term is mentioned
+                                if (parsed.effective_date && !parsed.renewal_date) {
+                                    parsed.renewal_date = calculateRenewalDate(parsed.effective_date, parsed.reconciliation_summary);
+                                    if (parsed.renewal_date) {
+                                        console.log('Calculated renewal date from cleaned response:', parsed.renewal_date);
+                                    }
                                 }
                             }
                             
@@ -1440,13 +1494,26 @@ Return ONLY this JSON:
                 const descMatch = content.match(/business[_\s]?description["']?\s*:\s*["']([^"']+)["']/i);
                 const summaryMatch = content.match(/reconciliation[_\s]?summary["']?\s*:\s*["']([^"']+)["']/i);
                 
-                return {
+                const fallbackSummary = summaryMatch ? summaryMatch[1] : "Unable to extract contract terms. Please review the contract manually.";
+                const fallbackResult = {
                     vendor_name: vendorMatch ? vendorMatch[1] : "Unknown Vendor",
                     business_description: descMatch ? cleanServiceCategory(descMatch[1]) : "General Services",
                     effective_date: null,
                     renewal_date: null,
-                    reconciliation_summary: summaryMatch ? summaryMatch[1] : "Unable to extract contract terms. Please review the contract manually."
+                    reconciliation_summary: fallbackSummary
                 };
+                
+                // Try to extract dates from summary even in fallback
+                if (fallbackSummary && fallbackSummary !== "Unable to extract contract terms. Please review the contract manually.") {
+                    const extractedDates = extractDatesFromSummary(fallbackSummary);
+                    if (extractedDates.effectiveDate) {
+                        fallbackResult.effective_date = extractedDates.effectiveDate;
+                        fallbackResult.renewal_date = calculateRenewalDate(extractedDates.effectiveDate, fallbackSummary);
+                        console.log('Extracted dates from fallback summary:', fallbackResult);
+                    }
+                }
+                
+                return fallbackResult;
             }
         }
 
