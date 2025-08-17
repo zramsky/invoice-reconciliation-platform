@@ -850,13 +850,16 @@
             const prompt = `Carefully analyze this ENTIRE contract image. Look at ALL sections, tables, and lists.
 
 CRITICAL DATE EXTRACTION INSTRUCTIONS:
-- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", or dates mentioned after "This agreement")
+- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", "effective from", or dates mentioned after "This agreement")
+- BE CONSISTENT: The same date MUST appear in both effective_date field AND in the reconciliation_summary
+- If the contract says "effective from January 1, 2025", use "2025-01-01" everywhere
 - Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
-- If you find an effective date AND a term length, CALCULATE the end date
+- If you find an effective date AND a term length, CALCULATE the end date precisely
 - Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
 - Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
 - Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
 - Look for automatic renewal clauses that might affect the end date
+- IMPORTANT: Double-check that the effective date you extract matches what you write in the summary
 
 Extract:
 1. The vendor/supplier company name
@@ -866,10 +869,13 @@ Extract:
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 DATE EXTRACTION RULES:
-- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01"
+- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
+- If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
+- NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
 - If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
 - If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
 - If it mentions "automatically renews for successive three-year terms" → include this in the summary
+- CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
 
 Pay special attention to:
 - The FIRST section of the contract where dates are usually stated
@@ -902,7 +908,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are an expert contract analyst. CRITICAL: Extract the EXACT effective date from the contract. If the contract mentions a term length (e.g., 'three-year term'), CALCULATE the end date by adding the term to the effective date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. For business_description, provide ONLY a 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with accurate dates."
+                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract - be precise. 2) The effective_date field and the date in reconciliation_summary MUST be identical (same date, just different formats). 3) If term length is mentioned, CALCULATE the end date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. 4) NEVER confuse or mix dates - if effective date is Dec 31, 2024, don't write Jan 1, 2025 in summary. 5) For business_description, use 2-3 word category. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
                             },
                             {
                                 role: "user",
@@ -1039,13 +1045,16 @@ Return ONLY this JSON:
             const prompt = `Read this ENTIRE contract carefully.
 
 CRITICAL DATE EXTRACTION INSTRUCTIONS:
-- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", or dates mentioned after "This agreement")
+- Find the EXACT effective date (look for phrases like "effective as of", "commencing on", "beginning", "start date", "effective from", or dates mentioned after "This agreement")
+- BE CONSISTENT: The same date MUST appear in both effective_date field AND in the reconciliation_summary
+- If the contract says "effective from January 1, 2025", use "2025-01-01" everywhere
 - Look for contract duration/term (e.g., "three-year term", "36 months", "expires after 2 years")
-- If you find an effective date AND a term length, CALCULATE the end date
+- If you find an effective date AND a term length, CALCULATE the end date precisely
 - Example: If effective date is January 1, 2025 and term is "three years", the end date is January 1, 2028
 - Example: "Three-year initial term" starting 1/1/2025 means renewal_date is 1/1/2028
 - Example: "36-month agreement" starting 7/1/2024 means renewal_date is 7/1/2027
 - Look for automatic renewal clauses that might affect the end date
+- IMPORTANT: Double-check that the effective date you extract matches what you write in the summary
 
 Extract:
 1. The vendor/supplier company name
@@ -1055,10 +1064,13 @@ Extract:
 5. A comprehensive 3-5 sentence summary of ALL terms relevant for invoice reconciliation
 
 DATE EXTRACTION RULES:
-- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01"
+- If the contract says "effective January 1, 2025" → effective_date: "2025-01-01" AND use "January 1, 2025" in summary
+- If the contract says "effective December 31, 2024" → effective_date: "2024-12-31" AND use "December 31, 2024" in summary
+- NEVER mix dates - if you extract "2025-01-01" as effective date, the summary must say "January 1, 2025" NOT any other date
 - If it mentions "three-year term" starting January 1, 2025 → renewal_date: "2028-01-01"
 - If it says "expires December 31, 2027" → renewal_date: "2027-12-31"
 - If it mentions "automatically renews for successive three-year terms" → include this in the summary
+- CONSISTENCY CHECK: The effective_date field and the date mentioned in reconciliation_summary MUST be the same date
 
 IMPORTANT: Include ALL of these if present:
 - The EXACT dates mentioned in the contract
@@ -1093,7 +1105,7 @@ Return ONLY this JSON:
                         messages: [
                             {
                                 role: "system",
-                                content: "You are an expert contract analyst. CRITICAL: Extract the EXACT effective date from the contract. If the contract mentions a term length (e.g., 'three-year term'), CALCULATE the end date by adding the term to the effective date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. For business_description, provide ONLY a 2-3 word service category. Format ALL dates as YYYY-MM-DD. Return ONLY valid JSON with accurate dates."
+                                content: "You are an expert contract analyst. CRITICAL RULES: 1) Extract the EXACT effective date from the contract - be precise. 2) The effective_date field and the date in reconciliation_summary MUST be identical (same date, just different formats). 3) If term length is mentioned, CALCULATE the end date. Example: Effective 1/1/2025 + three-year term = End date 1/1/2028. 4) NEVER confuse or mix dates - if effective date is Dec 31, 2024, don't write Jan 1, 2025 in summary. 5) For business_description, use 2-3 word category. Format dates as YYYY-MM-DD. Return ONLY valid JSON."
                             },
                             {
                                 role: "user", 
@@ -1133,6 +1145,63 @@ Return ONLY this JSON:
             }
         }
 
+        function formatDateForSummary(dateStr) {
+            // Convert YYYY-MM-DD to "Month Day, Year" format for summary
+            if (!dateStr || dateStr === 'null') return null;
+            try {
+                const date = new Date(dateStr + 'T00:00:00');
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                               'July', 'August', 'September', 'October', 'November', 'December'];
+                return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+            } catch (e) {
+                return dateStr;
+            }
+        }
+        
+        function fixDateInSummary(summary, correctDate) {
+            // Fix date inconsistencies in the summary
+            const correctDateFormatted = formatDateForSummary(correctDate);
+            
+            // Common date patterns to replace
+            const datePatterns = [
+                /January \d{1,2}, \d{4}/g,
+                /February \d{1,2}, \d{4}/g,
+                /March \d{1,2}, \d{4}/g,
+                /April \d{1,2}, \d{4}/g,
+                /May \d{1,2}, \d{4}/g,
+                /June \d{1,2}, \d{4}/g,
+                /July \d{1,2}, \d{4}/g,
+                /August \d{1,2}, \d{4}/g,
+                /September \d{1,2}, \d{4}/g,
+                /October \d{1,2}, \d{4}/g,
+                /November \d{1,2}, \d{4}/g,
+                /December \d{1,2}, \d{4}/g,
+                /\d{1,2}\/\d{1,2}\/\d{4}/g,
+                /\d{1,2}-\d{1,2}-\d{4}/g
+            ];
+            
+            let fixedSummary = summary;
+            let foundDate = false;
+            
+            // Try to find and replace the first date that looks like an effective date
+            for (const pattern of datePatterns) {
+                const matches = summary.match(pattern);
+                if (matches && matches.length > 0) {
+                    // Replace the first occurrence (likely the effective date)
+                    fixedSummary = summary.replace(matches[0], correctDateFormatted);
+                    foundDate = true;
+                    break;
+                }
+            }
+            
+            if (!foundDate) {
+                // If no date found, prepend the correct date to the summary
+                fixedSummary = `The contract is effective from ${correctDateFormatted}. ${summary}`;
+            }
+            
+            return fixedSummary;
+        }
+        
         function formatDate(dateStr) {
             if (!dateStr || dateStr === 'null') return 'Not specified';
             try {
@@ -1253,6 +1322,16 @@ Return ONLY this JSON:
                 // Clean up business_description if it's a sentence
                 if (parsed.business_description) {
                     parsed.business_description = cleanServiceCategory(parsed.business_description);
+                }
+                
+                // Validate date consistency
+                if (parsed.effective_date && parsed.reconciliation_summary) {
+                    const effectiveDateFormatted = formatDateForSummary(parsed.effective_date);
+                    if (!parsed.reconciliation_summary.includes(effectiveDateFormatted)) {
+                        console.warn('Date inconsistency detected - fixing summary to match effective date');
+                        // Try to fix the summary by replacing any wrong dates with the correct one
+                        parsed.reconciliation_summary = fixDateInSummary(parsed.reconciliation_summary, parsed.effective_date);
+                    }
                 }
                 
                 return parsed;
