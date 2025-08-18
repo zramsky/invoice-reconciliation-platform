@@ -1,0 +1,36 @@
+INVOICE RECONCILIATION PLATFORM TEST CONTRACT
+
+Contract Date: August 18, 2025
+Vendor: Fly.io Cloud Services
+Service: Backend Hosting and Infrastructure
+
+TERMS AND CONDITIONS:
+
+1. EFFECTIVE PERIOD
+This contract is effective from August 18, 2025, demonstrating the successful deployment of a strong Python Flask backend on Fly.io infrastructure.
+
+2. SERVICES PROVIDED
+- Cloud hosting for Invoice Reconciliation Platform backend
+- API endpoints for vendor management
+- File storage and serving capabilities  
+- Persistent data storage with JSON file system
+- High availability with auto-scaling
+
+3. TECHNICAL FEATURES
+- RESTful API with CORS support
+- File upload handling with secure filename processing
+- Vendor CRUD operations with unique UUID identification
+- Contract document storage and serving
+- Health check endpoints for monitoring
+
+4. DEPLOYMENT SUCCESS
+✅ Backend deployed to: https://invoice-reconciliation-backend.fly.dev
+✅ Frontend deployed to: https://contractrecplatform.web.app
+✅ End-to-end integration working
+✅ File persistence implemented
+✅ No local backend dependency required
+
+This contract demonstrates the successful implementation of a production-ready invoice reconciliation platform with cloud-based backend infrastructure.
+
+Signed: August 18, 2025
+Invoice Reconciliation Platform Team

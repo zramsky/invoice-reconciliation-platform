@@ -1,0 +1,12 @@
+[environments.production]
+[environments.production.deploy]
+startCommand = "gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 120 app:app"
+healthcheckPath = "/api/ping"
+healthcheckTimeout = 300
+restartPolicyType = "always"
+
+[environments.production.variables]
+PORT = { value = "8080" }
+OPENAI_API_KEY = { value = "sk-mock-key-for-development-testing-only" }
+UPLOAD_FOLDER = { value = "uploads" }
+MAX_FILE_SIZE = { value = "10485760" }

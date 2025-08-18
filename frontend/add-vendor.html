@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Vendor - Contract Reconciliation Platform</title>
+    <script src="config.js"></script>
+    <script src="firebase-backend.js"></script>
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -1709,15 +1711,23 @@ Return ONLY this JSON:
                 showToast('Saving vendor to server...', 'info');
                 
                 // Check if backend is available, fallback to localStorage if not
-                const backendUrl = window.location.hostname === 'localhost' ? 
-                    'http://localhost:5001' : 
-                    'https://invoice-reconciliation-platform.onrender.com';
+                const backendUrl = BackendConfig.getBackendUrl();
                 
-                try {
-                    const response = await fetch(`${backendUrl}/api/vendors`, {
-                        method: 'POST',
-                        body: apiFormData
-                    });
+                if (backendUrl) {
+                    try {
+                        let response;
+                        if (backendUrl === 'firebase') {
+                            response = await BackendConfig.makeRequest('/api/vendors', {
+                                method: 'POST',
+                                body: apiFormData
+                            });
+                        } else {
+                            // Use improved makeRequest with retry logic
+                            response = await BackendConfig.makeRequest('/api/vendors', {
+                                method: 'POST',
+                                body: apiFormData
+                            });
+                        }
                     
                     if (response.ok) {
                         const result = await response.json();
@@ -1758,52 +1768,51 @@ Return ONLY this JSON:
                     }
                 } catch (backendError) {
                     console.warn('Backend error, using localStorage fallback:', backendError);
-                    
-                    // Fallback to localStorage storage
-                    const vendor = {
-                        id: Date.now().toString(),
-                        name: name,
-                        vendor_name: name,
-                        business_description: businessDescription,
-                        effective_date: effectiveDate,
-                        renewal_date: renewalDate || null,
-                        upload_date: uploadDate,
-                        contract_date: effectiveDate,
-                        reconciliation_summary: reconciliationTerms,
-                        ai_extracted_name: contractAnalysis.vendor_name || '',
-                        ai_extracted_description: contractAnalysis.business_description || '',
-                        ai_extracted_summary: contractAnalysis.reconciliation_summary || '',
-                        contractFileData: await fileToBase64(uploadedFile),
-                        contractFile: uploadedFile.name,
-                        status: 'active',
-                        created_at: new Date().toISOString(),
-                        invoice_count: 0
-                    };
-                    
-                    const existingVendors = JSON.parse(localStorage.getItem('vendors') || '[]');
-                    const duplicate = existingVendors.find(v => 
-                        v.vendor_name?.toLowerCase() === name.toLowerCase() || 
-                        v.name?.toLowerCase() === name.toLowerCase()
-                    );
-                    
-                    if (duplicate) {
-                        const confirmed = confirm(`A vendor named "${name}" already exists. Do you want to create it anyway?`);
-                        if (!confirmed) {
-                            return;
-                        }
-                    }
-                    
-                    existingVendors.push(vendor);
-                    localStorage.setItem('vendors', JSON.stringify(existingVendors));
-                    
-                    console.log('Vendor saved to localStorage:', vendor);
-                    clearDraft();
-                    showToast('Vendor profile created successfully (offline mode)!', 'success');
-                    
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 1500);
+                    // Fall through to localStorage storage below
                 }
+                } else {
+                    // No backend available, use localStorage only
+                    console.warn('No backend configured, using localStorage only');
+                }
+                
+                // LocalStorage fallback storage (used when backend fails or is unavailable)
+                const vendor = {
+                    id: Date.now().toString(),
+                    name: name,
+                    vendor_name: name,
+                    business_description: businessDescription,
+                    effective_date: effectiveDate,
+                    renewal_date: renewalDate || null,
+                    upload_date: uploadDate,
+                    reconciliation_summary: reconciliationTerms,
+                    status: 'active',
+                    created_at: new Date().toISOString(),
+                    contractFile: uploadedFile ? uploadedFile.name : null,
+                    contractFileType: uploadedFile ? uploadedFile.type : null,
+                    contractFileSize: uploadedFile ? uploadedFile.size : null,
+                    contractFileData: contractData || null
+                };
+                
+                const existingVendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                const existingVendor = existingVendors.find(v => v.name === name || v.vendor_name === name);
+                
+                if (existingVendor) {
+                    const confirmed = confirm(`A vendor named "${name}" already exists. Do you want to create it anyway?`);
+                    if (!confirmed) {
+                        return;
+                    }
+                }
+                
+                existingVendors.push(vendor);
+                localStorage.setItem('vendors', JSON.stringify(existingVendors));
+                
+                console.log('Vendor saved to localStorage:', vendor);
+                clearDraft();
+                showToast(`Vendor profile created successfully${backendUrl ? '' : ' (offline mode)'}!`, 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
                 
             } catch (error) {
                 console.error('Error saving vendor:', error);

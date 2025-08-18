@@ -18,11 +18,6 @@ import tempfile
 app = Flask(__name__)
 CORS(app)
 
-# Load environment variables safely
-OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', 'not-configured')
-UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', 'uploads')
-MAX_FILE_SIZE = int(os.environ.get('MAX_FILE_SIZE', '10485760'))  # 10MB default
-
 # Configuration
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'tiff', 'bmp', 'doc', 'docx', 'txt'}
 
@@ -65,12 +60,10 @@ def index():
     return jsonify({
         "service": "Invoice Reconciliation Platform Backend",
         "status": "running",
-        "version": "2.0.1",
+        "version": "2.0.0",
         "platform": "Reliable Backend",
-        "startup_time": datetime.now().isoformat(),
         "endpoints": {
             "health": "/api/health",
-            "ping": "/api/ping",
             "vendors": "/api/vendors", 
             "create_vendor": "POST /api/vendors",
             "get_vendor": "GET /api/vendors/{id}",
@@ -79,22 +72,12 @@ def index():
         "demo_vendors": len(vendors_storage)
     })
 
-@app.route('/api/ping')
-def ping():
-    """Ultra-fast health check for load balancing"""
-    return jsonify({"status": "ok", "timestamp": datetime.now().isoformat()})
-
 @app.route('/api/health')
 def health_check():
     return jsonify({
         "status": "healthy", 
         "timestamp": datetime.now().isoformat(),
-        "vendors": len(vendors_storage),
-        "config": {
-            "openai_configured": OPENAI_API_KEY != 'not-configured' and not OPENAI_API_KEY.startswith('your_'),
-            "upload_folder": UPLOAD_FOLDER,
-            "max_file_size_mb": MAX_FILE_SIZE // (1024 * 1024)
-        }
+        "vendors": len(vendors_storage)
     })
 
 @app.route('/api/vendors', methods=['GET'])

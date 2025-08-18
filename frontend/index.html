@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice Reconciliation Platform Pro - Precision Contract Validation</title>
+    <script src="config.js"></script>
+    <script src="firebase-backend.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -4657,8 +4659,8 @@
                             <tr>
                                 <th>Vendor</th>
                                 <th>Description</th>
-                                <th class="sortable" onclick="sortTable('invoices')">Invoices</th>
-                                <th class="sortable" onclick="sortTable('lastUpdated')">Last Updated</th>
+                                <th class="sortable" onclick="sortTableSync('invoices')">Invoices</th>
+                                <th class="sortable" onclick="sortTableSync('lastUpdated')">Last Updated</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -4726,7 +4728,7 @@
         <div class="page-view" id="analysisView">
             <header>
                 <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
-                    <button class="btn btn-secondary" onclick="showDashboard()">
+                    <button class="btn btn-secondary" onclick="showDashboardSync()">
                         ← Back to Dashboard
                     </button>
                     <div>
@@ -4845,7 +4847,7 @@
         <!-- Processing Section -->
         <div class="processing-section hidden" id="processingSection">
             <div class="processing-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()">← Back to Dashboard</button>
+                <button class="back-to-dashboard-btn" onclick="showDashboardSync()">← Back to Dashboard</button>
                 <div class="processing-content">
                     <div class="spinner"></div>
                     <h2>Analyzing Terms. Cross-checking Figures.</h2>
@@ -4861,7 +4863,7 @@
         <!-- Results Section -->
         <div class="results-section hidden" id="resultsSection">
             <div class="results-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()" style="margin-bottom: 20px;">← Back to Dashboard</button>
+                <button class="back-to-dashboard-btn" onclick="showDashboardSync()" style="margin-bottom: 20px;">← Back to Dashboard</button>
                 <div class="results-title-section">
                     <h2>Validation Results</h2>
                     <div class="export-controls">
@@ -4918,7 +4920,7 @@
     <div class="page-view" id="aiProcessingView">
         <div class="ai-processing-container">
             <div class="ai-processing-header">
-                <button class="back-to-dashboard-btn" onclick="showDashboard()">← Back to Dashboard</button>
+                <button class="back-to-dashboard-btn" onclick="showDashboardSync()">← Back to Dashboard</button>
                 <h1>AI Document Analysis in Progress</h1>
                 <p class="ai-processing-subtitle">Watching AI extract and understand your documents</p>
             </div>
@@ -5015,7 +5017,7 @@
     <div class="page-view" id="vendorDetailsView">
         <header>
             <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 32px;">
-                <button class="btn btn-secondary" onclick="showDashboard()">
+                <button class="btn btn-secondary" onclick="showDashboardSync()">
                     ← Back to Dashboard
                 </button>
                 <div>
@@ -5437,12 +5439,33 @@
         // PAGE NAVIGATION SYSTEM
         // ===============================
 
-        function showDashboard() {
+        // Wrapper functions for onclick handlers (HTML can't handle async directly)
+        function showDashboardSync() {
+            showDashboard().catch(console.error);
+        }
+
+        function disableVendorSync(vendorId) {
+            disableVendor(vendorId).catch(console.error);
+        }
+
+        function enableVendorSync(vendorId) {
+            enableVendor(vendorId).catch(console.error);
+        }
+
+        function deleteVendorSync(vendorId) {
+            deleteVendor(vendorId).catch(console.error);
+        }
+
+        function sortTableSync(field) {
+            sortTable(field).catch(console.error);
+        }
+
+        async function showDashboard() {
             document.querySelectorAll('.page-view').forEach(view => {
                 view.classList.remove('active');
             });
             document.getElementById('dashboardView').classList.add('active');
-            loadDashboard();
+            await loadDashboard();
         }
 
         function showAnalysis() {
@@ -5480,22 +5503,18 @@
         let vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
         let currentSort = { field: null, direction: 'asc' };
 
-        function loadDashboard() {
+        async function loadDashboard() {
+            await loadVendorsTable();
             updateKPIs();
-            loadVendorsTable();
         }
 
         function updateKPIs() {
-            // Always reload vendors from localStorage to get latest data
-            vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
-            
+            // Use vendors already loaded by loadVendorsFromBackend()
             // Clean up any duplicate vendors before calculating KPIs
             removeDuplicateVendors();
             
             // Calculate KPI values from reconciliation history and vendors
             const history = JSON.parse(localStorage.getItem('reconciliation_history') || '[]');
-            
-            console.log('Updating KPIs with', vendors.length, 'total vendors');
             
             // Total Invoice Drift - sum of all discrepancy values
             let totalDrift = 0;
@@ -5534,12 +5553,98 @@
             document.getElementById('totalDriftValue').textContent = `$${totalDrift.toLocaleString('en-US', { minimumFractionDigits: 2 })}`;
             document.getElementById('activeVendorsValue').textContent = activeVendors.toString();
             document.getElementById('reviewedInvoicesValue').textContent = reviewedInvoices.toString();
+            
+            console.log('Updated KPIs:', activeVendors, 'vendors');
         }
 
-        function loadVendorsTable() {
-            // Always reload vendors from localStorage to get latest data
-            vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
-            console.log('Loading vendors table, found', vendors.length, 'vendors:', vendors);
+        async function loadVendorsFromBackend() {
+            try {
+                // Show loading state
+                showNotification('🔄 Loading vendors from backend...', 'info');
+                
+                // Check if BackendConfig is available
+                if (typeof BackendConfig === 'undefined') {
+                    console.error('BackendConfig not loaded, using localStorage');
+                    vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                    showNotification('⚠️ Backend unavailable, using local storage', 'warning');
+                    return;
+                }
+                
+                const backendUrl = BackendConfig.getBackendUrl();
+                
+                if (!backendUrl) {
+                    vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                    showNotification('💾 Using local storage mode', 'info');
+                    return;
+                }
+
+                showNotification('🌐 Connecting to backend...', 'info');
+
+                // Use enhanced backend request method
+                let response;
+                if (backendUrl === 'firebase') {
+                    response = await BackendConfig.makeRequest('/api/vendors');
+                } else {
+                    // Use improved makeRequest with retry logic
+                    response = await BackendConfig.makeRequest('/api/vendors');
+                }
+                
+                if (response.ok) {
+                    const backendVendors = await response.json();
+                    console.log('Loaded', backendVendors.length, 'vendors from backend');
+                    
+                    // Merge with localStorage vendors for compatibility
+                    const localVendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                    
+                    // Create a map to avoid duplicates (backend takes priority)
+                    const vendorMap = new Map();
+                    
+                    // Add local vendors first
+                    localVendors.forEach(vendor => {
+                        vendorMap.set(vendor.id, vendor);
+                    });
+                    
+                    // Add/update with backend vendors (they take priority)
+                    backendVendors.forEach(vendor => {
+                        // Convert backend format to frontend format
+                        const formattedVendor = {
+                            id: vendor.id,
+                            name: vendor.name,
+                            vendor_name: vendor.name,
+                            business_description: vendor.business_description || '',
+                            effective_date: vendor.effective_date || '',
+                            renewal_date: vendor.renewal_date || '',
+                            upload_date: vendor.upload_date || vendor.created_at,
+                            reconciliation_summary: vendor.reconciliation_summary || '',
+                            status: vendor.status || 'active',
+                            created_at: vendor.created_at,
+                            // Backend contract URLs
+                            contract_url: vendor.contract_url ? `${backendUrl}${vendor.contract_url}` : null,
+                            contract_file_path: vendor.contract_file_path ? `${backendUrl}${vendor.contract_url}` : null,
+                            contractFile: vendor.contract_filename || null
+                        };
+                        vendorMap.set(vendor.id, formattedVendor);
+                    });
+                    
+                    vendors = Array.from(vendorMap.values());
+                    console.log('Merged vendors:', vendors.length);
+                    showNotification(`✅ Loaded ${vendors.length} vendors from backend`, 'success');
+                } else {
+                    console.warn('Backend request failed, using localStorage fallback');
+                    vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                    showNotification('⚠️ Backend failed, using local storage', 'warning');
+                }
+            } catch (error) {
+                console.error('Error loading from backend:', error);
+                vendors = JSON.parse(localStorage.getItem('vendors') || '[]');
+                showNotification(`❌ Backend error: ${error.message}. Using local storage.`, 'error');
+            }
+        }
+
+        async function loadVendorsTable() {
+            // Try to load from backend first, then fallback to localStorage
+            await loadVendorsFromBackend();
+            console.log('Loading vendors table with', vendors.length, 'vendors');
             
             const tableBody = document.getElementById('vendorsTableBody');
             const emptyState = document.getElementById('emptyVendors');
@@ -5619,10 +5724,10 @@
                     <td>${lastUpdated}</td>
                     <td>
                         <div class="vendor-actions">
-                            <button class="btn-icon" onclick="disableVendor('${vendor.id}')" title="Disable vendor">
+                            <button class="btn-icon" onclick="disableVendorSync('${vendor.id}')" title="Disable vendor">
                                 Pause
                             </button>
-                            <button class="btn-icon btn-danger" onclick="deleteVendor('${vendor.id}')" title="Delete vendor permanently">
+                            <button class="btn-icon btn-danger" onclick="deleteVendorSync('${vendor.id}')" title="Delete vendor permanently">
                                 Delete
                             </button>
                         </div>
@@ -5674,10 +5779,10 @@
                         <td>${disabledDate}</td>
                         <td>
                             <div class="vendor-actions">
-                                <button class="btn-icon" onclick="enableVendor('${vendor.id}')" title="Re-enable vendor">
+                                <button class="btn-icon" onclick="enableVendorSync('${vendor.id}')" title="Re-enable vendor">
                                     Enable
                                 </button>
-                                <button class="btn-icon btn-danger" onclick="deleteVendor('${vendor.id}')" title="Delete vendor permanently">
+                                <button class="btn-icon btn-danger" onclick="deleteVendorSync('${vendor.id}')" title="Delete vendor permanently">
                                     Delete
                                 </button>
                             </div>
@@ -5706,7 +5811,7 @@
             }
         }
 
-        function disableVendor(vendorId) {
+        async function disableVendor(vendorId) {
             const vendor = vendors.find(v => v.id === vendorId);
             if (!vendor) return;
             
@@ -5716,12 +5821,12 @@
                 vendor.lastUpdated = new Date().toISOString();
                 
                 localStorage.setItem('vendors', JSON.stringify(vendors));
-                loadVendorsTable();
+                await loadVendorsTable();
                 updateKPIs();
             }
         }
 
-        function enableVendor(vendorId) {
+        async function enableVendor(vendorId) {
             const vendor = vendors.find(v => v.id === vendorId);
             if (!vendor) return;
             
@@ -5731,12 +5836,12 @@
                 vendor.lastUpdated = new Date().toISOString();
                 
                 localStorage.setItem('vendors', JSON.stringify(vendors));
-                loadVendorsTable();
+                await loadVendorsTable();
                 updateKPIs();
             }
         }
 
-        function deleteVendor(vendorId) {
+        async function deleteVendor(vendorId) {
             const vendor = vendors.find(v => v.id === vendorId);
             if (!vendor) return;
             
@@ -5749,7 +5854,7 @@
                     if (vendorIndex > -1) {
                         vendors.splice(vendorIndex, 1);
                         localStorage.setItem('vendors', JSON.stringify(vendors));
-                        loadVendorsTable();
+                        await loadVendorsTable();
                         updateKPIs();
                         alert(`"${vendor.name}" has been permanently deleted.`);
                     }
@@ -5759,7 +5864,7 @@
             }
         }
 
-        function sortTable(field) {
+        async function sortTable(field) {
             // Update sort direction
             if (currentSort.field === field) {
                 currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
@@ -5780,7 +5885,7 @@
                 sortedTh.classList.add(`sorted-${currentSort.direction}`);
             }
             
-            loadVendorsTable();
+            await loadVendorsTable();
         }
 
         function filterVendors() {
@@ -6351,7 +6456,7 @@ Return ONLY this JSON structure:
                 
                 // Close modal and refresh dashboard
                 closeAddVendorModal();
-                loadDashboard();
+                await loadDashboard();
                 
                 // Show success message
                 showToast('Vendor added successfully with AI contract analysis!', 'success');
@@ -6617,7 +6722,7 @@ Return ONLY this JSON structure:
                         <button class="btn btn-primary" onclick="downloadBulkReport()">
                             📊 Download Detailed Report
                         </button>
-                        <button class="btn btn-secondary" onclick="showDashboard()">
+                        <button class="btn btn-secondary" onclick="showDashboardSync()">
                             ← Back to Dashboard
                         </button>
                     </div>
@@ -6686,7 +6791,7 @@ Return ONLY this JSON structure:
         // ===============================
 
         // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             loadSettings();
             setupEventListeners();
             setupDragAndDrop();
@@ -6703,12 +6808,12 @@ Return ONLY this JSON structure:
             }
             
             // Load dashboard data on startup
-            loadDashboard();
+            await loadDashboard();
         });
         
         // Reload dashboard when page gains focus (user returns from add vendor page)
-        window.addEventListener('focus', function() {
-            loadDashboard();
+        window.addEventListener('focus', async function() {
+            await loadDashboard();
         });
         
         function navigateToAddVendor(button) {
@@ -7449,13 +7554,13 @@ Return ONLY this JSON structure:
                         } else {
                             console.warn('Vendor not found after creation, refreshing and going to dashboard');
                             // Try to reload and go to dashboard
-                            loadDashboard();
+                            await loadDashboard();
                             showDashboard();
                         }
                     } catch (error) {
                         console.error('Error during redirect:', error);
                         // Fallback to dashboard
-                        loadDashboard();
+                        await loadDashboard();
                         showDashboard();
                     }
                 }, 3000);
@@ -8216,7 +8321,7 @@ Return ONLY this JSON structure:
                 
                 // Update dashboard if on dashboard view
                 if (document.getElementById('dashboardView').classList.contains('active')) {
-                    loadDashboard();
+                    await loadDashboard();
                 }
                 
             } catch (error) {

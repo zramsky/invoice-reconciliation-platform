@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Test</title>
+    <script src="config.js"></script>
+</head>
+<body>
+    <h1>Backend Integration Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testBackend() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing backend connection...</p>';
+            
+            try {
+                console.log('🔍 Testing BackendConfig');
+                
+                if (typeof BackendConfig === 'undefined') {
+                    results.innerHTML += '<p>❌ BackendConfig is undefined!</p>';
+                    return;
+                }
+                
+                const backendUrl = BackendConfig.getBackendUrl();
+                results.innerHTML += `<p>🌐 Backend URL: ${backendUrl}</p>`;
+                
+                if (!backendUrl) {
+                    results.innerHTML += '<p>❌ No backend URL returned!</p>';
+                    return;
+                }
+                
+                results.innerHTML += '<p>🚀 Fetching vendors...</p>';
+                const response = await fetch(`${backendUrl}/api/vendors`);
+                
+                results.innerHTML += `<p>📡 Response: ${response.status} ${response.statusText}</p>`;
+                
+                if (response.ok) {
+                    const vendors = await response.json();
+                    results.innerHTML += `<p>✅ Success! Found ${vendors.length} vendors:</p>`;
+                    results.innerHTML += `<pre>${JSON.stringify(vendors, null, 2)}</pre>`;
+                } else {
+                    results.innerHTML += `<p>❌ Request failed: ${response.status}</p>`;
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<p>💥 Error: ${error.message}</p>`;
+                console.error('Test error:', error);
+            }
+        }
+        
+        // Run test on load
+        document.addEventListener('DOMContentLoaded', testBackend);
+    </script>
+</body>
+</html>

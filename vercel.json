@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/vendors.py": {
+      "runtime": "@vercel/python"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/vendors.py"
+    }
+  ]
+}

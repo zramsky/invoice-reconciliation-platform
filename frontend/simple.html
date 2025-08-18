@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Vendor Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .kpi { display: inline-block; margin: 20px; padding: 20px; border: 1px solid #ccc; }
+        .vendor { border: 1px solid #ddd; margin: 10px 0; padding: 10px; }
+        .loading { color: #666; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Simple Vendor Dashboard</h1>
+    
+    <div class="kpi">
+        <h3>Active Vendors</h3>
+        <div id="activeVendorCount">Loading...</div>
+    </div>
+    
+    <h2>Vendors</h2>
+    <div id="vendorsList">Loading vendors...</div>
+    
+    <button onclick="loadData()">Reload Data</button>
+    
+    <script>
+        const BACKEND_URL = 'https://invoice-reconciliation-backend.fly.dev';
+        
+        async function loadData() {
+            const countEl = document.getElementById('activeVendorCount');
+            const listEl = document.getElementById('vendorsList');
+            
+            countEl.textContent = 'Loading...';
+            listEl.innerHTML = '<div class="loading">Loading vendors...</div>';
+            
+            try {
+                console.log('Fetching from:', BACKEND_URL + '/api/vendors');
+                const response = await fetch(BACKEND_URL + '/api/vendors');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const vendors = await response.json();
+                console.log('Received vendors:', vendors);
+                
+                // Update count
+                const activeVendors = vendors.filter(v => !v.status || v.status === 'active');
+                countEl.textContent = activeVendors.length;
+                countEl.className = 'success';
+                
+                // Update list
+                if (activeVendors.length === 0) {
+                    listEl.innerHTML = '<div>No vendors found</div>';
+                } else {
+                    listEl.innerHTML = activeVendors.map(vendor => `
+                        <div class="vendor">
+                            <strong>${vendor.name}</strong><br>
+                            Description: ${vendor.business_description || 'N/A'}<br>
+                            Effective Date: ${vendor.effective_date || 'N/A'}<br>
+                            Status: ${vendor.status || 'active'}<br>
+                            Created: ${vendor.created_at ? new Date(vendor.created_at).toLocaleDateString() : 'N/A'}
+                        </div>
+                    `).join('');
+                }
+                
+            } catch (error) {
+                console.error('Error loading vendors:', error);
+                countEl.textContent = 'Error';
+                countEl.className = 'error';
+                listEl.innerHTML = `<div class="error">Error loading vendors: ${error.message}</div>`;
+            }
+        }
+        
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
