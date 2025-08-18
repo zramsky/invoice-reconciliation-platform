@@ -14,9 +14,18 @@ from datetime import datetime
 import base64
 import requests
 import tempfile
+from database import get_db, init_db
+from monitoring import get_monitor, get_profiler, create_monitoring_middleware
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
+
+# Add monitoring middleware
+app = create_monitoring_middleware(app)
 
 # Load environment variables safely
 OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY', 'not-configured')
@@ -26,36 +35,14 @@ MAX_FILE_SIZE = int(os.environ.get('MAX_FILE_SIZE', '10485760'))  # 10MB default
 # Configuration
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'tiff', 'bmp', 'doc', 'docx', 'txt'}
 
-# Simple in-memory storage that survives for session
-vendors_storage = {
-    "demo-vendor-1": {
-        "id": "demo-vendor-1",
-        "name": "Demo Vendor Company",
-        "business_description": "Sample vendor for testing platform functionality",
-        "effective_date": "2025-08-18",
-        "renewal_date": "2026-08-18",
-        "reconciliation_summary": "Standard contract terms with monthly reconciliation",
-        "upload_date": "2025-08-18T16:15:00.000Z",
-        "created_at": "2025-08-18T16:15:00.000Z",
-        "status": "active",
-        "contract_file_path": None,
-        "contract_url": None
-    },
-    "demo-vendor-2": {
-        "id": "demo-vendor-2", 
-        "name": "Test Services Inc",
-        "business_description": "Another sample vendor with contract file",
-        "effective_date": "2025-08-17",
-        "renewal_date": "2026-08-17",
-        "reconciliation_summary": "Premium service contract with weekly reconciliation",
-        "upload_date": "2025-08-18T16:16:00.000Z",
-        "created_at": "2025-08-18T16:16:00.000Z",
-        "status": "active", 
-        "contract_file_path": "demo-contract.txt",
-        "contract_url": "/api/vendors/demo-vendor-2/contract",
-        "contract_content": "DEMO CONTRACT\n\nContract Date: August 17, 2025\nVendor: Test Services Inc\nService: Premium Testing Services\n\nThis is a demo contract file to test the platform functionality.\n\nTERMS:\n1. Service delivery weekly\n2. Monthly reconciliation process\n3. Standard payment terms\n\nSigned: Test Services Inc"
-    }
-}
+# Initialize database on startup
+try:
+    init_db()
+    database = get_db()
+    print("✅ Database initialized successfully")
+except Exception as e:
+    print(f"❌ Database initialization failed: {e}")
+    database = None
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -76,7 +63,7 @@ def index():
             "get_vendor": "GET /api/vendors/{id}",
             "serve_contract": "GET /api/vendors/{id}/contract"
         },
-        "demo_vendors": len(vendors_storage)
+        "database_status": database.get_health_stats() if database else {"connected": False, "error": "Database not initialized"}
     })
 
 @app.route('/api/ping')
@@ -84,23 +71,56 @@ def ping():
     """Ultra-fast health check for load balancing"""
     return jsonify({"status": "ok", "timestamp": datetime.now().isoformat()})
 
+@app.route('/api/monitor/health')
+def monitor_health():
+    """Comprehensive health monitoring endpoint"""
+    monitor = get_monitor()
+    
+    return jsonify({
+        "service": monitor.get_health_report(),
+        "database": monitor.check_database_health(),
+        "dependencies": monitor.check_external_dependencies()
+    })
+
+@app.route('/api/monitor/performance')
+def monitor_performance():
+    """Performance monitoring endpoint"""
+    profiler = get_profiler()
+    monitor = get_monitor()
+    
+    return jsonify({
+        "endpoints": profiler.get_endpoint_report(),
+        "overall": monitor.get_health_report()["metrics"]
+    })
+
 @app.route('/api/health')
 def health_check():
+    db_stats = database.get_health_stats() if database else {"connected": False, "total_vendors": 0}
+    
     return jsonify({
         "status": "healthy", 
         "timestamp": datetime.now().isoformat(),
-        "vendors": len(vendors_storage),
+        "vendors": db_stats.get("total_vendors", 0),
+        "database": db_stats,
         "config": {
             "openai_configured": OPENAI_API_KEY != 'not-configured' and not OPENAI_API_KEY.startswith('your_'),
             "upload_folder": UPLOAD_FOLDER,
-            "max_file_size_mb": MAX_FILE_SIZE // (1024 * 1024)
+            "max_file_size_mb": MAX_FILE_SIZE // (1024 * 1024),
+            "database_type": db_stats.get("database_type", "none")
         }
     })
 
 @app.route('/api/vendors', methods=['GET'])
 def get_vendors():
     """Get all vendors"""
-    return jsonify(list(vendors_storage.values()))
+    try:
+        if not database:
+            return jsonify({"error": "Database not available"}), 500
+        
+        vendors = database.get_all_vendors()
+        return jsonify(vendors)
+    except Exception as e:
+        return jsonify({"error": f"Failed to fetch vendors: {str(e)}"}), 500
 
 @app.route('/api/vendors', methods=['POST'])
 def create_vendor():
@@ -136,12 +156,15 @@ def create_vendor():
                 vendor_data["contract_filename"] = secure_filename(contract_file.filename)
                 vendor_data["contract_url"] = f"/api/vendors/{vendor_id}/contract"
 
-        # Store vendor data
-        vendors_storage[vendor_id] = vendor_data
+        # Store vendor data in database
+        if not database:
+            return jsonify({"error": "Database not available"}), 500
+        
+        vendor = database.create_vendor(vendor_data)
         
         return jsonify({
             "message": "Vendor created successfully",
-            "vendor": vendor_data
+            "vendor": vendor
         }), 201
 
     except Exception as e:
@@ -150,31 +173,44 @@ def create_vendor():
 @app.route('/api/vendors/<vendor_id>')
 def get_vendor(vendor_id):
     """Get a specific vendor"""
-    if vendor_id not in vendors_storage:
-        return jsonify({"error": "Vendor not found"}), 404
-    
-    return jsonify(vendors_storage[vendor_id])
+    try:
+        if not database:
+            return jsonify({"error": "Database not available"}), 500
+        
+        vendor = database.get_vendor(vendor_id)
+        if not vendor:
+            return jsonify({"error": "Vendor not found"}), 404
+        
+        return jsonify(vendor)
+    except Exception as e:
+        return jsonify({"error": f"Failed to fetch vendor: {str(e)}"}), 500
 
 @app.route('/api/vendors/<vendor_id>/contract')
 def serve_contract(vendor_id):
     """Serve the contract file for viewing"""
-    if vendor_id not in vendors_storage:
-        return jsonify({"error": "Vendor not found"}), 404
-    
-    vendor = vendors_storage[vendor_id]
-    if not vendor.get('contract_content'):
-        return jsonify({"error": "Contract file not found"}), 404
-    
-    from flask import Response
-    
-    filename = vendor.get('contract_filename', 'contract.txt')
-    content = vendor.get('contract_content', '')
-    
-    return Response(
-        content,
-        mimetype='text/plain',
-        headers={"Content-Disposition": f"inline; filename={filename}"}
-    )
+    try:
+        if not database:
+            return jsonify({"error": "Database not available"}), 500
+        
+        vendor = database.get_vendor(vendor_id)
+        if not vendor:
+            return jsonify({"error": "Vendor not found"}), 404
+        
+        if not vendor.get('contract_content'):
+            return jsonify({"error": "Contract file not found"}), 404
+        
+        from flask import Response
+        
+        filename = vendor.get('contract_filename', 'contract.txt')
+        content = vendor.get('contract_content', '')
+        
+        return Response(
+            content,
+            mimetype='text/plain',
+            headers={"Content-Disposition": f"inline; filename={filename}"}
+        )
+    except Exception as e:
+        return jsonify({"error": f"Failed to serve contract: {str(e)}"}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
