@@ -1711,7 +1711,7 @@ Return ONLY this JSON:
                 // Check if backend is available, fallback to localStorage if not
                 const backendUrl = window.location.hostname === 'localhost' ? 
                     'http://localhost:5001' : 
-                    'https://your-backend-url.herokuapp.com'; // TODO: Replace with actual deployed backend URL
+                    'https://invoice-reconciliation-platform.onrender.com';
                 
                 try {
                     const response = await fetch(`${backendUrl}/api/vendors`, {

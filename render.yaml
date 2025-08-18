@@ -1,11 +1,11 @@
 services:
   - type: web
     name: invoice-reconciliation-backend
-    env: python
+    runtime: python
     region: oregon
     plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
+    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    startCommand: gunicorn app:app
     envVars:
-      - key: DEBUG
-        value: "False"
+      - key: PYTHON_VERSION
+        value: "3.11.0"
