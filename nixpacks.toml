@@ -2,10 +2,10 @@
 nixPkgs = ['python3', 'pip3']
 
 [phases.install]
-cmds = ['pip install Flask==3.1.1']
+cmds = ['pip install -r requirements_minimal.txt']
 
 [phases.build]
 cmds = ['echo "Build complete"']
 
 [start]
-cmd = 'python simple.py'
+cmd = 'python app_railway.py'
