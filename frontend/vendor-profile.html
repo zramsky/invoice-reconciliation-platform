@@ -961,12 +961,40 @@
             // Debug: Log vendor data to console
             console.log('Current vendor data:', currentVendor);
             console.log('Contract file check:', {
+                contract_url: currentVendor.contract_url,
+                contract_file_path: currentVendor.contract_file_path,
                 contractFileData: currentVendor.contractFileData,
                 contract_file: currentVendor.contract_file,
-                contractFile: currentVendor.contractFile,
-                hasContractData: !!(currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile)
+                contractFile: currentVendor.contractFile
             });
             
+            // Try backend URL first, then fallback to base64 data
+            if (currentVendor.contract_url || currentVendor.contract_file_path) {
+                const contractUrl = currentVendor.contract_url || currentVendor.contract_file_path;
+                
+                // Create a new window/tab to display the contract via backend
+                const newWindow = window.open(contractUrl, '_blank');
+                
+                if (!newWindow) {
+                    showToast('Pop-up blocked. Please allow pop-ups for this site.', 'error');
+                    return;
+                }
+                
+                // Check if the URL loads successfully
+                newWindow.addEventListener('error', () => {
+                    newWindow.close();
+                    // Fallback to base64 data if backend fails
+                    viewContractFallback();
+                });
+                
+                return;
+            }
+            
+            // Fallback to base64 data for offline/legacy vendors
+            viewContractFallback();
+        }
+        
+        function viewContractFallback() {
             if (currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile) {
                 const contractData = currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile;
                 
@@ -1026,6 +1054,23 @@
         }
 
         function downloadContract() {
+            // Try backend download URL first
+            if (currentVendor.contract_url || currentVendor.contract_file_path) {
+                const downloadUrl = (currentVendor.contract_url || currentVendor.contract_file_path) + '/download';
+                
+                // Create download link
+                const downloadLink = document.createElement('a');
+                downloadLink.href = downloadUrl;
+                downloadLink.download = currentVendor.contractFile || 'contract.pdf';
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                
+                showToast('Downloading contract...', 'info');
+                return;
+            }
+            
+            // Fallback to base64 data
             if (currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile) {
                 const contractData = currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile;
                 const fileName = currentVendor.contractFile || currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf';
@@ -1037,8 +1082,10 @@
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
+                
+                showToast('Downloading contract...', 'info');
             } else {
-                alert('Contract document not available for download');
+                showToast('Contract document not available for download', 'error');
             }
         }
 
