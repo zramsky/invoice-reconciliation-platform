@@ -1709,8 +1709,12 @@ Return ONLY this JSON:
                 showToast('Saving vendor to server...', 'info');
                 
                 // Check if backend is available, fallback to localStorage if not
+                const backendUrl = window.location.hostname === 'localhost' ? 
+                    'http://localhost:5001' : 
+                    'https://your-backend-url.herokuapp.com'; // TODO: Replace with actual deployed backend URL
+                
                 try {
-                    const response = await fetch('/api/vendors', {
+                    const response = await fetch(`${backendUrl}/api/vendors`, {
                         method: 'POST',
                         body: apiFormData
                     });
@@ -1730,10 +1734,10 @@ Return ONLY this JSON:
                             reconciliation_summary: reconciliationTerms,
                             status: 'active',
                             created_at: new Date().toISOString(),
-                            contract_file_path: `/api/vendors/${result.vendor_id}/contract`,
+                            contract_file_path: `${backendUrl}/api/vendors/${result.vendor_id}/contract`,
                             contractFile: uploadedFile.name,
                             // Add backend URL for contract viewing
-                            contract_url: `/api/vendors/${result.vendor_id}/contract`
+                            contract_url: `${backendUrl}/api/vendors/${result.vendor_id}/contract`
                         };
                         
                         const existingVendors = JSON.parse(localStorage.getItem('vendors') || '[]');
