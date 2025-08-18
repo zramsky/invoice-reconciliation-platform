@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Unspend</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --orange-600: #FF7A1A;
+            --orange-500: #FF8C3A;
+            --orange-400: #FF9C66;
+            --ink-900: #0B0B0C;
+            --ink-800: #111113;
+            --ink-600: #2A2A2E;
+            --cloud-200: #EDEEF0;
+            --cloud-100: #F7F7F8;
+            --error: #FF5252;
+            --success: #00E676;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FF7A1A 0%, #FF9C66 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .signup-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 420px;
+            padding: 3rem 2rem;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--orange-600);
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: var(--ink-600);
+            font-size: 0.9rem;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ink-900);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .form-subtitle {
+            color: var(--ink-600);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--ink-800);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 2px solid var(--cloud-200);
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--orange-600);
+            box-shadow: 0 0 0 3px rgba(255, 122, 26, 0.1);
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .notice-banner {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: #856404;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--orange-600);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            background: var(--orange-500);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 122, 26, 0.3);
+        }
+
+        .submit-btn:disabled {
+            background: var(--cloud-200);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--ink-600);
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--cloud-200);
+        }
+
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .login-link {
+            text-align: center;
+            color: var(--ink-600);
+        }
+
+        .login-link a {
+            color: var(--orange-600);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--ink-600);
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--orange-600);
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading {
+            display: none;
+        }
+
+        .loading.show {
+            display: inline-block;
+        }
+
+        .password-requirements {
+            font-size: 0.75rem;
+            color: var(--ink-600);
+            margin-top: 0.5rem;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <a href="/" class="back-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+            Back to home
+        </a>
+
+        <div class="logo">
+            <h1>Unspend</h1>
+            <p>Cut waste. Keep the signal.</p>
+        </div>
+
+        <h2 class="form-title">Create your account</h2>
+        <p class="form-subtitle">Start saving money with AI-powered reconciliation</p>
+
+        <div class="notice-banner">
+            ⚠️ <strong>Demo Mode:</strong> Registration is currently disabled. Backend deployment in progress. Use login with demo@unspend.com / Demo123! to test.
+        </div>
+
+        <form id="signupForm">
+            <div class="form-group">
+                <label class="form-label" for="fullName">Full Name</label>
+                <input 
+                    type="text" 
+                    id="fullName" 
+                    class="form-input" 
+                    placeholder="Enter your full name"
+                    required
+                >
+                <div class="error-message" id="nameError">Please enter your full name</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="email">Email</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    class="form-input" 
+                    placeholder="Enter your email"
+                    required
+                >
+                <div class="error-message" id="emailError">Please enter a valid email</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    class="form-input" 
+                    placeholder="Create a password"
+                    required
+                >
+                <div class="password-requirements">
+                    Password must be at least 8 characters long and include uppercase, lowercase, and a number.
+                </div>
+                <div class="error-message" id="passwordError">Password requirements not met</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="confirmPassword">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    class="form-input" 
+                    placeholder="Confirm your password"
+                    required
+                >
+                <div class="error-message" id="confirmError">Passwords do not match</div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <span class="button-text">Create Account</span>
+                <span class="spinner loading" id="spinner"></span>
+            </button>
+        </form>
+
+        <div class="divider">
+            <span>or</span>
+        </div>
+
+        <div class="login-link">
+            Already have an account? <a href="/login">Sign in</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signupForm');
+        const nameInput = document.getElementById('fullName');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const submitBtn = document.getElementById('submitBtn');
+        const spinner = document.getElementById('spinner');
+
+        function validatePassword(password) {
+            const minLength = password.length >= 8;
+            const hasUpper = /[A-Z]/.test(password);
+            const hasLower = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            return minLength && hasUpper && hasLower && hasNumber;
+        }
+
+        function showError(inputId, errorId, message) {
+            document.getElementById(inputId).classList.add('error');
+            const errorEl = document.getElementById(errorId);
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+
+        function clearErrors() {
+            document.querySelectorAll('.error-message').forEach(el => el.classList.remove('show'));
+            document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            clearErrors();
+            
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const password = passwordInput.value;
+            const confirmPassword = confirmPasswordInput.value;
+            
+            let hasErrors = false;
+            
+            // Validate name
+            if (!name || name.length < 2) {
+                showError('fullName', 'nameError', 'Please enter your full name');
+                hasErrors = true;
+            }
+            
+            // Validate email
+            if (!email || !email.includes('@')) {
+                showError('email', 'emailError', 'Please enter a valid email address');
+                hasErrors = true;
+            }
+            
+            // Validate password
+            if (!validatePassword(password)) {
+                showError('password', 'passwordError', 'Password must be at least 8 characters with uppercase, lowercase, and number');
+                hasErrors = true;
+            }
+            
+            // Validate password confirmation
+            if (password !== confirmPassword) {
+                showError('confirmPassword', 'confirmError', 'Passwords do not match');
+                hasErrors = true;
+            }
+            
+            if (hasErrors) return;
+            
+            // Show loading state
+            submitBtn.disabled = true;
+            document.querySelector('.button-text').style.display = 'none';
+            spinner.classList.add('show');
+            
+            // Simulate signup attempt (will fail without backend)
+            setTimeout(() => {
+                alert('Registration is currently disabled while backend is being deployed. Please use the demo login for now!');
+                
+                // Reset form
+                submitBtn.disabled = false;
+                document.querySelector('.button-text').style.display = 'inline';
+                spinner.classList.remove('show');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
