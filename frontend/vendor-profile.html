@@ -920,9 +920,9 @@
             const contractViewer = document.getElementById('contractViewer');
             
             // Check if contract file data is available
-            if (currentVendor.contract_file || currentVendor.contractFile) {
-                const contractData = currentVendor.contract_file || currentVendor.contractFile;
-                const fileName = currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf';
+            if (currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile) {
+                const contractData = currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile;
+                const fileName = currentVendor.contractFile || currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf';
                 
                 contractViewer.innerHTML = `
                     <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -958,18 +958,36 @@
         }
 
         function viewContract() {
-            if (currentVendor.contract_file || currentVendor.contractFile) {
-                const contractData = currentVendor.contract_file || currentVendor.contractFile;
+            // Debug: Log vendor data to console
+            console.log('Current vendor data:', currentVendor);
+            console.log('Contract file check:', {
+                contractFileData: currentVendor.contractFileData,
+                contract_file: currentVendor.contract_file,
+                contractFile: currentVendor.contractFile,
+                hasContractData: !!(currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile)
+            });
+            
+            if (currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile) {
+                const contractData = currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile;
                 
                 // Create a new window/tab to display the contract
                 const newWindow = window.open('', '_blank');
+                
+                if (!newWindow) {
+                    showToast('Pop-up blocked. Please allow pop-ups for this site.', 'error');
+                    return;
+                }
+                
                 if (contractData.startsWith('data:application/pdf')) {
                     // PDF file - display in iframe
                     newWindow.document.write(`
                         <html>
-                            <head><title>Contract Document</title></head>
-                            <body style="margin: 0; padding: 0;">
-                                <iframe src="${contractData}" style="width: 100%; height: 100vh; border: none;"></iframe>
+                            <head><title>Contract Document - ${currentVendor.vendor_name || 'Unknown Vendor'}</title></head>
+                            <body style="margin: 0; padding: 0; background: #f0f0f0;">
+                                <div style="padding: 10px; background: #333; color: white; text-align: center; font-family: Arial;">
+                                    Contract: ${currentVendor.contractFile || currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf'}
+                                </div>
+                                <iframe src="${contractData}" style="width: 100%; height: calc(100vh - 40px); border: none;"></iframe>
                             </body>
                         </html>
                     `);
@@ -977,22 +995,40 @@
                     // Image file - display as image
                     newWindow.document.write(`
                         <html>
-                            <head><title>Contract Document</title></head>
-                            <body style="margin: 0; padding: 20px; background: #f5f5f5; display: flex; justify-content: center;">
-                                <img src="${contractData}" style="max-width: 100%; height: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+                            <head><title>Contract Document - ${currentVendor.vendor_name || 'Unknown Vendor'}</title></head>
+                            <body style="margin: 0; padding: 20px; background: #f5f5f5; display: flex; flex-direction: column; align-items: center;">
+                                <div style="margin-bottom: 20px; font-family: Arial; font-size: 18px; color: #333;">
+                                    ${currentVendor.contractFile || currentVendor.contract_filename || currentVendor.contractFilename || 'Contract Image'}
+                                </div>
+                                <img src="${contractData}" style="max-width: 95%; height: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px;">
+                            </body>
+                        </html>
+                    `);
+                } else {
+                    // Unknown format or data
+                    newWindow.document.write(`
+                        <html>
+                            <head><title>Contract Document - Error</title></head>
+                            <body style="margin: 0; padding: 40px; background: #f5f5f5; font-family: Arial; text-align: center;">
+                                <h2 style="color: #d32f2f;">Unable to Display Contract</h2>
+                                <p>The contract file format is not supported for preview.</p>
+                                <p style="color: #666; font-size: 14px;">Data type: ${contractData.substring(0, 50)}...</p>
+                                <button onclick="window.close()" style="padding: 10px 20px; background: #1976d2; color: white; border: none; border-radius: 4px; cursor: pointer;">Close</button>
                             </body>
                         </html>
                     `);
                 }
+                newWindow.document.close();
             } else {
-                alert('Contract document not available');
+                showToast('Contract document not available. Please re-upload the vendor contract.', 'error');
+                console.error('No contract data found for vendor:', currentVendor);
             }
         }
 
         function downloadContract() {
-            if (currentVendor.contract_file || currentVendor.contractFile) {
-                const contractData = currentVendor.contract_file || currentVendor.contractFile;
-                const fileName = currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf';
+            if (currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile) {
+                const contractData = currentVendor.contractFileData || currentVendor.contract_file || currentVendor.contractFile;
+                const fileName = currentVendor.contractFile || currentVendor.contract_filename || currentVendor.contractFilename || 'contract.pdf';
                 
                 // Create download link
                 const downloadLink = document.createElement('a');
