@@ -2,7 +2,7 @@
 const API_CONFIG = {
     BASE_URL: window.location.hostname === 'localhost' 
         ? 'http://localhost:5000' 
-        : '', // Will be updated with Render URL once deployed
+        : 'https://invoice-reconciliation-platform-vtb2.onrender.com',
     ENDPOINTS: {
         LOGIN: '/api/auth/login',
         REGISTER: '/api/auth/register',

@@ -291,6 +291,7 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
         const form = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
@@ -338,20 +339,14 @@
                     window.location.href = '/dashboard';
                 }, 1000);
             } else {
-                // Try real API (will fail without backend)
+                // Try real API with backend
                 try {
                     submitBtn.disabled = true;
                     document.querySelector('.button-text').style.display = 'none';
                     spinner.classList.add('show');
                     
-                    // This will fail without backend
-                    const response = await fetch('/api/auth/login', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ email, password })
-                    });
+                    // Use API helper from config.js
+                    const response = await API.post(API_CONFIG.ENDPOINTS.LOGIN, { email, password });
                     
                     if (response.ok) {
                         const data = await response.json();
