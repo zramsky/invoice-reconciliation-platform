@@ -2,13 +2,12 @@ services:
   - type: web
     name: invoice-reconciliation-backend
     env: python
+    region: oregon
+    plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: cd backend && python app.py
+    startCommand: python app.py
     envVars:
       - key: DEBUG
         value: "False"
-      - key: PORT
-        fromService:
-          type: web
-          name: invoice-reconciliation-backend
-          property: port
+      - key: PYTHONPATH
+        value: "/opt/render/project/src"
