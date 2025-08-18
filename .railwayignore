@@ -1,0 +1,15 @@
+# Railway ignore file
+node_modules/
+*.pyc
+__pycache__/
+.git/
+.env
+.env.local
+*.log
+.DS_Store
+venv/
+.vscode/
+*.sqlite
+*.db
+test-*.sh
+deploy-*.sh

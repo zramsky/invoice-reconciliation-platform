@@ -1,5 +1,4 @@
 {
-  "name": "invoice-reconciliation-frontend",
   "version": 2,
   "public": true,
   "cleanUrls": true,
@@ -10,30 +9,30 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/",
-      "dest": "/frontend/index.html"
+      "source": "/",
+      "destination": "/frontend/index.html"
     },
     {
-      "src": "/add-vendor",
-      "dest": "/frontend/add-vendor.html"
+      "source": "/add-vendor",
+      "destination": "/frontend/add-vendor.html"
     },
     {
-      "src": "/vendor-profile",
-      "dest": "/frontend/vendor-profile.html"
+      "source": "/vendor-profile",
+      "destination": "/frontend/vendor-profile.html"
     },
     {
-      "src": "/test",
-      "dest": "/frontend/test.html"
+      "source": "/test",
+      "destination": "/frontend/test.html"
     },
     {
-      "src": "/simple",
-      "dest": "/frontend/simple.html"
+      "source": "/simple",
+      "destination": "/frontend/simple.html"
     },
     {
-      "src": "/frontend/(.*)",
-      "dest": "/frontend/$1"
+      "source": "/(.*)",
+      "destination": "/frontend/$1"
     }
   ],
   "headers": [
@@ -59,7 +58,7 @@
       ]
     },
     {
-      "source": "/frontend/(.*\\.(js|css|html|json))$",
+      "source": "/frontend/(.*)",
       "headers": [
         {
           "key": "Cache-Control",
