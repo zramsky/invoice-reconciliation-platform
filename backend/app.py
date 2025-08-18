@@ -294,6 +294,65 @@ def reconcile_documents():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Authentication endpoints
+@app.route('/api/auth/login', methods=['POST'])
+def login():
+    """User login endpoint"""
+    try:
+        data = request.get_json()
+        email = data.get('email', '').strip().lower()
+        password = data.get('password', '')
+        
+        # Simple demo authentication
+        if email == 'demo@unspend.com' and password == 'Demo123!':
+            return jsonify({
+                "success": True,
+                "token": "demo-jwt-token",
+                "name": "Demo User",
+                "email": email
+            })
+        
+        # For now, reject all other login attempts
+        return jsonify({"error": "Invalid credentials"}), 401
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/auth/register', methods=['POST'])
+def register():
+    """User registration endpoint"""
+    try:
+        data = request.get_json()
+        name = data.get('name', '').strip()
+        email = data.get('email', '').strip().lower()
+        password = data.get('password', '')
+        
+        # For now, registration is disabled
+        return jsonify({"error": "Registration is currently disabled"}), 400
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/auth/verify', methods=['GET'])
+def verify_token():
+    """Verify JWT token"""
+    try:
+        # Simple token verification for demo
+        auth_header = request.headers.get('Authorization', '')
+        if auth_header == 'Bearer demo-jwt-token':
+            return jsonify({
+                "valid": True,
+                "user": {
+                    "name": "Demo User",
+                    "email": "demo@unspend.com"
+                }
+            })
+        
+        return jsonify({"valid": False}), 401
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/dashboard', methods=['GET'])
 def dashboard():
     """Dashboard data for exceptions, next payments, renewals"""
