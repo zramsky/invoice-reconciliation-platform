@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ['python3', 'pip3']
+
+[phases.install]
+cmds = ['pip install -r requirements-railway.txt']
+
+[phases.build]
+cmds = ['echo "Build complete"']
+
+[start]
+cmd = 'gunicorn --bind 0.0.0.0:$PORT --workers 1 --timeout 120 --access-logfile - --error-logfile - railway_app:app'
