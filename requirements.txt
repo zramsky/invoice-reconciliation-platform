@@ -9,3 +9,4 @@ numpy==1.26.3
 pandas==2.2.0
 werkzeug==3.0.1
 pydantic==2.5.0
+gunicorn==21.2.0
